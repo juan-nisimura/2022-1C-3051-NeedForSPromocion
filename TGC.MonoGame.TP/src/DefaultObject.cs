@@ -23,6 +23,7 @@ namespace TGC.Monogame.TP.Src
         // protected Matrix Projection;
         protected String ModelDirectory = "RacingCarA/RacingCar";
         protected String ShaderDirectory = "BasicShader";
+        protected Vector3 DiffuseColor = Color.White.ToVector3(); 
         public void Initialize(){
             this.ResetWorld();
         }
@@ -40,17 +41,6 @@ namespace TGC.Monogame.TP.Src
                     meshPart.Effect = Effect;
         }
 
-/*
-        public DefaultObject SetView(Matrix view){
-            View = view;
-            return this;
-        }
-
-        public DefaultObject SetProjection(Matrix projection){
-            Projection = projection;
-            return this;
-        }
-*/
         public DefaultObject TransformWorld(Matrix transform){
             World *= transform;
             return this;
@@ -66,6 +56,7 @@ namespace TGC.Monogame.TP.Src
             // Para dibujar el modelo necesitamos pasarle informacion que el efecto esta esperando.
             Effect.Parameters["View"].SetValue(view);
             Effect.Parameters["Projection"].SetValue(projection);
+            Effect.Parameters["DiffuseColor"].SetValue(DiffuseColor);
 
             foreach (var mesh in Model.Meshes)
             {

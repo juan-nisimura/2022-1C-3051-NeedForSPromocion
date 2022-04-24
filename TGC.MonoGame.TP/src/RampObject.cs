@@ -21,6 +21,7 @@ namespace TGC.Monogame.TP.Src
             ScaleMatrix = Matrix.CreateScale(size);
             TranslateMatrix = Matrix.CreateTranslation(position);
             RotationMatrix = Matrix.CreateRotationY(rotation);
+            DiffuseColor = color.ToVector3();
         }
 
         public new void Initialize(){
@@ -30,6 +31,7 @@ namespace TGC.Monogame.TP.Src
         public new void Load(ContentManager content){
             // Cargo efecto
             Effect = content.Load<Effect>(ContentFolderEffects + ShaderDirectory);
+            ;
         }
 
         public override void Update(GameTime gameTime){   
@@ -39,6 +41,7 @@ namespace TGC.Monogame.TP.Src
             Effect.Parameters["World"].SetValue(World);
             Effect.Parameters["View"].SetValue(view);
             Effect.Parameters["Projection"].SetValue(projection);
+            Effect.Parameters["DiffuseColor"].SetValue(DiffuseColor);
             RampPrimitive.Draw(Effect);
         }
     }

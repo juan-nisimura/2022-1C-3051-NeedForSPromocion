@@ -53,6 +53,7 @@ namespace TGC.Monogame.TP.Src
         }
         public new void Load(ContentManager content){
             ModelDirectory = "RacingCarA/RacingCar";
+            DiffuseColor = Color.Blue.ToVector3();
             base.Load(content);
         }
 

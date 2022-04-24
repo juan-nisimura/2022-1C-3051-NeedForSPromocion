@@ -16,6 +16,7 @@ namespace TGC.Monogame.TP.Src
         }
         public new void Load(ContentManager content){
             ModelDirectory = "CombatVehicle/Vehicle";
+            DiffuseColor = Color.DarkGreen.ToVector3();
             base.Load(content);
         }
 

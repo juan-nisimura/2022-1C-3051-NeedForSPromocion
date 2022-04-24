@@ -18,6 +18,7 @@ namespace TGC.Monogame.TP.Src
             CubePrimitive = new CubePrimitive(graphicsDevice);
             ScaleMatrix = Matrix.CreateScale(size);
             TranslateMatrix = Matrix.CreateTranslation(position);
+            DiffuseColor = color.ToVector3();
         }
 
         public new void Initialize(){
@@ -36,6 +37,7 @@ namespace TGC.Monogame.TP.Src
             Effect.Parameters["World"].SetValue(World);
             Effect.Parameters["View"].SetValue(view);
             Effect.Parameters["Projection"].SetValue(projection);
+            Effect.Parameters["DiffuseColor"].SetValue(DiffuseColor);
             CubePrimitive.Draw(Effect);
         }
     }

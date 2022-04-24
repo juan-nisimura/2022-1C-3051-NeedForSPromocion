@@ -70,10 +70,10 @@ namespace TGC.MonoGame.TP
             Tank.Initialize();
 
             Boxes = new BoxObject[] {
-                new BoxObject(GraphicsDevice, new Vector3(1000f, 0f, 0f), new Vector3(10f, 20f, 2000f), Color.Red),
-                new BoxObject(GraphicsDevice, new Vector3(-1000f, 0f, 0f), new Vector3(10f, 20f, 2000f), Color.Red),
-                new BoxObject(GraphicsDevice, new Vector3(0f, 0f, 1000f), new Vector3(2000f, 20f, 10f), Color.Red),
-                new BoxObject(GraphicsDevice, new Vector3(0f, 0f, -1000f), new Vector3(2000f, 20f, 10f), Color.Red)
+                new BoxObject(GraphicsDevice, new Vector3(1000f, 0f, 0f), new Vector3(10f, 20f, 2000f), Color.Black),
+                new BoxObject(GraphicsDevice, new Vector3(-1000f, 0f, 0f), new Vector3(10f, 20f, 2000f), Color.Black),
+                new BoxObject(GraphicsDevice, new Vector3(0f, 0f, 1000f), new Vector3(2000f, 20f, 10f), Color.Black),
+                new BoxObject(GraphicsDevice, new Vector3(0f, 0f, -1000f), new Vector3(2000f, 20f, 10f), Color.Black)
             };
 
             PowerUps = new PowerUpObject[] {
@@ -83,9 +83,9 @@ namespace TGC.MonoGame.TP
             };
 
             Ramps = new RampObject[] {
-                new RampObject(GraphicsDevice, new Vector3(100f, 0f, 0f), new Vector3(100f, 10f, 80f), MathF.PI / 2, Color.Red),
+                new RampObject(GraphicsDevice, new Vector3(100f, 0f, 0f), new Vector3(100f, 10f, 80f), MathF.PI / 2, Color.Gray),
                 new RampObject(GraphicsDevice, new Vector3(-100f, 0f, 0f), new Vector3(100f, 20f, 20f), - MathF.PI / 2, Color.Red),
-                new RampObject(GraphicsDevice, new Vector3(0f, 0f, 100f), new Vector3(100f, 10f, 20f), - MathF.PI, Color.Red),
+                new RampObject(GraphicsDevice, new Vector3(0f, 0f, 100f), new Vector3(100f, 10f, 20f), - MathF.PI, Color.Yellow),
                 new RampObject(GraphicsDevice, new Vector3(0f, 0f, -100f), new Vector3(100f, 10f, 100f), 0, Color.Red),
             };
 
@@ -196,7 +196,7 @@ namespace TGC.MonoGame.TP
             {
                 Ramps[i].Draw(View, Projection);
             }
-            // Floor.Draw(Matrix.CreateScale(1000f), View, Projection);
+            Floor.Draw(Matrix.CreateScale(1000f), View, Projection);
         }
 
         /// <summary>

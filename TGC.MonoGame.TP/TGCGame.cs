@@ -36,17 +36,19 @@ namespace TGC.MonoGame.TP
             IsMouseVisible = true;
         }
 
+        private Boolean GodModeIsActive { get; set; } = false;
+        private KeyController ControllerKeyG { get; set; }
         private GraphicsDeviceManager Graphics { get; }
         private SpriteBatch SpriteBatch { get; set; }
         private float Rotation { get; set; }
         private Matrix World { get; set; }
         private Matrix View { get; set; }
         private Matrix Projection { get; set; }
+        private CameraObject Camera { get; set; }
         private CarObject Car { get; set; }
         private TankObject Tank { get; set; }
         private BoxObject[] Boxes { get; set; }
         private PowerUpObject[] PowerUps { get; set; }
-
         private RampObject[] Ramps { get; set; }
         private CylinderObject[] Cylinders { get; set; }
         private QuadPrimitive Floor { get; set; }
@@ -63,6 +65,8 @@ namespace TGC.MonoGame.TP
             World = Matrix.Identity;
             Projection =
                 Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 500);
+
+            Camera = new CameraObject();
 
             Car = new CarObject();
             Car.Initialize();
@@ -123,6 +127,7 @@ namespace TGC.MonoGame.TP
             {
                 Cylinders[i].Initialize();
             }
+            ControllerKeyG = new KeyController(Keys.G);
 
             base.Initialize();
         }
@@ -174,6 +179,15 @@ namespace TGC.MonoGame.TP
                 //Salgo del juego.
                 Exit();
 
+            if (ControllerKeyG.Update().IsKeyToPressed()){
+                GodModeIsActive = !GodModeIsActive;
+            }
+
+            if(GodModeIsActive){
+                View = Camera.MoveCameraByKeyboard(gameTime).GetView();
+                return;
+            }
+
             Car.Update(gameTime);
             Tank.Update(gameTime);
             for (int i = 0; i < Boxes.Length; i++)
@@ -193,7 +207,7 @@ namespace TGC.MonoGame.TP
                 Cylinders[i].Update(gameTime);
             }
 
-            View = Matrix.CreateLookAt(Car.Position + new Vector3(-100f, 150f, -100f), Car.Position, new Vector3(1f, 1.5f, 1f));
+            View = Camera.FollowCamera(Car.Position).GetView();//  Matrix.CreateLookAt(Car.Position + new Vector3(-100f, 150f, -100f), Car.Position, new Vector3(1f, 1.5f, 1f));
 
             base.Update(gameTime);
         }

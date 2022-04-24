@@ -9,15 +9,15 @@ namespace TGC.Monogame.TP.Src
 {
     class CarObject : DefaultObject
     {
-        private float MaxSpeed { get; set; } = 2500f;
+        private float MaxSpeed { get; set; } = 3000f;
         private float MaxReverseSpeed { get; set; } = 1500f;
-        private float ForwardAcceleration { get; set; } = 1500f;
-        private float BackwardAcceleration { get; set; } = 1500f;
-        private float StopAcceleration { get; set; } = 1500f;
-        private float MaxTurningAcceleration { get; set; } = MathF.PI;
-        private float MaxTurningSpeed { get; set; } = MathF.PI / 3f;
-        private float Gravity { get; set; } = 300f;
-        private float JumpInitialSpeed { get; set; } = 150f;
+        private float ForwardAcceleration { get; set; } = 3500f;
+        private float BackwardAcceleration { get; set; } = 3500f;
+        private float StopAcceleration { get; set; } = 2500f;
+        private float MaxTurningAcceleration { get; set; } = MathF.PI * 5;
+        private float MaxTurningSpeed { get; set; } = MathF.PI / 1.25f;
+        private float Gravity { get; set; } = 400f;
+        private float JumpInitialSpeed { get; set; } = 100f;
 
         private float Speed { get; set; } = 0;
         private float Acceleration { get; set; } = 0;
@@ -30,27 +30,6 @@ namespace TGC.Monogame.TP.Src
         public new void Initialize(){
             
             base.Initialize();
-            
-            /*
-            // Configuro constantes 
-            MaxSpeed = 2500f;
-            MaxReverseSpeed = 1500f;
-            ForwardAcceleration = 1500f;
-            BackwardAcceleration = 1500f;
-            StopAcceleration = 1500f;
-            MaxTurningSpeed = MathF.PI / 3f;
-            MaxTurningAcceleration = MathF.PI;
-            Gravity = 300f;
-            JumpInitialSpeed = 150f;
-
-            // Inicializo variables
-            Speed = 0;
-            Acceleration = 0;
-            Rotation = 0;
-            TurningSpeed = 0;
-            TurningAcceleration = 0;
-            VerticalSpeed = 0;
-            Position = new Vector3(0f, 0f, 0f); */
 
             World = Matrix.CreateScale(0.05f, 0.05f, 0.05f);
         }

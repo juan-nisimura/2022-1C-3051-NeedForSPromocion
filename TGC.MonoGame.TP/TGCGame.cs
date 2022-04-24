@@ -51,6 +51,7 @@ namespace TGC.MonoGame.TP
         private PowerUpObject[] PowerUps { get; set; }
         private RampObject[] Ramps { get; set; }
         private CylinderObject[] Cylinders { get; set; }
+        private MountObject[] Mounts { get; set; }
         private QuadPrimitive Floor { get; set; }
 
         /// <summary>
@@ -75,23 +76,36 @@ namespace TGC.MonoGame.TP
             Tank.Initialize();
 
             Boxes = new BoxObject[] {
-                new BoxObject(GraphicsDevice, new Vector3(1000f, 0f, 0f), new Vector3(10f, 20f, 2000f), Color.Black),
-                new BoxObject(GraphicsDevice, new Vector3(-1000f, 0f, 0f), new Vector3(10f, 20f, 2000f), Color.Black),
-                new BoxObject(GraphicsDevice, new Vector3(0f, 0f, 1000f), new Vector3(2000f, 20f, 10f), Color.Black),
-                new BoxObject(GraphicsDevice, new Vector3(0f, 0f, -1000f), new Vector3(2000f, 20f, 10f), Color.Black)
+                new BoxObject(GraphicsDevice, new Vector3(700f, 0f, 0f), new Vector3(10f, 20f, 1400f), Color.White),
+                new BoxObject(GraphicsDevice, new Vector3(-700f, 0f, 0f), new Vector3(10f, 20f, 1400f), Color.White),
+                new BoxObject(GraphicsDevice, new Vector3(0f, 0f, 700f), new Vector3(1400f, 20f, 10f), Color.White),
+                new BoxObject(GraphicsDevice, new Vector3(0f, 0f, -700f), new Vector3(1400f, 20f, 10f), Color.White),
+
+                new BoxObject(GraphicsDevice, new Vector3(235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown),
+                new BoxObject(GraphicsDevice, new Vector3(0f, 15f, 0f), new Vector3(120f, 30f, 80f), Color.Gray),
+                new BoxObject(GraphicsDevice, new Vector3(-235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown),
             };
 
             PowerUps = new PowerUpObject[] {
-                new PowerUpObject(GraphicsDevice, new Vector3(30f,0f,-30f)),
-                new PowerUpObject(GraphicsDevice, new Vector3(-30f,0f,-30f)),
-                new PowerUpObject(GraphicsDevice, new Vector3(-30f,0f,30f))
+                new PowerUpObject(GraphicsDevice, new Vector3(0f,30f,0f)),
+
+                new PowerUpObject(GraphicsDevice, new Vector3(235f,0f,0f)),
+                new PowerUpObject(GraphicsDevice, new Vector3(-235f,0f,0f)),
+
+                new PowerUpObject(GraphicsDevice, new Vector3(235f,5f,-400f)),
+                new PowerUpObject(GraphicsDevice, new Vector3(-235f,5f,-400f)),
+                new PowerUpObject(GraphicsDevice, new Vector3(0f,5f,-250f)),
+                
+                new PowerUpObject(GraphicsDevice, new Vector3(235f,5f,400f)),
+                new PowerUpObject(GraphicsDevice, new Vector3(-235f,5f,400f)),
+                new PowerUpObject(GraphicsDevice, new Vector3(0f,5f,250f)),
             };
 
             Ramps = new RampObject[] {
-                new RampObject(GraphicsDevice, new Vector3(100f, 0f, 0f), new Vector3(100f, 10f, 80f), MathF.PI / 2, Color.Gray),
-                new RampObject(GraphicsDevice, new Vector3(-100f, 0f, 0f), new Vector3(100f, 20f, 20f), - MathF.PI / 2, Color.Red),
-                new RampObject(GraphicsDevice, new Vector3(0f, 0f, 100f), new Vector3(100f, 10f, 20f), - MathF.PI, Color.Yellow),
-                new RampObject(GraphicsDevice, new Vector3(0f, 0f, -100f), new Vector3(100f, 10f, 100f), 0, Color.Red),
+                new RampObject(GraphicsDevice, new Vector3(370f, 15f, -90f), new Vector3(100f, 30f, 80f), MathF.PI / 2, Color.Yellow),
+                new RampObject(GraphicsDevice, new Vector3(-370f, 15f, 90f), new Vector3(100f, 30f, 80f), - MathF.PI / 2, Color.Yellow),
+
+/*
                 new RampObject(GraphicsDevice, new Vector3(0f, 27.5f, 160f), new Vector3(200f, 0f, 50f), MathF.PI, Color.DarkSlateGray),
                 new RampObject(GraphicsDevice, new Vector3(-170f, 0f, 160f), new Vector3(140f, 55f, 50f), MathF.PI, Color.DarkGray),
                 new RampObject(GraphicsDevice, new Vector3(170f, 0f, 160f), new Vector3(140f, 55f, 50f), 0, Color.DarkGray),
@@ -99,11 +113,27 @@ namespace TGC.MonoGame.TP
                 new RampObject(GraphicsDevice, new Vector3(50f, 42.5f, 184.5f), new Vector3(100f, 30f, 1f), 0, Color.OrangeRed),
                 new RampObject(GraphicsDevice, new Vector3(-50f, 42.5f, 135.5f), new Vector3(100f, 30f, 1f), MathF.PI, Color.OrangeRed),
                 new RampObject(GraphicsDevice, new Vector3(50f, 42.5f, 135.5f), new Vector3(100f, 30f, 1f), 0, Color.OrangeRed),
-            };
+ */         };
 
             Cylinders = new CylinderObject[]{
-                new CylinderObject(GraphicsDevice, new Vector3(0f, 30f, 130f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Yellow),
-                new CylinderObject(GraphicsDevice, new Vector3(0f, 30f, 190f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Yellow),
+                new CylinderObject(GraphicsDevice, new Vector3(150f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new CylinderObject(GraphicsDevice, new Vector3(150f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new CylinderObject(GraphicsDevice, new Vector3(300f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new CylinderObject(GraphicsDevice, new Vector3(300f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new CylinderObject(GraphicsDevice, new Vector3(-150f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new CylinderObject(GraphicsDevice, new Vector3(-150f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new CylinderObject(GraphicsDevice, new Vector3(-300f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new CylinderObject(GraphicsDevice, new Vector3(-300f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+            };
+            
+            Mounts = new MountObject[]{
+                new MountObject(GraphicsDevice, new Vector3(235f,2.5f,-400f),new Vector3(60f,5f,60f),0,Color.White),
+                
+                new MountObject(GraphicsDevice, new Vector3(-235f,2.5f,-400f),new Vector3(60f,5f,60f),0,Color.White),
+                new MountObject(GraphicsDevice, new Vector3(0f,2.5f,-250f),new Vector3(60f,5f,60f),0,Color.White),
+                new MountObject(GraphicsDevice, new Vector3(0f,2.5f,250f),new Vector3(60f,5f,60f),0,Color.White),
+                new MountObject(GraphicsDevice, new Vector3(-235f,2.5f,400f),new Vector3(60f,5f,60f),0,Color.White),
+                new MountObject(GraphicsDevice, new Vector3(235f,2.5f,400f),new Vector3(60f,5f,60f),0,Color.White),
             };
 
             Floor = new QuadPrimitive(GraphicsDevice);           
@@ -127,8 +157,16 @@ namespace TGC.MonoGame.TP
             {
                 Cylinders[i].Initialize();
             }
+
+            for (int i = 0; i < Mounts.Length; i++)
+            {
+                Mounts[i].Initialize();
+            }
+
             ControllerKeyG = new KeyController(Keys.G);
 
+            Console.WriteLine("Cantidad de objectos = {0}", DefaultObject.ObjectCount);
+            
             base.Initialize();
         }
 
@@ -160,6 +198,10 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Cylinders.Length; i++)
             {
                 Cylinders[i].Load(Content);
+            }
+            for (int i = 0; i < Mounts.Length; i++)
+            {
+                Mounts[i].Load(Content);
             }
 
             base.LoadContent();
@@ -206,6 +248,10 @@ namespace TGC.MonoGame.TP
             {
                 Cylinders[i].Update(gameTime);
             }
+            for (int i = 0; i < Mounts.Length; i++)
+            {
+                Mounts[i].Update(gameTime);
+            }
 
             View = Camera.FollowCamera(Car.Position).GetView();//  Matrix.CreateLookAt(Car.Position + new Vector3(-100f, 150f, -100f), Car.Position, new Vector3(1f, 1.5f, 1f));
 
@@ -239,6 +285,10 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Cylinders.Length; i++)
             {
                 Cylinders[i].Draw(View, Projection);
+            }
+            for (int i = 0; i < Mounts.Length; i++)
+            {
+                Mounts[i].Draw(View, Projection);
             }
             Floor.Draw(Matrix.CreateScale(1000f), View, Projection);
         }

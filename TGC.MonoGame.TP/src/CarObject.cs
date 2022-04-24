@@ -9,28 +9,29 @@ namespace TGC.Monogame.TP.Src
 {
     class CarObject : DefaultObject
     {
-        private float MaxSpeed { get; set; }
-        private float MaxReverseSpeed { get; set; }
-        private float ForwardAcceleration { get; set; }
-        private float BackwardAcceleration { get; set; }
-        private float StopAcceleration { get; set; }
-        private float MaxTurningAcceleration { get; set; }
-        private float MaxTurningSpeed { get; set; }
-        private float Gravity { get; set; }
-        private float JumpInitialSpeed { get; set; }
+        private float MaxSpeed { get; set; } = 2500f;
+        private float MaxReverseSpeed { get; set; } = 1500f;
+        private float ForwardAcceleration { get; set; } = 1500f;
+        private float BackwardAcceleration { get; set; } = 1500f;
+        private float StopAcceleration { get; set; } = 1500f;
+        private float MaxTurningAcceleration { get; set; } = MathF.PI;
+        private float MaxTurningSpeed { get; set; } = MathF.PI / 3f;
+        private float Gravity { get; set; } = 300f;
+        private float JumpInitialSpeed { get; set; } = 150f;
 
-        private float Speed { get; set; } 
-        private float Acceleration { get; set; }
-        private float Rotation { get; set; }
-        private float TurningSpeed { get; set; }
-        private float TurningAcceleration { get; set; }
-        private float VerticalSpeed { get; set; }
-        public Vector3 Position { get; set; }
+        private float Speed { get; set; } = 0;
+        private float Acceleration { get; set; } = 0;
+        private float Rotation { get; set; } = 0;
+        private float TurningSpeed { get; set; } = 0;
+        private float TurningAcceleration { get; set; } = 0;
+        private float VerticalSpeed { get; set; } = 0;
+        public Vector3 Position { get; set; } = new Vector3(0f, 0f, 0f);
 
         public new void Initialize(){
             
             base.Initialize();
             
+            /*
             // Configuro constantes 
             MaxSpeed = 2500f;
             MaxReverseSpeed = 1500f;
@@ -49,7 +50,9 @@ namespace TGC.Monogame.TP.Src
             TurningSpeed = 0;
             TurningAcceleration = 0;
             VerticalSpeed = 0;
-            Position = new Vector3(0f, 0f, 0f);
+            Position = new Vector3(0f, 0f, 0f); */
+
+            World = Matrix.CreateScale(0.05f, 0.05f, 0.05f);
         }
         public new void Load(ContentManager content){
             ModelDirectory = "RacingCarA/RacingCar";
@@ -113,10 +116,8 @@ namespace TGC.Monogame.TP.Src
             }
             // Si el auto esta en el aire
             else{
-
                 // Calculo velocidad vertical
                 VerticalSpeed = VerticalSpeed - Gravity * elapsedTime;
-                
             }
 
             // Calculo la posicion vertical

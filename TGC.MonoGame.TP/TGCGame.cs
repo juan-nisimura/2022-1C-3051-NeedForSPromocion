@@ -48,6 +48,7 @@ namespace TGC.MonoGame.TP
         private PowerUpObject[] PowerUps { get; set; }
 
         private RampObject[] Ramps { get; set; }
+        private CylinderObject[] Cylinders { get; set; }
         private QuadPrimitive Floor { get; set; }
 
         /// <summary>
@@ -87,6 +88,18 @@ namespace TGC.MonoGame.TP
                 new RampObject(GraphicsDevice, new Vector3(-100f, 0f, 0f), new Vector3(100f, 20f, 20f), - MathF.PI / 2, Color.Red),
                 new RampObject(GraphicsDevice, new Vector3(0f, 0f, 100f), new Vector3(100f, 10f, 20f), - MathF.PI, Color.Yellow),
                 new RampObject(GraphicsDevice, new Vector3(0f, 0f, -100f), new Vector3(100f, 10f, 100f), 0, Color.Red),
+                new RampObject(GraphicsDevice, new Vector3(0f, 27.5f, 160f), new Vector3(200f, 0f, 50f), MathF.PI, Color.DarkSlateGray),
+                new RampObject(GraphicsDevice, new Vector3(-170f, 0f, 160f), new Vector3(140f, 55f, 50f), MathF.PI, Color.DarkGray),
+                new RampObject(GraphicsDevice, new Vector3(170f, 0f, 160f), new Vector3(140f, 55f, 50f), 0, Color.DarkGray),
+                new RampObject(GraphicsDevice, new Vector3(-50f, 42.5f, 184.5f), new Vector3(100f, 30f, 1f), MathF.PI, Color.OrangeRed),
+                new RampObject(GraphicsDevice, new Vector3(50f, 42.5f, 184.5f), new Vector3(100f, 30f, 1f), 0, Color.OrangeRed),
+                new RampObject(GraphicsDevice, new Vector3(-50f, 42.5f, 135.5f), new Vector3(100f, 30f, 1f), MathF.PI, Color.OrangeRed),
+                new RampObject(GraphicsDevice, new Vector3(50f, 42.5f, 135.5f), new Vector3(100f, 30f, 1f), 0, Color.OrangeRed),
+            };
+
+            Cylinders = new CylinderObject[]{
+                new CylinderObject(GraphicsDevice, new Vector3(0f, 30f, 130f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Yellow),
+                new CylinderObject(GraphicsDevice, new Vector3(0f, 30f, 190f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Yellow),
             };
 
             Floor = new QuadPrimitive(GraphicsDevice);           
@@ -104,6 +117,11 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Ramps.Length; i++)
             {
                 Ramps[i].Initialize();
+            }
+
+            for (int i = 0; i < Cylinders.Length; i++)
+            {
+                Cylinders[i].Initialize();
             }
 
             base.Initialize();
@@ -133,6 +151,10 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Ramps.Length; i++)
             {
                 Ramps[i].Load(Content);
+            }
+            for (int i = 0; i < Cylinders.Length; i++)
+            {
+                Cylinders[i].Load(Content);
             }
 
             base.LoadContent();
@@ -166,6 +188,10 @@ namespace TGC.MonoGame.TP
             {
                 Ramps[i].Update(gameTime);
             }
+            for (int i = 0; i < Cylinders.Length; i++)
+            {
+                Cylinders[i].Update(gameTime);
+            }
 
             View = Matrix.CreateLookAt(Car.Position + new Vector3(-100f, 150f, -100f), Car.Position, new Vector3(1f, 1.5f, 1f));
 
@@ -195,6 +221,10 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Ramps.Length; i++)
             {
                 Ramps[i].Draw(View, Projection);
+            }
+            for (int i = 0; i < Cylinders.Length; i++)
+            {
+                Cylinders[i].Draw(View, Projection);
             }
             Floor.Draw(Matrix.CreateScale(1000f), View, Projection);
         }

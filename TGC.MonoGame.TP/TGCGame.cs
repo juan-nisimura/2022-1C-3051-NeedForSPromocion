@@ -46,6 +46,8 @@ namespace TGC.MonoGame.TP
         private TankObject Tank { get; set; }
         private BoxObject[] Boxes { get; set; }
         private PowerUpObject[] PowerUps { get; set; }
+
+        private RampObject[] Ramps { get; set; }
         private QuadPrimitive Floor { get; set; }
 
         /// <summary>
@@ -80,6 +82,13 @@ namespace TGC.MonoGame.TP
                 new PowerUpObject(GraphicsDevice, new Vector3(-30f,0f,30f))
             };
 
+            Ramps = new RampObject[] {
+                new RampObject(GraphicsDevice, new Vector3(100f, 0f, 0f), new Vector3(100f, 10f, 80f), MathF.PI / 2, Color.Red),
+                new RampObject(GraphicsDevice, new Vector3(-100f, 0f, 0f), new Vector3(100f, 20f, 20f), - MathF.PI / 2, Color.Red),
+                new RampObject(GraphicsDevice, new Vector3(0f, 0f, 100f), new Vector3(100f, 10f, 20f), - MathF.PI, Color.Red),
+                new RampObject(GraphicsDevice, new Vector3(0f, 0f, -100f), new Vector3(100f, 10f, 100f), 0, Color.Red),
+            };
+
             Floor = new QuadPrimitive(GraphicsDevice);           
 
             for (int i = 0; i < Boxes.Length; i++)
@@ -90,6 +99,11 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < PowerUps.Length; i++)
             {
                 PowerUps[i].Initialize();
+            }
+
+            for (int i = 0; i < Ramps.Length; i++)
+            {
+                Ramps[i].Initialize();
             }
 
             base.Initialize();
@@ -115,6 +129,10 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < PowerUps.Length; i++)
             {
                 PowerUps[i].Load(Content);
+            }
+            for (int i = 0; i < Ramps.Length; i++)
+            {
+                Ramps[i].Load(Content);
             }
 
             base.LoadContent();
@@ -144,6 +162,10 @@ namespace TGC.MonoGame.TP
             {
                 PowerUps[i].Update(gameTime);
             }
+            for (int i = 0; i < Ramps.Length; i++)
+            {
+                Ramps[i].Update(gameTime);
+            }
 
             View = Matrix.CreateLookAt(Car.Position + new Vector3(-100f, 150f, -100f), Car.Position, new Vector3(1f, 1.5f, 1f));
 
@@ -169,6 +191,10 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < PowerUps.Length; i++)
             {
                 PowerUps[i].Draw(View, Projection);
+            }
+            for (int i = 0; i < Ramps.Length; i++)
+            {
+                Ramps[i].Draw(View, Projection);
             }
             // Floor.Draw(Matrix.CreateScale(1000f), View, Projection);
         }

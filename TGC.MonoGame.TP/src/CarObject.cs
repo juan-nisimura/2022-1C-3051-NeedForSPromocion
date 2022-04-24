@@ -32,11 +32,11 @@ namespace TGC.Monogame.TP.Src
             base.Initialize();
             
             // Configuro constantes 
-            MaxSpeed = 250f;
-            MaxReverseSpeed = 150f;
-            ForwardAcceleration = 150f;
-            BackwardAcceleration = 150f;
-            StopAcceleration = 150f;
+            MaxSpeed = 2500f;
+            MaxReverseSpeed = 1500f;
+            ForwardAcceleration = 1500f;
+            BackwardAcceleration = 1500f;
+            StopAcceleration = 1500f;
             MaxTurningSpeed = MathF.PI / 3f;
             MaxTurningAcceleration = MathF.PI;
             Gravity = 300f;
@@ -125,7 +125,7 @@ namespace TGC.Monogame.TP.Src
             World *= Matrix.CreateRotationY(Rotation);
 
             // Calculo la nueva posicion
-            Position = new Vector3(Position.X - Speed * World.Forward.X * elapsedTime, verticalPosition, Position.Z + Speed * World.Forward.Z * elapsedTime);
+            Position = new Vector3(Position.X - Speed * World.Forward.X * elapsedTime, verticalPosition, Position.Z - Speed * World.Forward.Z * elapsedTime);
 
             World *= Matrix.CreateTranslation(Position);
         }

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.Monogame.TP.Src;
+using TGC.MonoGame.TP.Src.Geometries.Textures;
 
 namespace TGC.MonoGame.TP
 {
@@ -42,6 +43,10 @@ namespace TGC.MonoGame.TP
         private Matrix View { get; set; }
         private Matrix Projection { get; set; }
         private CarObject Car { get; set; }
+        private TankObject Tank { get; set; }
+        private BoxObject[] Boxes { get; set; }
+        private PowerUpObject[] PowerUps { get; set; }
+        private QuadPrimitive Floor { get; set; }
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -54,10 +59,38 @@ namespace TGC.MonoGame.TP
             // Configuramos nuestras matrices de la escena.
             World = Matrix.Identity;
             Projection =
-                Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 250);
+                Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 500);
 
             Car = new CarObject();
             Car.Initialize();
+
+            Tank = new TankObject();
+            Tank.Initialize();
+
+            Boxes = new BoxObject[] {
+                new BoxObject(GraphicsDevice, new Vector3(1000f, 0f, 0f), new Vector3(10f, 20f, 2000f), Color.Red),
+                new BoxObject(GraphicsDevice, new Vector3(-1000f, 0f, 0f), new Vector3(10f, 20f, 2000f), Color.Red),
+                new BoxObject(GraphicsDevice, new Vector3(0f, 0f, 1000f), new Vector3(2000f, 20f, 10f), Color.Red),
+                new BoxObject(GraphicsDevice, new Vector3(0f, 0f, -1000f), new Vector3(2000f, 20f, 10f), Color.Red)
+            };
+
+            PowerUps = new PowerUpObject[] {
+                new PowerUpObject(GraphicsDevice, new Vector3(30f,0f,-30f)),
+                new PowerUpObject(GraphicsDevice, new Vector3(-30f,0f,-30f)),
+                new PowerUpObject(GraphicsDevice, new Vector3(-30f,0f,30f))
+            };
+
+            Floor = new QuadPrimitive(GraphicsDevice);           
+
+            for (int i = 0; i < Boxes.Length; i++)
+            {
+                Boxes[i].Initialize();
+            }
+
+            for (int i = 0; i < PowerUps.Length; i++)
+            {
+                PowerUps[i].Initialize();
+            }
 
             base.Initialize();
         }
@@ -74,6 +107,15 @@ namespace TGC.MonoGame.TP
 
             // Cargo el auto
             Car.Load(Content);
+            Tank.Load(Content);
+            for (int i = 0; i < Boxes.Length; i++)
+            {
+                Boxes[i].Load(Content);
+            }
+            for (int i = 0; i < PowerUps.Length; i++)
+            {
+                PowerUps[i].Load(Content);
+            }
 
             base.LoadContent();
         }
@@ -93,8 +135,17 @@ namespace TGC.MonoGame.TP
                 Exit();
 
             Car.Update(gameTime);
+            Tank.Update(gameTime);
+            for (int i = 0; i < Boxes.Length; i++)
+            {
+                Boxes[i].Update(gameTime);
+            }
+            for (int i = 0; i < PowerUps.Length; i++)
+            {
+                PowerUps[i].Update(gameTime);
+            }
 
-            View = Matrix.CreateLookAt(Car.Position + new Vector3(0f, 100f, -100f), Car.Position, new Vector3(0f, 1f, 1f));
+            View = Matrix.CreateLookAt(Car.Position + new Vector3(-100f, 150f, -100f), Car.Position, new Vector3(1f, 1.5f, 1f));
 
             base.Update(gameTime);
         }
@@ -106,12 +157,20 @@ namespace TGC.MonoGame.TP
         protected override void Draw(GameTime gameTime)
         {
             // Aca deberiamos poner toda la logica de renderizado del juego.
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Color.Green);
 
-            // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.
-            Car.SetView(View)
-                .SetProjection(Projection)
-                .Draw();
+            // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
+            Car.Draw(View, Projection);
+            Tank.Draw(View, Projection);
+            for (int i = 0; i < Boxes.Length; i++)
+            {
+                Boxes[i].Draw(View, Projection);
+            }
+            for (int i = 0; i < PowerUps.Length; i++)
+            {
+                PowerUps[i].Draw(View, Projection);
+            }
+            // Floor.Draw(Matrix.CreateScale(1000f), View, Projection);
         }
 
         /// <summary>

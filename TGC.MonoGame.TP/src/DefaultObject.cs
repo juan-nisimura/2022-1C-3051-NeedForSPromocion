@@ -19,8 +19,8 @@ namespace TGC.Monogame.TP.Src
         protected Model Model;
         protected Effect Effect;
         protected Matrix World;
-        protected Matrix View;
-        protected Matrix Projection;
+        // protected Matrix View;
+        // protected Matrix Projection;
         protected String ModelDirectory = "RacingCarA/RacingCar";
         protected String ShaderDirectory = "BasicShader";
         public void Initialize(){
@@ -40,6 +40,7 @@ namespace TGC.Monogame.TP.Src
                     meshPart.Effect = Effect;
         }
 
+/*
         public DefaultObject SetView(Matrix view){
             View = view;
             return this;
@@ -49,7 +50,7 @@ namespace TGC.Monogame.TP.Src
             Projection = projection;
             return this;
         }
-
+*/
         public DefaultObject TransformWorld(Matrix transform){
             World *= transform;
             return this;
@@ -59,13 +60,13 @@ namespace TGC.Monogame.TP.Src
             World = Matrix.Identity;
             return this;
         }
-
         abstract public void Update(GameTime gameTime);
-        public void Draw(){
-            Effect.Parameters["View"].SetValue(View);
-            Effect.Parameters["Projection"].SetValue(Projection);
+        public void Draw(Matrix view, Matrix projection){
 
             // Para dibujar el modelo necesitamos pasarle informacion que el efecto esta esperando.
+            Effect.Parameters["View"].SetValue(view);
+            Effect.Parameters["Projection"].SetValue(projection);
+
             foreach (var mesh in Model.Meshes)
             {
                 var meshWorld = mesh.ParentBone.Transform * World;

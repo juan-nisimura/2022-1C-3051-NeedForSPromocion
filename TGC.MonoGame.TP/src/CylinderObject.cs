@@ -11,11 +11,6 @@ namespace TGC.Monogame.TP.Src
     class CylinderObject : DefaultObject
     {
         protected CylinderPrimitive CylinderPrimitive { get; set; }
-        protected Matrix ScaleMatrix;
-        protected Matrix TranslateMatrix;
-        
-        protected Matrix RotationMatrix;
-
         public CylinderObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotation, Color color){
             CylinderPrimitive = new CylinderPrimitive(graphicsDevice);
             ScaleMatrix = Matrix.CreateScale(size);
@@ -31,7 +26,6 @@ namespace TGC.Monogame.TP.Src
         public new void Load(ContentManager content){
             // Cargo efecto
             Effect = content.Load<Effect>(ContentFolderEffects + ShaderDirectory);
-            ;
         }
 
         public override void Update(GameTime gameTime){   

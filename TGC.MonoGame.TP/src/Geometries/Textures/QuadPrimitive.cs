@@ -115,8 +115,6 @@ namespace TGC.MonoGame.TP.Src.Geometries.Textures
             graphicsDevice.SetVertexBuffer(Vertices);
             graphicsDevice.Indices = Indices;
 
-            effect.Parameters["DiffuseColor"].SetValue(Color.Black.ToVector3());
-
             foreach (var effectPass in effect.CurrentTechnique.Passes)
             {
                 effectPass.Apply();

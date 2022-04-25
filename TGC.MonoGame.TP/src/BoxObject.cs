@@ -11,9 +11,6 @@ namespace TGC.Monogame.TP.Src
     class BoxObject : DefaultObject
     {
         protected CubePrimitive CubePrimitive { get; set; }
-        protected Matrix ScaleMatrix;
-        protected Matrix TranslateMatrix;
-
         public BoxObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, Color color){
             CubePrimitive = new CubePrimitive(graphicsDevice);
             ScaleMatrix = Matrix.CreateScale(size);

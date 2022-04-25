@@ -19,6 +19,9 @@ namespace TGC.Monogame.TP.Src
         protected Model Model;
         protected Effect Effect;
         protected Matrix World;
+        protected Matrix ScaleMatrix;
+        protected Matrix TranslateMatrix;
+        protected Matrix RotationMatrix;
         protected String ModelDirectory = "RacingCarA/RacingCar";
         protected String ShaderDirectory = "BasicShader";
         protected Vector3 DiffuseColor = Color.White.ToVector3();

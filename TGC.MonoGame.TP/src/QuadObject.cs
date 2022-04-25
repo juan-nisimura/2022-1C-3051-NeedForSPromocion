@@ -4,16 +4,16 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.Monogame.TP;
 using Microsoft.Xna.Framework.Content;
-using TGC.MonoGame.TP.Src.Geometries;
+using TGC.MonoGame.TP.Src.Geometries.Textures;
 
 namespace TGC.Monogame.TP.Src   
 {
-    class RampObject : DefaultObject
+    class QuadObject : DefaultObject
     {
-        protected RampPrimitive RampPrimitive { get; set; }
+        protected QuadPrimitive QuadPrimitive { get; set; }
 
-        public RampObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotation, Color color){
-            RampPrimitive = new RampPrimitive(graphicsDevice);
+        public QuadObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotation, Color color){
+            QuadPrimitive = new QuadPrimitive(graphicsDevice);
             ScaleMatrix = Matrix.CreateScale(size);
             TranslateMatrix = Matrix.CreateTranslation(position);
             RotationMatrix = Matrix.CreateRotationY(rotation);
@@ -27,7 +27,6 @@ namespace TGC.Monogame.TP.Src
         public new void Load(ContentManager content){
             // Cargo efecto
             Effect = content.Load<Effect>(ContentFolderEffects + ShaderDirectory);
-            ;
         }
 
         public override void Update(GameTime gameTime){   
@@ -38,7 +37,7 @@ namespace TGC.Monogame.TP.Src
             Effect.Parameters["View"].SetValue(view);
             Effect.Parameters["Projection"].SetValue(projection);
             Effect.Parameters["DiffuseColor"].SetValue(DiffuseColor);
-            RampPrimitive.Draw(Effect);
+            QuadPrimitive.Draw(Effect);
         }
     }
 }

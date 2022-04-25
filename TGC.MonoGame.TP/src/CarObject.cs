@@ -25,7 +25,7 @@ namespace TGC.Monogame.TP.Src
         private float TurningSpeed { get; set; } = 0;
         private float TurningAcceleration { get; set; } = 0;
         private float VerticalSpeed { get; set; } = 0;
-        public Vector3 Position { get; set; } = new Vector3(0f, 0f, 0f);
+        public Vector3 Position { get; set; } = new Vector3(-100f, 0f, 100f);
 
         public new void Initialize(){
             

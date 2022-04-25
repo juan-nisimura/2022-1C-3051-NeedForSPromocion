@@ -11,11 +11,11 @@ namespace TGC.Monogame.TP.Src
     {
         public new void Initialize(){
             base.Initialize();
-            World *= Matrix.CreateScale(0.005f);
-            World *= Matrix.CreateTranslation(50f,0f,50f);
+            World *= Matrix.CreateScale(0.05f);
+            World *= Matrix.CreateTranslation(-100f,0f,-100f);
         }
         public new void Load(ContentManager content){
-            ModelDirectory = "CombatVehicle/Vehicle";
+            ModelDirectory = "RacingCarA/RacingCar";
             DiffuseColor = Color.DarkGreen.ToVector3();
             base.Load(content);
         }

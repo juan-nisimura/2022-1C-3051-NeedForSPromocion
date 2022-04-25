@@ -76,14 +76,39 @@ namespace TGC.MonoGame.TP
             Tank.Initialize();
 
             Boxes = new BoxObject[] {
-                new BoxObject(GraphicsDevice, new Vector3(700f, 0f, 0f), new Vector3(10f, 20f, 1400f), Color.White),
-                new BoxObject(GraphicsDevice, new Vector3(-700f, 0f, 0f), new Vector3(10f, 20f, 1400f), Color.White),
-                new BoxObject(GraphicsDevice, new Vector3(0f, 0f, 700f), new Vector3(1400f, 20f, 10f), Color.White),
-                new BoxObject(GraphicsDevice, new Vector3(0f, 0f, -700f), new Vector3(1400f, 20f, 10f), Color.White),
+                new BoxObject(GraphicsDevice, new Vector3(705f, 25f, 0f), new Vector3(10f, 50f, 1420f), Color.White),
+                new BoxObject(GraphicsDevice, new Vector3(-705f, 25f, 0f), new Vector3(10f, 50f, 1420f), Color.White),
+                new BoxObject(GraphicsDevice, new Vector3(0f, 25f, 705f), new Vector3(1400f, 50f, 10f), Color.White),
+                new BoxObject(GraphicsDevice, new Vector3(0f, 25f, -705f), new Vector3(1400f, 50f, 10f), Color.White),
 
                 new BoxObject(GraphicsDevice, new Vector3(235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown),
                 new BoxObject(GraphicsDevice, new Vector3(0f, 15f, 0f), new Vector3(120f, 30f, 80f), Color.Gray),
                 new BoxObject(GraphicsDevice, new Vector3(-235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown),
+
+                new BoxObject(GraphicsDevice, new Vector3(550f, 20f, 550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
+                new BoxObject(GraphicsDevice, new Vector3(-550f, 20f, 550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
+                new BoxObject(GraphicsDevice, new Vector3(-550f, 20f, -550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
+                new BoxObject(GraphicsDevice, new Vector3(550f, 20f, -550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
+            
+                new BoxObject(GraphicsDevice, new Vector3(405f, 45f, 450f), new Vector3(10f, 10f, 100f), Color.Gray),
+                new BoxObject(GraphicsDevice, new Vector3(455f, 45f, 405f), new Vector3(90f, 10f, 10f), Color.Gray),  
+                new BoxObject(GraphicsDevice, new Vector3(405f, 45f, 650f), new Vector3(10f, 10f, 100f), Color.Gray),
+                new BoxObject(GraphicsDevice, new Vector3(650f, 45f, 405f), new Vector3(100f, 10f, 10f), Color.Gray),
+            
+                new BoxObject(GraphicsDevice, new Vector3(-405f, 45f, 450f), new Vector3(10f, 10f, 100f), Color.Gray),
+                new BoxObject(GraphicsDevice, new Vector3(-455f, 45f, 405f), new Vector3(90f, 10f, 10f), Color.Gray),  
+                new BoxObject(GraphicsDevice, new Vector3(-405f, 45f, 650f), new Vector3(10f, 10f, 100f), Color.Gray),
+                new BoxObject(GraphicsDevice, new Vector3(-650f, 45f, 405f), new Vector3(100f, 10f, 10f), Color.Gray),
+            
+                new BoxObject(GraphicsDevice, new Vector3(-405f, 45f, -450f), new Vector3(10f, 10f, 100f), Color.Gray),
+                new BoxObject(GraphicsDevice, new Vector3(-455f, 45f, -405f), new Vector3(90f, 10f, 10f), Color.Gray),  
+                new BoxObject(GraphicsDevice, new Vector3(-405f, 45f, -650f), new Vector3(10f, 10f, 100f), Color.Gray),
+                new BoxObject(GraphicsDevice, new Vector3(-650f, 45f, -405f), new Vector3(100f, 10f, 10f), Color.Gray),
+
+                new BoxObject(GraphicsDevice, new Vector3(405f, 45f, -450f), new Vector3(10f, 10f, 100f), Color.Gray),
+                new BoxObject(GraphicsDevice, new Vector3(455f, 45f, -405f), new Vector3(90f, 10f, 10f), Color.Gray),  
+                new BoxObject(GraphicsDevice, new Vector3(405f, 45f, -650f), new Vector3(10f, 10f, 100f), Color.Gray),
+                new BoxObject(GraphicsDevice, new Vector3(650f, 45f, -405f), new Vector3(100f, 10f, 10f), Color.Gray),           
             };
 
             PowerUps = new PowerUpObject[] {
@@ -99,12 +124,37 @@ namespace TGC.MonoGame.TP
                 new PowerUpObject(GraphicsDevice, new Vector3(235f,5f,400f)),
                 new PowerUpObject(GraphicsDevice, new Vector3(-235f,5f,400f)),
                 new PowerUpObject(GraphicsDevice, new Vector3(0f,5f,250f)),
+
+                new PowerUpObject(GraphicsDevice, new Vector3(550f, 40f, 550f)),
+                new PowerUpObject(GraphicsDevice, new Vector3(-550f, 40f, -550f)),
+                new PowerUpObject(GraphicsDevice, new Vector3(-550f, 40f, 550f)),
+                new PowerUpObject(GraphicsDevice, new Vector3(550f, 40f, -550f))
             };
 
             Ramps = new RampObject[] {
                 new RampObject(GraphicsDevice, new Vector3(370f, 15f, -90f), new Vector3(100f, 30f, 80f), MathF.PI / 2, Color.Yellow),
                 new RampObject(GraphicsDevice, new Vector3(-370f, 15f, 90f), new Vector3(100f, 30f, 80f), - MathF.PI / 2, Color.Yellow),
 
+                new RampObject(GraphicsDevice, new Vector3(550f, 20f, 350f), new Vector3(100f, 40f, 100f), MathF.PI / 2, Color.Yellow),
+                new RampObject(GraphicsDevice, new Vector3(350f, 20f, 550f), new Vector3(100f, 40f, 100f), MathF.PI, Color.Yellow),
+
+                new RampObject(GraphicsDevice, new Vector3(550f, 20f, -350f), new Vector3(100f, 40f, 100f), - MathF.PI / 2, Color.Yellow),
+                new RampObject(GraphicsDevice, new Vector3(350f, 20f, -550f), new Vector3(100f, 40f, 100f), MathF.PI, Color.Yellow),
+
+                new RampObject(GraphicsDevice, new Vector3(-550f, 20f, -350f), new Vector3(100f, 40f, 100f), - MathF.PI / 2, Color.Yellow),
+                new RampObject(GraphicsDevice, new Vector3(-350f, 20f, -550f), new Vector3(100f, 40f, 100f), 0, Color.Yellow),
+
+                new RampObject(GraphicsDevice, new Vector3(-550f, 20f, 350f), new Vector3(100f, 40f, 100f), MathF.PI / 2, Color.Yellow),
+                new RampObject(GraphicsDevice, new Vector3(-350f, 20f, 550f), new Vector3(100f, 40f, 100f), 0, Color.Yellow),
+
+
+
+/*
+                new BoxObject(GraphicsDevice, new Vector3(550f, 20f, 550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
+                new BoxObject(GraphicsDevice, new Vector3(-550f, 20f, 550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
+                new BoxObject(GraphicsDevice, new Vector3(-550f, 20f, -550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
+                new BoxObject(GraphicsDevice, new Vector3(550f, 20f, -550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
+*/
 /*
                 new RampObject(GraphicsDevice, new Vector3(0f, 27.5f, 160f), new Vector3(200f, 0f, 50f), MathF.PI, Color.DarkSlateGray),
                 new RampObject(GraphicsDevice, new Vector3(-170f, 0f, 160f), new Vector3(140f, 55f, 50f), MathF.PI, Color.DarkGray),
@@ -265,7 +315,7 @@ namespace TGC.MonoGame.TP
         protected override void Draw(GameTime gameTime)
         {
             // Aca deberiamos poner toda la logica de renderizado del juego.
-            GraphicsDevice.Clear(Color.Green);
+            GraphicsDevice.Clear(Color.LightBlue);
 
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
             Car.Draw(View, Projection);
@@ -290,7 +340,7 @@ namespace TGC.MonoGame.TP
             {
                 Mounts[i].Draw(View, Projection);
             }
-            Floor.Draw(Matrix.CreateScale(1000f), View, Projection);
+            Floor.Draw(Matrix.CreateScale(700f), View, Projection);
         }
 
         /// <summary>

@@ -19,8 +19,8 @@ namespace TGC.MonoGame.TP.Src.Geometries.Textures
             CreateIndexBuffer(graphicsDevice);
 
             Effect = new BasicEffect(graphicsDevice);
-            Effect.TextureEnabled = true;
-            Effect.EnableDefaultLighting();
+            // Effect.TextureEnabled = true;
+            // Effect.EnableDefaultLighting();
         }
 
         /// <summary>
@@ -114,6 +114,8 @@ namespace TGC.MonoGame.TP.Src.Geometries.Textures
             // Set our vertex declaration, vertex buffer, and index buffer.
             graphicsDevice.SetVertexBuffer(Vertices);
             graphicsDevice.Indices = Indices;
+
+            effect.Parameters["DiffuseColor"].SetValue(Color.Black.ToVector3());
 
             foreach (var effectPass in effect.CurrentTechnique.Passes)
             {

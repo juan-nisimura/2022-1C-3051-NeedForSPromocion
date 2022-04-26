@@ -69,10 +69,10 @@ namespace TGC.MonoGame.TP
 
             Camera = new CameraObject();
 
-            Car = new PlayerCarObject(new Vector3(-100f,0,-100f), Color.Blue);
+            Car = new PlayerCarObject(GraphicsDevice, new Vector3(-100f,0,-100f), Color.Blue);
             Car.Initialize();
 
-            IACar = new IACarObject(new Vector3(-100f,0,-50f), Color.Red);
+            IACar = new IACarObject(GraphicsDevice, new Vector3(-100f,0,-50f), Color.Red);
             IACar.Initialize();
 
             Boxes = new BoxObject[] {

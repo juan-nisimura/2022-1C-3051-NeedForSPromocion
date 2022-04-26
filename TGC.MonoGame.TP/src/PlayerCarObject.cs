@@ -9,7 +9,8 @@ namespace TGC.Monogame.TP.Src
 {
     class PlayerCarObject : CarObject
     {
-        public PlayerCarObject(Vector3 position, Color color) : base(position, color)
+        public PlayerCarObject(GraphicsDevice graphicsDevice, Vector3 position, Color color)
+             : base(graphicsDevice, position, color)
         {
         }
 

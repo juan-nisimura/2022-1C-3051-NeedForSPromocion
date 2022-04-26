@@ -2,6 +2,8 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+
 namespace TGC.Monogame.TP.Src   
 {
     class CarObject : DefaultObject
@@ -25,21 +27,35 @@ namespace TGC.Monogame.TP.Src
         protected Vector3 Position { get; set; }
 
         protected WeaponObject Weapon { get; set; } = new WeaponObject();
+        protected WheelObject[] FrontWheels { get; set; }
+        protected WheelObject[] BackWheels { get; set; }
 
-        public CarObject(Vector3 position, Color color){
+        public CarObject(GraphicsDevice graphicsDevice, Vector3 position, Color color){
             Position = position;
             DiffuseColor = color.ToVector3();
+            FrontWheels = new WheelObject[] {
+                new WheelObject(graphicsDevice, new Vector3(105f,45f,145f)),
+                new WheelObject(graphicsDevice, new Vector3(-105f,45f,145f)),
+            };
+            BackWheels = new WheelObject[] {
+                new WheelObject(graphicsDevice, new Vector3(105f,45f,-145f)),
+                new WheelObject(graphicsDevice, new Vector3(-105f,45f,-145f)),
+            };
         }
 
         public new void Initialize(){
             base.Initialize();
             ScaleMatrix = Matrix.CreateScale(0.05f, 0.05f, 0.05f);
             Weapon.Initialize();
+            for(int i = 0;i < FrontWheels.Length;i++)    FrontWheels[i].Initialize();
+            for(int i = 0;i < BackWheels.Length;i++)     BackWheels[i].Initialize();
         }
         public new void Load(ContentManager content){
             ModelDirectory = "RacingCarA/RacingCar";
             base.Load(content);
             Weapon.Load(content);
+            for(int i = 0;i < FrontWheels.Length;i++)    FrontWheels[i].Load(content);
+            for(int i = 0;i < BackWheels.Length;i++)     BackWheels[i].Load(content);
         }
 
         public override void Update(GameTime gameTime){
@@ -54,12 +70,16 @@ namespace TGC.Monogame.TP.Src
             World *= Matrix.CreateTranslation(Position);
 
             Weapon.FollowCar(World);
+            for(int i = 0;i < FrontWheels.Length;i++)    FrontWheels[i].FollowCar(World, TurningSpeed);
+            for(int i = 0;i < BackWheels.Length;i++)     BackWheels[i].FollowCar(World, 0);
         }
 
         public new void Draw(Matrix view, Matrix projection)
         {
             base.Draw(view, projection);
             Weapon.Draw(view, projection);
+            for(int i = 0;i < FrontWheels.Length;i++)    FrontWheels[i].Draw(view, projection);
+            for(int i = 0;i < BackWheels.Length;i++)     BackWheels[i].Draw(view, projection);
         }
 
         public Vector3 GetPosition()

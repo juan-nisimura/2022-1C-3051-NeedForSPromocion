@@ -30,10 +30,21 @@ Afuera del mundo Windows, vas a necesitar la ayudar de [Wine](https://www.winehq
 
 Los recursos usados se almacenan utilizando [Git LFS](https://git-lfs.github.com), con lo cual antes de clonar el repositorio les conviene tenerlo instalado así es automático el pull o si ya lo tienen pueden hacer ```git lfs pull```.
 
+## Jugabilidad
+
+ * **Tecla G**: Cambia de modo ("Modo Normal" o "Modo God"). Por defecto, el juego comienza en modo normal.
+ * **Modo God**:
+   * **Teclas WASD**: Mueve la cámara.
+ * **Modo Normal** (maneja el auto):
+   * **Tecla W**: Acelerar.
+   * **Tecla S**: Acelerar en reversa.
+   * **Teclas A y D**: Doblar.
+   * **Tecla Espacio**: Saltar.
+
 ## Integrantes
-TGC, Tgcito  |  Apellido, Nombre
------------- | -------------
-<img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/robotgc.png" height="500"> | <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/trofeotp.png" height="500">
+Happel, Javier  |  Monduela, Franco  |  Moyano, Leonel  |  Nisimura, Juan  |  Vidaurreta, Agustín
+------------ | ------------- | ------------- | ------------- | ------------- 
+<img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/robotgc.png" height="500"> | <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/trofeotp.png" height="500"> | |
 
 ## Capturas
 ![screenshot1](https://github.com/tgc-utn/tgc-monogame-tp/blob/master/TGC.MonoGame.TP/Icon.bmp)

@@ -52,6 +52,7 @@ namespace TGC.MonoGame.TP
         private CylinderObject[] Cylinders { get; set; }
         private MountObject[] Mounts { get; set; }
         private BoostPadObject[] BoostPads { get; set; }
+        private TreeObject[] Trees { get; set; }
         private FloorObject Floor { get; set; }
 
         /// <summary>
@@ -146,22 +147,7 @@ namespace TGC.MonoGame.TP
 
                 new RampObject(GraphicsDevice, new Vector3(-550f, 20f, 350f), new Vector3(100f, 40f, 100f), MathF.PI / 2, Color.Yellow),
                 new RampObject(GraphicsDevice, new Vector3(-350f, 20f, 550f), new Vector3(100f, 40f, 100f), 0, Color.Yellow),
-
-/*
-                new BoxObject(GraphicsDevice, new Vector3(550f, 20f, 550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
-                new BoxObject(GraphicsDevice, new Vector3(-550f, 20f, 550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
-                new BoxObject(GraphicsDevice, new Vector3(-550f, 20f, -550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
-                new BoxObject(GraphicsDevice, new Vector3(550f, 20f, -550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
-*/
-/*
-                new RampObject(GraphicsDevice, new Vector3(0f, 27.5f, 160f), new Vector3(200f, 0f, 50f), MathF.PI, Color.DarkSlateGray),
-                new RampObject(GraphicsDevice, new Vector3(-170f, 0f, 160f), new Vector3(140f, 55f, 50f), MathF.PI, Color.DarkGray),
-                new RampObject(GraphicsDevice, new Vector3(170f, 0f, 160f), new Vector3(140f, 55f, 50f), 0, Color.DarkGray),
-                new RampObject(GraphicsDevice, new Vector3(-50f, 42.5f, 184.5f), new Vector3(100f, 30f, 1f), MathF.PI, Color.OrangeRed),
-                new RampObject(GraphicsDevice, new Vector3(50f, 42.5f, 184.5f), new Vector3(100f, 30f, 1f), 0, Color.OrangeRed),
-                new RampObject(GraphicsDevice, new Vector3(-50f, 42.5f, 135.5f), new Vector3(100f, 30f, 1f), MathF.PI, Color.OrangeRed),
-                new RampObject(GraphicsDevice, new Vector3(50f, 42.5f, 135.5f), new Vector3(100f, 30f, 1f), 0, Color.OrangeRed),
- */         };
+            };
 
             Cylinders = new CylinderObject[]{
                 new CylinderObject(GraphicsDevice, new Vector3(150f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
@@ -198,6 +184,17 @@ namespace TGC.MonoGame.TP
                 new BoostPadObject(GraphicsDevice, new Vector3(-525,0.1f,0f),new Vector3(22.5f,1f,25f),0),
             };
 
+            Trees = new TreeObject[]{
+                new TreeObject(GraphicsDevice, new Vector3(100f,0f,400f), 40f),
+                new TreeObject(GraphicsDevice, new Vector3(-100f,0f,400f), 40f),
+                new TreeObject(GraphicsDevice, new Vector3(100f,0f,-400f), 40f),
+                new TreeObject(GraphicsDevice, new Vector3(-100f,0f,-400f), 40f),
+                new TreeObject(GraphicsDevice, new Vector3(-300f,0f,-300f), 40f),
+                new TreeObject(GraphicsDevice, new Vector3(-300f,0f,300f), 40f),
+                new TreeObject(GraphicsDevice, new Vector3(300f,0f,-300f), 40f),
+                new TreeObject(GraphicsDevice, new Vector3(300f,0f,300f), 40f),
+            };
+
             Floor = new FloorObject(GraphicsDevice, new Vector3(0f,0f,0f),new Vector3(700f,1f,700f),0);           
 
             for (int i = 0; i < Boxes.Length; i++)      Boxes[i].Initialize();
@@ -206,6 +203,7 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Cylinders.Length; i++)  Cylinders[i].Initialize();
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Initialize();
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Initialize();
+            for (int i = 0; i < Trees.Length; i++)      Trees[i].Initialize();
 
             Floor.Initialize();
 
@@ -236,6 +234,7 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Cylinders.Length; i++)  Cylinders[i].Load(Content);
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Load(Content);     
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Load(Content);
+            for (int i = 0; i < Trees.Length; i++)      Trees[i].Load(Content);
 
             base.LoadContent();
         }
@@ -273,6 +272,7 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Cylinders.Length; i++)  Cylinders[i].Update(gameTime);
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Update(gameTime);
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Update(gameTime);
+            for (int i = 0; i < Trees.Length; i++)      Trees[i].Update(gameTime);
 
             View = Camera.FollowCamera(Car.GetPosition()).GetView();
 
@@ -298,6 +298,7 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Cylinders.Length; i++)  Cylinders[i].Draw(View, Projection);
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Draw(View, Projection);
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Draw(View, Projection);
+            for (int i = 0; i < Trees.Length; i++)      Trees[i].Draw(View, Projection);
         }
 
         /// <summary>

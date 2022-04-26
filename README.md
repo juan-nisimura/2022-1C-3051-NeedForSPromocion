@@ -34,7 +34,7 @@ Los recursos usados se almacenan utilizando [Git LFS](https://git-lfs.github.com
 ```
 dotnet restore
 dotnet build
-dotnet run --project TGC.MonoGame.Samples
+dotnet run --project TGC.MonoGame.TP
 ```
 
 ## Jugabilidad

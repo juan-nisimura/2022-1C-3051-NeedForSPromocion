@@ -30,16 +30,23 @@ Afuera del mundo Windows, vas a necesitar la ayudar de [Wine](https://www.winehq
 
 Los recursos usados se almacenan utilizando [Git LFS](https://git-lfs.github.com), con lo cual antes de clonar el repositorio les conviene tenerlo instalado así es automático el pull o si ya lo tienen pueden hacer ```git lfs pull```.
 
+## Para ejecutar en terminal
+```
+dotnet restore
+dotnet build
+dotnet run --project TGC.MonoGame.Samples
+```
+
 ## Jugabilidad
 
- * **Tecla G**: Cambia de modo ("Modo Normal" o "Modo God"). Por defecto, el juego comienza en modo normal.
+ * <kbd>G</kbd>: Cambia de modo ("Modo Normal" o "Modo God"). Por defecto, el juego comienza en modo normal.
  * **Modo God**:
-   * **Teclas WASD**: Mueve la cámara.
+   * <kbd>W</kbd>, <kbd>A</kbd>, <kbd>S</kbd>, <kbd>D</kbd>: Mueve la cámara.
  * **Modo Normal** (maneja el auto):
-   * **Tecla W**: Acelerar.
-   * **Tecla S**: Acelerar en reversa.
-   * **Teclas A y D**: Doblar.
-   * **Tecla Espacio**: Saltar.
+   * <kbd>W</kbd>: Acelerar.
+   * <kbd>S</kbd>: Acelerar en reversa.
+   * <kbd>A</kbd>, <kbd>D</kbd>: Doblar.
+   * <kbd>Espacio</kbd>: Saltar.
 
 ## Integrantes
 Happel, Javier  |  Monduela, Franco  |  Moyano, Leonel  |  Nisimura, Juan  |  Vidaurreta, Agustín

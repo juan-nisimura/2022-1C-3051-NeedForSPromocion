@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.Monogame.TP.Src;
+using TGC.Monogame.TP.Src.PrimitiveObjects;
+using TGC.Monogame.TP.Src.ModelObjects;
 
 namespace TGC.MonoGame.TP
 {
@@ -209,7 +211,7 @@ namespace TGC.MonoGame.TP
 
             ControllerKeyG = new KeyController(Keys.G);
 
-            Console.WriteLine("Cantidad de objectos = {0}", DefaultObject.ObjectCount);
+            Console.WriteLine("Cantidad de objectos = {0}", DefaultObject<Type>.ObjectCount);
             
             base.Initialize();
         }
@@ -225,16 +227,19 @@ namespace TGC.MonoGame.TP
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Cargo los objetos
-            Car.Load(Content);
-            IACar.Load(Content);
-            Floor.Load(Content);
-            for (int i = 0; i < Boxes.Length; i++)      Boxes[i].Load(Content);
-            for (int i = 0; i < PowerUps.Length; i++)   PowerUps[i].Load(Content);
-            for (int i = 0; i < Ramps.Length; i++)      Ramps[i].Load(Content);
-            for (int i = 0; i < Cylinders.Length; i++)  Cylinders[i].Load(Content);
-            for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Load(Content);     
-            for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Load(Content);
-            for (int i = 0; i < Trees.Length; i++)      Trees[i].Load(Content);
+
+            CarObject.Load(Content);
+
+            BoostPadObject.Load(Content, "BasicShader");
+            BoxObject.Load(Content, "BasicShader");
+            CylinderObject.Load(Content, "BasicShader");
+            FloorObject.Load(Content, "BasicShader");
+            MountObject.Load(Content, "BasicShader");
+            PowerUpObject.Load(Content, "BasicShader");
+            RampObject.Load(Content, "BasicShader");
+            SphereObject.Load(Content, "BasicShader");
+            //TreeObject.Load(Content, "BasicShader");
+            //WheelObject.Load(Content, "BasicShader");
 
             base.LoadContent();
         }
@@ -291,6 +296,7 @@ namespace TGC.MonoGame.TP
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
             Car.Draw(View, Projection);
             IACar.Draw(View, Projection);
+            
             Floor.Draw(View, Projection);
             for (int i = 0; i < Boxes.Length; i++)      Boxes[i].Draw(View, Projection);
             for (int i = 0; i < PowerUps.Length; i++)   PowerUps[i].Draw(View, Projection);
@@ -299,6 +305,7 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Draw(View, Projection);
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Draw(View, Projection);
             for (int i = 0; i < Trees.Length; i++)      Trees[i].Draw(View, Projection);
+            
         }
 
         /// <summary>

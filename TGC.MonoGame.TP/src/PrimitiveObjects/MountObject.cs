@@ -1,14 +1,11 @@
 using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using TGC.Monogame.TP;
 using Microsoft.Xna.Framework.Content;
-using TGC.MonoGame.TP.Src.Geometries;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace TGC.Monogame.TP.Src   
+namespace TGC.Monogame.TP.Src.PrimitiveObjects 
 {
-    class MountObject : DefaultObject
+    class MountObject : DefaultObject <MountObject>
     {
         protected BoxObject Box { get; set; }
         protected RampObject[] Ramps { get; set; }
@@ -29,19 +26,22 @@ namespace TGC.Monogame.TP.Src
                 Ramps[i].Initialize();
             }
         }
-        public new void Load(ContentManager content){
+
+        public override void Update(GameTime gameTime){
+
+        }
+        
+        public static void Load(ContentManager content, string shaderDirectory){
             // Cargo efecto
+            /*
             Box.Load(content);
             for (int i = 0; i < Ramps.Length; i++)
             {
                 Ramps[i].Load(content);
-            }
+            }*/
         }
 
-        public override void Update(GameTime gameTime){   
-        }
-
-        public new void Draw(Matrix view, Matrix projection){
+        public override void Draw(Matrix view, Matrix projection){
             Box.Draw(view, projection);
             for (int i = 0; i < Ramps.Length; i++)
             {

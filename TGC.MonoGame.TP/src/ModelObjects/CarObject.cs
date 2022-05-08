@@ -3,10 +3,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.Monogame.TP.Src.PrimitiveObjects;
 
-namespace TGC.Monogame.TP.Src   
+namespace TGC.Monogame.TP.Src.ModelObjects  
 {
-    class CarObject : DefaultObject
+    class CarObject : DefaultModelObject <CarObject>
     {
         protected float MaxSpeed { get; set; } = 3000f;
         protected float MaxReverseSpeed { get; set; } = 1500f;
@@ -50,12 +51,10 @@ namespace TGC.Monogame.TP.Src
             for(int i = 0;i < FrontWheels.Length;i++)    FrontWheels[i].Initialize();
             for(int i = 0;i < BackWheels.Length;i++)     BackWheels[i].Initialize();
         }
-        public new void Load(ContentManager content){
-            ModelDirectory = "RacingCarA/RacingCar";
-            base.Load(content);
-            Weapon.Load(content);
-            for(int i = 0;i < FrontWheels.Length;i++)    FrontWheels[i].Load(content);
-            for(int i = 0;i < BackWheels.Length;i++)     BackWheels[i].Load(content);
+        
+        public static void Load(ContentManager content){
+            DefaultLoad(content, "RacingCarA/RacingCar", "BasicShader");
+            WeaponObject.Load(content);
         }
 
         public override void Update(GameTime gameTime){

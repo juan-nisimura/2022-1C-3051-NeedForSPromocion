@@ -2,9 +2,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
-namespace TGC.Monogame.TP.Src   
+namespace TGC.Monogame.TP.Src.PrimitiveObjects 
 {
-    class TreeObject : DefaultObject
+    class TreeObject : DefaultObject <TreeObject>
     {
         protected CylinderObject Cylinder { get; set; }
         protected SphereObject Sphere { get; set; }
@@ -17,15 +17,13 @@ namespace TGC.Monogame.TP.Src
             Cylinder.Initialize();
             Sphere.Initialize();
         }
-        public new void Load(ContentManager content){
-            Cylinder.Load(content);
-            Sphere.Load(content);
+        public static void Load(ContentManager content, string shaderDirectory){
         }
 
         public override void Update(GameTime gameTime){   
         }
 
-        public new void Draw(Matrix view, Matrix projection){
+        public override void Draw(Matrix view, Matrix projection){
             Cylinder.Draw(view, projection);
             Sphere.Draw(view, projection);
         }

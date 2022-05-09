@@ -19,6 +19,18 @@
 /processorParam:DebugMode=Auto
 /build:Effects/BasicShader.fx
 
+#begin Effects/CarShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/CarShader.fx
+
+#begin Effects/WeaponShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/WeaponShader.fx
+
 #begin Models/CombatVehicle/Tex_0001_1.png
 /importer:TextureImporter
 /processor:TextureProcessor

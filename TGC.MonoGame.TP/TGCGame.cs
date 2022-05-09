@@ -238,8 +238,6 @@ namespace TGC.MonoGame.TP
             PowerUpObject.Load(Content, "BasicShader");
             RampObject.Load(Content, "BasicShader");
             SphereObject.Load(Content, "BasicShader");
-            //TreeObject.Load(Content, "BasicShader");
-            //WheelObject.Load(Content, "BasicShader");
 
             base.LoadContent();
         }

@@ -16,10 +16,9 @@ namespace TGC.Monogame.TP.Src
         public const string ContentFolderSounds = "Sounds/";
         public const string ContentFolderSpriteFonts = "SpriteFonts/";
         public const string ContentFolderTextures = "Textures/";
-
-        // protected static Effect Effect;     // Usar dictionary
-
         protected static Dictionary<Type, Effect> Effects = new Dictionary<Type, Effect>(); 
+        protected static Dictionary<Type, Texture> Textures = new Dictionary<Type, Texture>();
+        
         protected Matrix World;
         protected Matrix ScaleMatrix;
         protected Matrix TranslateMatrix;
@@ -28,9 +27,12 @@ namespace TGC.Monogame.TP.Src
         protected Vector3 DiffuseColor;
         public static int ObjectCount { get; set; } = 0;
 
-
         public static Effect getEffect(){
             return Effects[typeof(T)];
+        }
+
+        public static Texture getTexture(){
+            return Textures[typeof(T)];
         }
 
         public void Initialize(){

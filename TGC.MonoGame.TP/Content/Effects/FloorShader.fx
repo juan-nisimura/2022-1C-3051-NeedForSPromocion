@@ -17,7 +17,16 @@ float4x4 World;
 float4x4 View;
 float4x4 Projection;
 
-float Time = 0;
+texture Texture;
+
+sampler2D textureSampler = sampler_state
+{
+	Texture = (Texture);
+	MagFilter = Linear;
+	MinFilter = Linear;
+	AddressU = Wrap;
+	AddressV = Wrap;
+};
 
 struct VertexShaderInput
 {
@@ -29,7 +38,6 @@ struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
 	float2 TextureCoordinate : TEXCOORD0;
-	float4 Color: COLOR0;
 };
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
@@ -52,22 +60,8 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	float2 coordinates = input.TextureCoordinate;
-
-	float esLaSegundaMitad = floor(coordinates.x + 0.5);	// no = 0, si = 1
-
-	// Espejo las coordenadas en x si es la segunda mitad
-	coordinates = float2(coordinates.x * (1 - esLaSegundaMitad) + (1 - coordinates.x) * esLaSegundaMitad, coordinates.y);
-
-	coordinates = coordinates * 8;
-
-	float2 cell = floor(coordinates);
-	coordinates = frac(coordinates);
-
-	float cuadradoPar = (cell.x + cell.y) % 2;	// par = 0, impar = 1
-
-	float verde = (floor(coordinates.x + coordinates.y) + cuadradoPar) % 2;
-
-    return float4(0.1, verde * 0.9, 0.1, 1);
+	coordinates = coordinates * 15;
+	return float4(0.4,0.4,0.4,0) + tex2D(textureSampler, coordinates);
 }
 
 technique BasicColorDrawing

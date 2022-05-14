@@ -15,6 +15,14 @@ namespace TGC.Monogame.TP.Src
             Effects.Add(typeof(T), content.Load<Effect>(ContentFolderEffects + shaderDirectory));
         }
 
+        public static void Load(ContentManager content, string shaderDirectory, string textureDirectory){
+            // Cargo efecto
+            Load(content, shaderDirectory);
+            
+            // Cargo la textura
+            Textures.Add(typeof(T), content.Load<Texture>(ContentFolderTextures + textureDirectory));
+        }
+
         public override void Update(GameTime gameTime){   
         }
 
@@ -23,6 +31,7 @@ namespace TGC.Monogame.TP.Src
             Effects[typeof(T)].Parameters["View"].SetValue(view);
             Effects[typeof(T)].Parameters["Projection"].SetValue(projection);
             Effects[typeof(T)].Parameters["DiffuseColor"]?.SetValue(DiffuseColor);
+            Effects[typeof(T)].Parameters["Texture"]?.SetValue(getTexture());
             DrawPrimitive();
         }
     

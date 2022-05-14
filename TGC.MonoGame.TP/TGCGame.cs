@@ -239,7 +239,7 @@ namespace TGC.MonoGame.TP
             BoostPadObject.Load(Content, "BoostPadShader");
             BoxObject.Load(Content, "BasicShader");
             CylinderObject.Load(Content, "BasicShader");
-            FloorObject.Load(Content, "BasicShader");
+            FloorObject.Load(Content, "FloorShader", "Floor");
             MountObject.Load(Content, "BasicShader");
             PowerUpObject.Load(Content, "BasicShader");
             RampObject.Load(Content, "BasicShader");

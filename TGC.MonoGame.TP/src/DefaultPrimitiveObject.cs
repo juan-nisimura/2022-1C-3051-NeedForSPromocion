@@ -22,7 +22,7 @@ namespace TGC.Monogame.TP.Src
             Effects[typeof(T)].Parameters["World"].SetValue(World);
             Effects[typeof(T)].Parameters["View"].SetValue(view);
             Effects[typeof(T)].Parameters["Projection"].SetValue(projection);
-            Effects[typeof(T)].Parameters["DiffuseColor"].SetValue(DiffuseColor);
+            Effects[typeof(T)].Parameters["DiffuseColor"]?.SetValue(DiffuseColor);
             DrawPrimitive();
         }
     

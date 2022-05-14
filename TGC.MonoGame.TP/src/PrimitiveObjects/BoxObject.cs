@@ -6,7 +6,6 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
     class BoxObject : CubeObject <BoxObject>
     {
-
         public BoxObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, Color color) : base(graphicsDevice, position, size, color)
         {
         }

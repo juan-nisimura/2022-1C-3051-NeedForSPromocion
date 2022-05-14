@@ -56,6 +56,7 @@ namespace TGC.MonoGame.TP
         private BoostPadObject[] BoostPads { get; set; }
         private TreeObject[] Trees { get; set; }
         private FloorObject Floor { get; set; }
+        private MissileObject[] Missiles { get; set; }
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -173,17 +174,17 @@ namespace TGC.MonoGame.TP
             };
 
             BoostPads = new BoostPadObject[]{
-                new BoostPadObject(GraphicsDevice, new Vector3(0,0.1f,575f),new Vector3(25f,1f,22.5f),0),
-                new BoostPadObject(GraphicsDevice, new Vector3(0,0.1f,525f),new Vector3(25f,1f,22.5f),0),
+                new BoostPadObject(GraphicsDevice, new Vector3(0,0.1f,575f),new Vector3(22.5f,1f,27.5f), - MathF.PI / 2),
+                new BoostPadObject(GraphicsDevice, new Vector3(0,0.1f,525f),new Vector3(22.5f,1f,27.5f), - MathF.PI / 2),
 
-                new BoostPadObject(GraphicsDevice, new Vector3(0,0.1f,-575f),new Vector3(25f,1f,22.5f),0),
-                new BoostPadObject(GraphicsDevice, new Vector3(0,0.1f,-525f),new Vector3(25f,1f,22.5f),0),
+                new BoostPadObject(GraphicsDevice, new Vector3(0,0.1f,-575f),new Vector3(22.5f,1f,27.5f), MathF.PI / 2),
+                new BoostPadObject(GraphicsDevice, new Vector3(0,0.1f,-525f),new Vector3(22.5f,1f,27.5f), MathF.PI / 2),
 
-                new BoostPadObject(GraphicsDevice, new Vector3(575,0.1f,0f),new Vector3(22.5f,1f,25f),0),
-                new BoostPadObject(GraphicsDevice, new Vector3(525,0.1f,0f),new Vector3(22.5f,1f,25f),0),
+                new BoostPadObject(GraphicsDevice, new Vector3(575,0.1f,0f),new Vector3(22.5f,1f,27.5f), 0),
+                new BoostPadObject(GraphicsDevice, new Vector3(525,0.1f,0f),new Vector3(22.5f,1f,27.5f), 0),
 
-                new BoostPadObject(GraphicsDevice, new Vector3(-575,0.1f,0f),new Vector3(22.5f,1f,25f),0),
-                new BoostPadObject(GraphicsDevice, new Vector3(-525,0.1f,0f),new Vector3(22.5f,1f,25f),0),
+                new BoostPadObject(GraphicsDevice, new Vector3(-575,0.1f,0f),new Vector3(22.5f,1f,27.5f), MathF.PI),
+                new BoostPadObject(GraphicsDevice, new Vector3(-525,0.1f,0f),new Vector3(22.5f,1f,27.5f), MathF.PI),
             };
 
             Trees = new TreeObject[]{
@@ -197,6 +198,10 @@ namespace TGC.MonoGame.TP
                 new TreeObject(GraphicsDevice, new Vector3(300f,0f,300f), 40f),
             };
 
+            Missiles = new MissileObject[] {
+                new MissileObject(GraphicsDevice, new Vector3(-100f, 0f, -100f), 40f),
+            };
+
             Floor = new FloorObject(GraphicsDevice, new Vector3(0f,0f,0f),new Vector3(700f,1f,700f),0);           
 
             for (int i = 0; i < Boxes.Length; i++)      Boxes[i].Initialize();
@@ -206,6 +211,7 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Initialize();
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Initialize();
             for (int i = 0; i < Trees.Length; i++)      Trees[i].Initialize();
+            for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Initialize();
 
             Floor.Initialize();
 
@@ -230,7 +236,7 @@ namespace TGC.MonoGame.TP
 
             CarObject.Load(Content);
 
-            BoostPadObject.Load(Content, "BasicShader");
+            BoostPadObject.Load(Content, "BoostPadShader");
             BoxObject.Load(Content, "BasicShader");
             CylinderObject.Load(Content, "BasicShader");
             FloorObject.Load(Content, "BasicShader");
@@ -238,6 +244,7 @@ namespace TGC.MonoGame.TP
             PowerUpObject.Load(Content, "BasicShader");
             RampObject.Load(Content, "BasicShader");
             SphereObject.Load(Content, "BasicShader");
+            TriangleObject.Load(Content, "BasicShader");
 
             base.LoadContent();
         }
@@ -276,6 +283,7 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Update(gameTime);
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Update(gameTime);
             for (int i = 0; i < Trees.Length; i++)      Trees[i].Update(gameTime);
+            for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Update(gameTime);
 
             View = Camera.FollowCamera(Car.GetPosition()).GetView();
 
@@ -303,6 +311,7 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Draw(View, Projection);
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Draw(View, Projection);
             for (int i = 0; i < Trees.Length; i++)      Trees[i].Draw(View, Projection);
+            for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Draw(View, Projection);
             
         }
 

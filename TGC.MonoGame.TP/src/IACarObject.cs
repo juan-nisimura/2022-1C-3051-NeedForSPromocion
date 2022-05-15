@@ -34,10 +34,13 @@ namespace TGC.Monogame.TP.Src
 
             // Calculo rotacion del auto
             Rotation += TurningSpeed * elapsedTime;
-            ObjectBox.Center = Position;
-            ObjectBox.Orientation = Matrix.CreateRotationY(Rotation);
 
+            // Esto calcula la posicion del auto
             base.Update(gameTime);
+            
+            ObjectBox.Center = Position;
+            // Hacer que funcione cuando se incline
+            ObjectBox.Orientation = Matrix.CreateRotationY(Rotation);
         }
     }
 }

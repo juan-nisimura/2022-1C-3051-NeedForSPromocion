@@ -76,6 +76,7 @@ namespace TGC.Monogame.TP.Src
             // Move the center
             ObjectBox.Center = Position;
             // Then set its orientation!
+            // Hacerlo que funcione cuando se inclina
             ObjectBox.Orientation = Matrix.CreateRotationY(ObjectAngle);
 
 

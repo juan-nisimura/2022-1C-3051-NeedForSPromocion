@@ -12,7 +12,6 @@ namespace TGC.Monogame.TP.Src
         public PlayerCarObject(GraphicsDevice graphicsDevice, Vector3 position, Color color)
              : base(graphicsDevice, position, color)
         {
-        }
 
         public override void Update(GameTime gameTime){
             // Capturo el estado del teclado
@@ -73,9 +72,13 @@ namespace TGC.Monogame.TP.Src
                 // Calculo velocidad vertical
                 VerticalSpeed = VerticalSpeed - Gravity * elapsedTime;
             }
-            ObjectBox.Center = Position;
-            ObjectBox.Orientation = Matrix.CreateRotationY(Rotation);
+            
+            // Esto calcula la posición del auto
             base.Update(gameTime);
+        
+            ObjectBox.Center = Position;
+            // Hacerlo que funcione cuando se incline
+            ObjectBox.Orientation = Matrix.CreateRotationY(Rotation);
         }
     }
 }

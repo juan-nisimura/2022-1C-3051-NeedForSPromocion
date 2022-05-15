@@ -4,7 +4,7 @@ using TGC.MonoGame.TP.Src.Geometries;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
-    class TriangleObject : DefaultPrimitiveObject <TriangleObject>
+    class TriangleObject<T> : DefaultPrimitiveObject <T>
     {
         protected TrianglePrimitive TrianglePrimitive { get; }
         public TriangleObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 vertex1, Vector3 vertex2, Vector3 vertex3, Color color){

@@ -4,7 +4,7 @@ using TGC.MonoGame.TP.Src.Geometries;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
-    class CylinderObject : DefaultPrimitiveObject <CylinderObject>
+    class CylinderObject<T> : DefaultPrimitiveObject <T>
     {
         protected CylinderPrimitive CylinderPrimitive { get; }
         public CylinderObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotation, Color color){

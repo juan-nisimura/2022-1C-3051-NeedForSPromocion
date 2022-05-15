@@ -1,20 +1,20 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TGC.MonoGame.TP.Src.Geometries;
+using TGC.MonoGame.TP.Src.Geometries.Textures;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
     class CubeObject <T> : DefaultPrimitiveObject <T>
     {
-        protected CubePrimitive CubePrimitive { get; }
+        protected BoxPrimitive BoxPrimitive { get; }
         public CubeObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, Color color){
-            CubePrimitive = new CubePrimitive(graphicsDevice);
+            BoxPrimitive = new BoxPrimitive(graphicsDevice, Vector3.One, (Texture2D) getTexture());
             ScaleMatrix = Matrix.CreateScale(size);
             RotationMatrix = Matrix.Identity;
             TranslateMatrix = Matrix.CreateTranslation(position);
             DiffuseColor = color.ToVector3();
         }
 
-        protected override void DrawPrimitive() { CubePrimitive.Draw(getEffect()); }
+        protected override void DrawPrimitive() { BoxPrimitive.Draw(getEffect()); }
     }
 }

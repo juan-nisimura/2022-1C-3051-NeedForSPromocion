@@ -1,11 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using TGC.Monogame.TP;
-using Microsoft.Xna.Framework.Content;
-
-namespace TGC.Monogame.TP.Src   
+namespace TGC.Monogame.TP.Src.ModelObjects   
 {
     class IACarObject : CarObject
     {

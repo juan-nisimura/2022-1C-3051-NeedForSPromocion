@@ -1,10 +1,11 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.Monogame.TP.Src.ModelObjects;
 
-namespace TGC.Monogame.TP.Src   
+namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
-    class PowerUpObject : BoxObject
+    class PowerUpObject : CubeObject <PowerUpObject>
     {
         private float Rotation;
         private Vector3 Position;
@@ -13,12 +14,12 @@ namespace TGC.Monogame.TP.Src
         private float RespawnActualTime;
         const float RespawnCooldown = 10;
 
-        private PowerUp;
+        //private PowerUp PowerUp;
 
         public PowerUpObject(GraphicsDevice graphicsDevice, Vector3 position) : base(graphicsDevice, position, new Vector3(10f,10f,10f), Color.Yellow)
         {
             Position = position + new Vector3(0f, 10f, 0f);
-            //TranslateMatrix *= Matrix.CreateTranslation(0f, 10f, 0f);
+            TranslateMatrix = Matrix.CreateTranslation(Position);
             BoundingSphere = new BoundingSphere(Position, 8f);
         }
         public new void Initialize(){
@@ -42,13 +43,18 @@ namespace TGC.Monogame.TP.Src
                     // Si colisionó con el auto, el auto obtiene un powerup
                     isAvailable = false;
                     RespawnActualTime = 0;
-                    car.setPowerUp(PowerUp);
+                    // car.setPowerUp(PowerUp);
                 }
 
             } else {
                 RespawnActualTime += elapsedTime;
                 isAvailable = RespawnActualTime > RespawnCooldown;
             }
+        }
+
+        protected override void DrawPrimitive() {
+            if(isAvailable)   
+                BoxPrimitive.Draw(getEffect());
         }
     }
 }

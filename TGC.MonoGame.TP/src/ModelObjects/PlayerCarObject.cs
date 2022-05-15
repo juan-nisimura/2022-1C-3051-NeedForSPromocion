@@ -2,16 +2,15 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using TGC.Monogame.TP;
-using Microsoft.Xna.Framework.Content;
 
-namespace TGC.Monogame.TP.Src
+namespace TGC.Monogame.TP.Src.ModelObjects
 {
     class PlayerCarObject : CarObject
     {
         public PlayerCarObject(GraphicsDevice graphicsDevice, Vector3 position, Color color)
              : base(graphicsDevice, position, color)
         {
+        }
 
         public override void Update(GameTime gameTime){
             // Capturo el estado del teclado

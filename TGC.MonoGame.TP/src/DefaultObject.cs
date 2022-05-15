@@ -1,14 +1,11 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using TGC.Monogame.TP;
-using Microsoft.Xna.Framework.Content;
-using TGC.MonoGame.Samples.Collisions;
+using System.Collections.Generic;
 
 namespace TGC.Monogame.TP.Src   
 {
-    abstract class DefaultObject 
+    abstract class DefaultObject <T>
     {
         public const string ContentFolder3D = "Models/";
         public const string ContentFolderEffects = "Effects/";
@@ -16,59 +13,40 @@ namespace TGC.Monogame.TP.Src
         public const string ContentFolderSounds = "Sounds/";
         public const string ContentFolderSpriteFonts = "SpriteFonts/";
         public const string ContentFolderTextures = "Textures/";
+        protected static Dictionary<Type, Effect> Effects = new Dictionary<Type, Effect>(); 
+        protected static Dictionary<Type, Texture> Textures = new Dictionary<Type, Texture>();
+        
+        protected Matrix World;
+        protected Matrix ScaleMatrix;
+        protected Matrix TranslateMatrix;
+        protected Matrix RotationMatrix;
 
-        protected Model Model;
-        protected Effect Effect;
-        public Matrix World;
-        public Matrix ScaleMatrix;
-        public Matrix TranslateMatrix;
-        public Matrix RotationMatrix;
-        protected String ModelDirectory = "RacingCarA/RacingCar";
-        protected String ShaderDirectory = "BasicShader";
-        public Vector3 DiffuseColor = Color.White.ToVector3();
+        protected Vector3 DiffuseColor;
         public static int ObjectCount { get; set; } = 0;
+
+        public static Effect getEffect(){
+            return Effects[typeof(T)];
+        }
+
+        public static Texture getTexture(){
+            return Textures[typeof(T)];
+        }
 
         public void Initialize(){
             this.ResetWorld();
-            BoxObject.ObjectCount++; 
-        }
-        public void Load(ContentManager content){
-
-            // Cargo el modelo
-            Model = content.Load<Model>(ContentFolder3D + ModelDirectory);
-
-            // Cargo efecto
-            Effect = content.Load<Effect>(ContentFolderEffects + ShaderDirectory);
-
-            // Asigno el efecto que cargue a cada parte del mesh.
-            foreach (var mesh in Model.Meshes)
-                foreach (var meshPart in mesh.MeshParts)
-                    meshPart.Effect = Effect;
+            ObjectCount++; 
         }
 
-        public DefaultObject TransformWorld(Matrix transform){
+        public DefaultObject<T> TransformWorld(Matrix transform){
             World *= transform;
             return this;
         }
 
-        public DefaultObject ResetWorld(){
+        public DefaultObject<T> ResetWorld(){
             World = Matrix.Identity;
             return this;
         }
         abstract public void Update(GameTime gameTime);
-        public void Draw(Matrix view, Matrix projection){
-
-            // Para dibujar el modelo necesitamos pasarle informacion que el efecto esta esperando.
-            Effect.Parameters["View"].SetValue(view);
-            Effect.Parameters["Projection"].SetValue(projection);
-            Effect.Parameters["DiffuseColor"].SetValue(DiffuseColor);
-
-            foreach (var mesh in Model.Meshes)
-            {
-                var meshWorld = mesh.ParentBone.Transform * World;
-                Effect.Parameters["World"].SetValue(meshWorld);
-                mesh.Draw();
-            }
-        }
+        public abstract void Draw(Matrix view, Matrix projection);
     }
 }

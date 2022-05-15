@@ -19,6 +19,36 @@
 /processorParam:DebugMode=Auto
 /build:Effects/BasicShader.fx
 
+#begin Effects/BoostPadShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/BoostPadShader.fx
+
+#begin Effects/CarShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/CarShader.fx
+
+#begin Effects/FloorShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/FloorShader.fx
+
+#begin Effects/TreeTrunkShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/TreeTrunkShader.fx
+
+#begin Effects/WeaponShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/WeaponShader.fx
+
 #begin Models/CombatVehicle/Tex_0001_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -195,4 +225,40 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Models/RacingCarA/Vehicle_rougness.png
+
+#begin Textures/bark brown/textures/bark_brown_01_diff_4k.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/bark brown/textures/bark_brown_01_diff_4k.jpg
+
+#begin Textures/Floor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Floor.png
+
+#begin Textures/forest leaves/textures/forest_leaves_03_diff_4k.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/forest leaves/textures/forest_leaves_03_diff_4k.jpg
 

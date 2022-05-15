@@ -3,6 +3,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.Monogame.TP.Src;
+using TGC.MonoGame.Samples.Physics.Bepu;
+using BepuPhysics;
+using BepuPhysics.Collidables;
+using BepuUtilities.Memory;
+using NumericVector3 = System.Numerics.Vector3;
 
 namespace TGC.MonoGame.TP
 {
@@ -53,6 +58,7 @@ namespace TGC.MonoGame.TP
         private MountObject[] Mounts { get; set; }
         private BoostPadObject[] BoostPads { get; set; }
         private FloorObject Floor { get; set; }
+        private Boolean TouchingObject { get; set; }
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -248,6 +254,7 @@ namespace TGC.MonoGame.TP
         protected override void Update(GameTime gameTime)
         {
             // Aca deberiamos poner toda la logica de actualizacion del juego.
+            var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
 
             // Capturar Input teclado
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -264,7 +271,7 @@ namespace TGC.MonoGame.TP
                 View = Camera.MoveCameraByKeyboard(gameTime).GetView();
                 return;
             }
-
+            
             Car.Update(gameTime);
             IACar.Update(gameTime);
             Floor.Update(gameTime);
@@ -273,7 +280,28 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Cylinders.Length; i++)  Cylinders[i].Update(gameTime);
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Update(gameTime);
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Update(gameTime);
-
+            TouchingObject = Car.ObjectBox.Intersects(IACar.ObjectBox);
+            if(TouchingObject){
+                //Car.Speed = -2f ;
+                Car.DiffuseColor = Color.Yellow.ToVector3();
+                /*IACar.RotationMatrix *= Matrix.CreateRotationY(IACar.Rotation);
+                IACar.TranslateMatrix = Matrix.CreateTranslation(IACar.Position);
+                IACar.World = IACar.ScaleMatrix * IACar.RotationMatrix * IACar.TranslateMatrix;
+                IACar.Speed= 5f;
+                IACar.Position = new Vector3(IACar.Position.X - IACar.Speed * World.Forward.X * elapsedTime, 0, IACar.Position.Z - IACar.Speed * World.Forward.Z * elapsedTime);
+                IACar.World *= Matrix.CreateTranslation(IACar.Position);*/
+                float num = 6f;
+                IACar.Position= new Vector3(IACar.Position.X - Car.Speed * num * Car.World.Forward.X * elapsedTime, 0, IACar.Position.Z - Car.Speed * num * Car.World.Forward.Z * elapsedTime);
+                Car.Speed *= 0.8f;
+                IACar.Speed = Car.Speed*0.6f;
+                //IACar.ObjectBox.Orientation = Matrix.CreateRotationY(IACar.Rotation);
+                //IACar.ObjectBox.Center = IACar.Position;
+                
+                //Car.Speed = -5;
+            }else{
+                Car.DiffuseColor = Color.Blue.ToVector3();
+            }
+            
             View = Camera.FollowCamera(Car.GetPosition()).GetView();
 
             base.Update(gameTime);

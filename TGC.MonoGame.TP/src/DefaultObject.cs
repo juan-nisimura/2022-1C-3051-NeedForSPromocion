@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.Monogame.TP;
 using Microsoft.Xna.Framework.Content;
+using TGC.MonoGame.Samples.Collisions;
 
 namespace TGC.Monogame.TP.Src   
 {
@@ -18,14 +19,15 @@ namespace TGC.Monogame.TP.Src
 
         protected Model Model;
         protected Effect Effect;
-        protected Matrix World;
-        protected Matrix ScaleMatrix;
-        protected Matrix TranslateMatrix;
-        protected Matrix RotationMatrix;
+        public Matrix World;
+        public Matrix ScaleMatrix;
+        public Matrix TranslateMatrix;
+        public Matrix RotationMatrix;
         protected String ModelDirectory = "RacingCarA/RacingCar";
         protected String ShaderDirectory = "BasicShader";
-        protected Vector3 DiffuseColor = Color.White.ToVector3();
+        public Vector3 DiffuseColor = Color.White.ToVector3();
         public static int ObjectCount { get; set; } = 0;
+
         public void Initialize(){
             this.ResetWorld();
             BoxObject.ObjectCount++; 

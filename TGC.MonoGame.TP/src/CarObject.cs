@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-
+using TGC.MonoGame.Samples.Collisions;
 namespace TGC.Monogame.TP.Src   
 {
     class CarObject : DefaultObject
@@ -18,17 +18,28 @@ namespace TGC.Monogame.TP.Src
         protected float Gravity { get; set; } = 400f;
         protected float JumpInitialSpeed { get; set; } = 100f;
 
-        protected float Speed { get; set; } = 0;
-        protected float Acceleration { get; set; } = 0;
-        protected float Rotation { get; set; } = 0;
-        protected float TurningSpeed { get; set; } = 0;
+        public float Speed { get; set; } = 0;
+        public float Acceleration { get; set; } = 0;
+        public float Rotation { get; set; } = 0;
+        public float TurningSpeed { get; set; } = 0;
         protected float TurningAcceleration { get; set; } = 0;
         protected float VerticalSpeed { get; set; } = 0;
-        protected Vector3 Position { get; set; }
+        public Vector3 Position { get; set; }
 
         protected WeaponObject Weapon { get; set; } = new WeaponObject();
         protected WheelObject[] FrontWheels { get; set; }
         protected WheelObject[] BackWheels { get; set; }
+
+
+        //colisions
+        // The World Matrix for the Chair Oriented Bounding Box
+        private Matrix ObjectOBBWorld { get; set; }
+
+        // The OrientedBoundingBox of the Chair
+        public OrientedBoundingBox ObjectBox { get; set; }
+        
+        // The Y Angle for the Chair
+        private float ObjectAngle { get; set; } = 0;
 
         public CarObject(GraphicsDevice graphicsDevice, Vector3 position, Color color){
             Position = position;
@@ -51,8 +62,23 @@ namespace TGC.Monogame.TP.Src
             for(int i = 0;i < BackWheels.Length;i++)     BackWheels[i].Initialize();
         }
         public new void Load(ContentManager content){
+            
             ModelDirectory = "RacingCarA/RacingCar";
             base.Load(content);
+
+            // Create an OBB for a model
+            // First, get an AABB from the model
+            var temporaryCubeAABB = BoundingVolumesExtensions.CreateAABBFrom(Model);
+            // Scale it to match the model's transform
+            temporaryCubeAABB = BoundingVolumesExtensions.Scale(temporaryCubeAABB, 0.05f);
+            // Create an Oriented Bounding Box from the AABB
+            ObjectBox = OrientedBoundingBox.FromAABB(temporaryCubeAABB);
+            // Move the center
+            ObjectBox.Center = Position;
+            // Then set its orientation!
+            ObjectBox.Orientation = Matrix.CreateRotationY(ObjectAngle);
+
+
             Weapon.Load(content);
             for(int i = 0;i < FrontWheels.Length;i++)    FrontWheels[i].Load(content);
             for(int i = 0;i < BackWheels.Length;i++)     BackWheels[i].Load(content);
@@ -64,10 +90,16 @@ namespace TGC.Monogame.TP.Src
             World = ScaleMatrix;
             World *= Matrix.CreateRotationY(Rotation);
 
+            // Rotate the box
+            //ObjectAngle += 0.01f;
+            //ObjectBox.Orientation = Matrix.CreateRotationY(Rotation);
+
             // Calculo la nueva posicion
             Position = new Vector3(Position.X - Speed * World.Forward.X * elapsedTime, Math.Max(Position.Y + VerticalSpeed * elapsedTime, 0), Position.Z - Speed * World.Forward.Z * elapsedTime);
 
             World *= Matrix.CreateTranslation(Position);
+
+            
 
             Weapon.FollowCar(World);
             for(int i = 0;i < FrontWheels.Length;i++)    FrontWheels[i].FollowCar(World, TurningSpeed);

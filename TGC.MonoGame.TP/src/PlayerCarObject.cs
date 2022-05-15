@@ -73,7 +73,8 @@ namespace TGC.Monogame.TP.Src
                 // Calculo velocidad vertical
                 VerticalSpeed = VerticalSpeed - Gravity * elapsedTime;
             }
-
+            ObjectBox.Center = Position;
+            ObjectBox.Orientation = Matrix.CreateRotationY(Rotation);
             base.Update(gameTime);
         }
     }

@@ -136,10 +136,10 @@ namespace TGC.MonoGame.TP
 
             Floor = new FloorObject(GraphicsDevice, new Vector3(0f,0f,0f),new Vector3(700f,1f,700f),0);           
 
-            for (int i = 0; i < Ramps.Length; i++)      Ramps[i].Initialize();
+            for (int i = 0; i < Ramps.Length; i++)          Ramps[i].Initialize();
             for (int i = 0; i < BridgeColumns.Length; i++)  BridgeColumns[i].Initialize();
-            for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Initialize();
-            for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Initialize();
+            for (int i = 0; i < BoostPads.Length; i++)      BoostPads[i].Initialize();
+            for (int i = 0; i < Missiles.Length; i++)       Missiles[i].Initialize();
 
             Floor.Initialize();
 
@@ -294,11 +294,11 @@ namespace TGC.MonoGame.TP
             Car.Update(gameTime);
             IACar.Update(gameTime);
             Floor.Update(gameTime);
-            for (int i = 0; i < Boxes.Length; i++)      Boxes[i].Update(gameTime);
-            for (int i = 0; i < Ramps.Length; i++)      Ramps[i].Update(gameTime);
+            for (int i = 0; i < Boxes.Length; i++)          Boxes[i].Update(gameTime);
+            for (int i = 0; i < Ramps.Length; i++)          Ramps[i].Update(gameTime);
             for (int i = 0; i < BridgeColumns.Length; i++)  BridgeColumns[i].Update(gameTime);
-            for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Update(gameTime);
-            for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Update(gameTime);
+            for (int i = 0; i < Mounts.Length; i++)         Mounts[i].Update(gameTime);
+            for (int i = 0; i < BoostPads.Length; i++)      BoostPads[i].Update(gameTime, Car);
 
             // TODO: Revisar
             /*

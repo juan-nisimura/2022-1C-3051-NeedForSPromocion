@@ -88,8 +88,6 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
             World *= Matrix.CreateTranslation(Position);
 
-            
-
             Weapon.FollowCar(World);
         }
 

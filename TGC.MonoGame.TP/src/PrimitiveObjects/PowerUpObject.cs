@@ -14,6 +14,8 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
         private float RespawnActualTime;
         const float RespawnCooldown = 10;
 
+        private static Random RandomPowerUp = new Random(); 
+
         //private PowerUp PowerUp;
 
         public PowerUpObject(GraphicsDevice graphicsDevice, Vector3 position) : base(graphicsDevice, position, new Vector3(10f,10f,10f), Color.Yellow)
@@ -43,6 +45,8 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
                     // Si colisionó con el auto, el auto obtiene un powerup
                     isAvailable = false;
                     RespawnActualTime = 0;
+
+                    // RandomPowerUp.Next(2);  // Hay que usar enums del 0 al 2
                     // car.setPowerUp(PowerUp);
                 }
 

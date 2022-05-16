@@ -9,5 +9,8 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
         public MissileHeadObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, Color color) :
             base(graphicsDevice, position, size, color){
         }
+        public MissileHeadObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotationY, Color color) :
+            base(graphicsDevice, position, size, rotationY,color){
+        }
     }
 }

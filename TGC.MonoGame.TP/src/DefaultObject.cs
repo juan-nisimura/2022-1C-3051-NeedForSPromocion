@@ -49,6 +49,9 @@ namespace TGC.Monogame.TP.Src
             World = Matrix.Identity;
             return this;
         }
+        public Matrix GetWorld(){
+            return World;
+        }
         abstract public void Update(GameTime gameTime);
         public abstract void Draw(Matrix view, Matrix projection);
     }

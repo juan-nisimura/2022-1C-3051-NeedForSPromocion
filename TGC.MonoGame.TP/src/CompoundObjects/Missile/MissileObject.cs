@@ -13,7 +13,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
         private const float TRIANGLE_RELATIVE_SIZE = 0.4f;
         
         public MissileObject(GraphicsDevice graphicsDevice, Vector3 position, float size){
-            MissileBody = new MissileBodyObject(graphicsDevice, position + new Vector3(0f, size/2, 0f), new Vector3(size/2, size, size/2), 0, Color.Gray);
+            MissileBody = new MissileBodyObject(graphicsDevice, position + new Vector3(0f, size/2, 0f), new Vector3(size/2, size, size/2), 0 ,0, Color.Gray);
             MissileHead = new MissileHeadObject(graphicsDevice, position + new Vector3(0f, size, 0f), new Vector3(0.5f, 1, 0.5f) * size, Color.Red);
             MissileTriangles = new MissileTriangleObject[] {
                 new MissileTriangleObject(graphicsDevice, position + new Vector3(0f, 0f, 0.25f) * size, new Vector3(0f, 1f, 0f) * size * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 1f) * size * TRIANGLE_RELATIVE_SIZE, Color.Green),

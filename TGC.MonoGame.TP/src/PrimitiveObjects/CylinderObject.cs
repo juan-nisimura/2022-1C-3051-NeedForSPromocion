@@ -14,6 +14,14 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             RotationMatrix = Matrix.CreateRotationY(rotation);
             DiffuseColor = color.ToVector3();
         }
+        public CylinderObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotationX, float rotationY, Color color){
+            CylinderPrimitive = new CylinderPrimitive(graphicsDevice);
+            ScaleMatrix = Matrix.CreateScale(size);
+            TranslateMatrix = Matrix.CreateTranslation(position);
+            RotationMatrix = Matrix.CreateRotationX(rotationX);
+            RotationMatrix *= Matrix.CreateRotationY(rotationY);
+            DiffuseColor = color.ToVector3();
+        }
 
         protected override void DrawPrimitive() { CylinderPrimitive.Draw(getEffect()); }
     }

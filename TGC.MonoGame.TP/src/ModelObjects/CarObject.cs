@@ -1,8 +1,13 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using TGC.Monogame.TP.Src.PrimitiveObjects;
+using TGC.MonoGame.TP.Src.Geometries;
+using TGC.Monogame.TP.Src.ModelObjects;
+using TGC.Monogame.TP.Src.CompoundObjects.Missile;
+
 
 namespace TGC.Monogame.TP.Src.ModelObjects  
 {
@@ -28,6 +33,10 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         protected Vector3 Position { get; set; }
 
         protected WeaponObject Weapon { get; set; } = new WeaponObject();
+        //protected BulletObject[] MGBullets {get;set;}
+        //protected int indexBullet {get; set;}=0;
+        //protected List<BulletObject> MGBulletsList {get;set;}
+        
 
         public CarObject(GraphicsDevice graphicsDevice, Vector3 position, Color color){
             Position = position;
@@ -38,6 +47,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             base.Initialize();
             ScaleMatrix = Matrix.CreateScale(0.05f, 0.05f, 0.05f);
             Weapon.Initialize();
+            //MGBulletsList = new List<BulletObject>();
         }
         
         public static void Load(ContentManager content){
@@ -74,8 +84,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             WheelObject.Draw(getEffect(), getModel().Meshes["WheelB"], World, WheelAngle, TurningSpeed);
             WheelObject.Draw(getEffect(), getModel().Meshes["WheelC"], World, WheelAngle, 0);
             WheelObject.Draw(getEffect(), getModel().Meshes["WheelD"], World, WheelAngle, 0);
-
-            Weapon.Draw(view, projection);  
+            Weapon.Draw(view, projection);
         }
 
         public Vector3 GetPosition()

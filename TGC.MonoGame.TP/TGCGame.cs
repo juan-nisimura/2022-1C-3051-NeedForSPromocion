@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -8,6 +9,7 @@ using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.Monogame.TP.Src.CompoundObjects.Tree;
 using TGC.Monogame.TP.Src.CompoundObjects.Missile;
 using TGC.Monogame.TP.Src.CompoundObjects.Bridge;
+using TGC.MonoGame.TP.Src.Geometries;
 
 namespace TGC.MonoGame.TP
 {
@@ -60,6 +62,10 @@ namespace TGC.MonoGame.TP
         private TreeObject[] Trees { get; set; }
         private FloorObject Floor { get; set; }
         private MissileObject[] Missiles { get; set; }
+        private BulletObject[] MGBullets {get; set;}
+        private List<BulletObject> MGBulletsList {get; set;}
+        private BulletObject bullet2 {get;set;}
+        private SpherePrimitive Sphere { get; set; }
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -128,6 +134,10 @@ namespace TGC.MonoGame.TP
                 new MissileObject(GraphicsDevice, new Vector3(-100f, 0f, -100f), 40f),
             };
 
+            
+            //bullet2 = new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-150f),10f);
+
+
             Floor = new FloorObject(GraphicsDevice, new Vector3(0f,0f,0f),new Vector3(700f,1f,700f),0);           
 
             //for (int i = 0; i < Boxes.Length; i++)      Boxes[i].Initialize();
@@ -139,7 +149,9 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < BridgeColumns.Length; i++)  BridgeColumns[i].Initialize();
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Initialize();
             for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Initialize();
-
+            
+            
+            //bullet2.Initialize();
             Floor.Initialize();
 
             ControllerKeyG = new KeyController(Keys.G);
@@ -173,6 +185,8 @@ namespace TGC.MonoGame.TP
             PowerUpObject.Load(Content, "BasicShader", "Floor");
             RampObject.Load(Content, "BasicShader");
             BridgeColumnObject.Load(Content, "BasicShader");
+
+            //MGBulletsList = new List<BulletObject>();
 
             base.LoadContent();
             
@@ -267,7 +281,7 @@ namespace TGC.MonoGame.TP
         protected override void Update(GameTime gameTime)
         {
             // Aca deberiamos poner toda la logica de actualizacion del juego.
-
+            
             // Capturar Input teclado
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 //Salgo del juego.
@@ -284,7 +298,7 @@ namespace TGC.MonoGame.TP
                 return;
             }
 
-            Car.Update(gameTime);
+            Car.Update(gameTime, GraphicsDevice, View, Projection);
             IACar.Update(gameTime);
             Floor.Update(gameTime);
             for (int i = 0; i < Boxes.Length; i++)      Boxes[i].Update(gameTime);
@@ -294,6 +308,35 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Update(gameTime);
             for (int i = 0; i < Trees.Length; i++)      Trees[i].Update(gameTime);
             for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Update(gameTime);
+
+            //MGBulletsList = Car.GetMGBulletsList();
+            MGBullets = Car.GetMGBullets();
+            /*MGBullets = new BulletObject[]{
+                new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-150f),10f),
+                new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-200f),10f),
+                new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-250f),10f)
+            };
+            for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Initialize();
+            for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime);*/
+            //bullet2.Update(gameTime);
+
+            
+            var keyboardState = Keyboard.GetState();
+            //TouchSpeedBoost = Car.ObjectBox.Intersects(SpeedBoost.ObjectBox);
+            if (keyboardState.IsKeyDown(Keys.LeftShift)) {
+                //Car.SetSpeedBoostActive(true);
+                Car.SetSpeedBoostTime();
+            }else{
+                //Car.SetSpeedBoostActive(false);
+            }
+
+            //TouchMachineGunBoost = Car.ObjectBox.Intersects(MachineGun.ObjectBox);
+            if (keyboardState.IsKeyDown(Keys.LeftControl)) {
+                //Car.SetSpeedBoostActive(true);
+                Car.SetMachineGunTime();
+            }else{
+                //Car.SetSpeedBoostActive(false);
+            }
 
             View = Camera.FollowCamera(Car.GetPosition()).GetView();
 
@@ -321,8 +364,14 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Draw(View, Projection);
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Draw(View, Projection);
             for (int i = 0; i < Trees.Length; i++)      Trees[i].Draw(View, Projection);
-            for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Draw(View, Projection);
+            //for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Draw(View, Projection);
+
+            //MGBulletsList.ForEach(bullet => bullet.Draw(View, Projection));
+            if(MGBullets != null){
+                for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
+            }
             
+            //bullet2.Draw(View, Projection);
         }
 
         /// <summary>

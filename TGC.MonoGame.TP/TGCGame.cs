@@ -4,12 +4,21 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.Monogame.TP.Src;
+
+// BEPU
+using TGC.MonoGame.Samples.Physics.Bepu;
+using BepuPhysics;
+using BepuPhysics.Collidables;
+using BepuUtilities.Memory;
+using NumericVector3 = System.Numerics.Vector3;
+
 using TGC.Monogame.TP.Src.PrimitiveObjects;
 using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.Monogame.TP.Src.CompoundObjects.Tree;
 using TGC.Monogame.TP.Src.CompoundObjects.Missile;
 using TGC.Monogame.TP.Src.CompoundObjects.Bridge;
 using TGC.MonoGame.TP.Src.Geometries;
+
 
 namespace TGC.MonoGame.TP
 {
@@ -61,6 +70,9 @@ namespace TGC.MonoGame.TP
         private BoostPadObject[] BoostPads { get; set; }
         private TreeObject[] Trees { get; set; }
         private FloorObject Floor { get; set; }
+
+        private Boolean TouchingObject { get; set; }
+
         private MissileObject[] Missiles { get; set; }
         private BulletObject[] MGBullets {get; set;}
         private List<BulletObject> MGBulletsList {get; set;}
@@ -81,12 +93,6 @@ namespace TGC.MonoGame.TP
                 Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 500);
 
             Camera = new CameraObject();
-
-            Car = new PlayerCarObject(GraphicsDevice, new Vector3(-100f,0,-100f), Color.Blue);
-            Car.Initialize();
-
-            IACar = new IACarObject(GraphicsDevice, new Vector3(-100f,0,-50f), Color.Red);
-            IACar.Initialize();
 
             Ramps = new RampObject[] {
                 new RampObject(GraphicsDevice, new Vector3(370f, 15f, -90f), new Vector3(100f, 30f, 80f), MathF.PI / 2, Color.Yellow),
@@ -140,11 +146,6 @@ namespace TGC.MonoGame.TP
 
             Floor = new FloorObject(GraphicsDevice, new Vector3(0f,0f,0f),new Vector3(700f,1f,700f),0);           
 
-            //for (int i = 0; i < Boxes.Length; i++)      Boxes[i].Initialize();
-            //for (int i = 0; i < PowerUps.Length; i++)   PowerUps[i].Initialize();
-            //for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Initialize();
-            //for (int i = 0; i < Trees.Length; i++)      Trees[i].Initialize();
-
             for (int i = 0; i < Ramps.Length; i++)      Ramps[i].Initialize();
             for (int i = 0; i < BridgeColumns.Length; i++)  BridgeColumns[i].Initialize();
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Initialize();
@@ -171,8 +172,7 @@ namespace TGC.MonoGame.TP
             // Aca es donde deberiamos cargar todos los contenido necesarios antes de iniciar el juego.
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // Cargo los objetos
-
+            // Cargo los efectos, modelos y texturas
             CarObject.Load(Content);
 
             TreeObject.Load(Content);
@@ -187,6 +187,11 @@ namespace TGC.MonoGame.TP
             BridgeColumnObject.Load(Content, "BasicShader");
 
             //MGBulletsList = new List<BulletObject>();
+            Car = new PlayerCarObject(GraphicsDevice, new Vector3(-100f,0,-100f), Color.Blue);
+            Car.Initialize();
+
+            IACar = new IACarObject(GraphicsDevice, new Vector3(-100f,0,-50f), Color.Red);
+            IACar.Initialize();
 
             base.LoadContent();
             
@@ -282,6 +287,8 @@ namespace TGC.MonoGame.TP
         {
             // Aca deberiamos poner toda la logica de actualizacion del juego.
             
+            var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
+
             // Capturar Input teclado
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 //Salgo del juego.
@@ -291,7 +298,7 @@ namespace TGC.MonoGame.TP
                 GodModeIsActive = !GodModeIsActive;
             }
 
-            for (int i = 0; i < PowerUps.Length; i++)   PowerUps[i].Update(gameTime);
+            for (int i = 0; i < PowerUps.Length; i++)   PowerUps[i].Update(gameTime, Car);
 
             if(GodModeIsActive){
                 View = Camera.MoveCameraByKeyboard(gameTime).GetView();
@@ -306,6 +313,32 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < BridgeColumns.Length; i++)  BridgeColumns[i].Update(gameTime);
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Update(gameTime);
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Update(gameTime);
+
+            // TODO: Revisar
+            /*
+            TouchingObject = Car.ObjectBox.Intersects(IACar.ObjectBox);
+            if(TouchingObject){
+                //Car.Speed = -2f ;
+                Car.DiffuseColor = Color.Yellow.ToVector3();*/
+                /*IACar.RotationMatrix *= Matrix.CreateRotationY(IACar.Rotation);
+                IACar.TranslateMatrix = Matrix.CreateTranslation(IACar.Position);
+                IACar.World = IACar.ScaleMatrix * IACar.RotationMatrix * IACar.TranslateMatrix;
+                IACar.Speed= 5f;
+                IACar.Position = new Vector3(IACar.Position.X - IACar.Speed * World.Forward.X * elapsedTime, 0, IACar.Position.Z - IACar.Speed * World.Forward.Z * elapsedTime);
+                IACar.World *= Matrix.CreateTranslation(IACar.Position);*/
+                /*
+                float num = 6f;
+                IACar.Position= new Vector3(IACar.Position.X - Car.Speed * num * Car.World.Forward.X * elapsedTime, 0, IACar.Position.Z - Car.Speed * num * Car.World.Forward.Z * elapsedTime);
+                Car.Speed *= 0.8f;
+                IACar.Speed = Car.Speed*0.6f;
+                //IACar.ObjectBox.Orientation = Matrix.CreateRotationY(IACar.Rotation);
+                //IACar.ObjectBox.Center = IACar.Position;
+                
+                //Car.Speed = -5;
+            }else{
+                Car.DiffuseColor = Color.Blue.ToVector3();
+            }*/
+            
             for (int i = 0; i < Trees.Length; i++)      Trees[i].Update(gameTime);
             for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Update(gameTime);
 

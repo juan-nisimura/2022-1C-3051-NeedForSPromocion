@@ -130,8 +130,13 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                 // Calculo velocidad vertical
                 VerticalSpeed = VerticalSpeed - Gravity * elapsedTime;
             }
-
+            
+            // Esto calcula la posición del auto
             base.Update(gameTime);
+        
+            ObjectBox.Center = Position;
+            // Hacerlo que funcione cuando se incline
+            ObjectBox.Orientation = Matrix.CreateRotationY(Rotation);
         }
 
         /*public void SetSpeedBoostActive(Boolean isActive){

@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.MonoGame.Samples.Collisions;
 using TGC.Monogame.TP.Src.PrimitiveObjects;
 using TGC.MonoGame.TP.Src.Geometries;
 using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.Monogame.TP.Src.CompoundObjects.Missile;
 
 
-namespace TGC.Monogame.TP.Src.ModelObjects  
+namespace TGC.Monogame.TP.Src.ModelObjects
+
 {
     class CarObject : DefaultModelObject <CarObject>
     {
@@ -23,24 +25,47 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         protected float Gravity { get; set; } = 400f;
         protected float JumpInitialSpeed { get; set; } = 100f;
 
-        protected float Speed { get; set; } = 0;
-        protected float Acceleration { get; set; } = 0;
-        protected float Rotation { get; set; } = 0;
-        protected float TurningSpeed { get; set; } = 0;
+        public float Speed { get; set; } = 0;
+        public float Acceleration { get; set; } = 0;
+        public float Rotation { get; set; } = 0;
+        public float TurningSpeed { get; set; } = 0;
         protected float TurningAcceleration { get; set; } = 0;
         protected float VerticalSpeed { get; set; } = 0;
+
         protected float WheelAngle { get; set; } = 0;
         protected Vector3 Position { get; set; }
-
         protected WeaponObject Weapon { get; set; } = new WeaponObject();
         //protected BulletObject[] MGBullets {get;set;}
         //protected int indexBullet {get; set;}=0;
         //protected List<BulletObject> MGBulletsList {get;set;}
         
 
+        //colisions
+        // The World Matrix for the Chair Oriented Bounding Box
+        private Matrix ObjectOBBWorld { get; set; }
+
+        // The OrientedBoundingBox of the Chair
+        public OrientedBoundingBox ObjectBox { get; set; }
+        
+        // The Y Angle for the Chair
+        private float ObjectAngle { get; set; } = 0;
+
         public CarObject(GraphicsDevice graphicsDevice, Vector3 position, Color color){
             Position = position;
             DiffuseColor = color.ToVector3();
+
+            // Create an OBB for a model
+            // First, get an AABB from the model
+            var temporaryCubeAABB = BoundingVolumesExtensions.CreateAABBFrom(getModel());
+            // Scale it to match the model's transform
+            temporaryCubeAABB = BoundingVolumesExtensions.Scale(temporaryCubeAABB, 0.05f);
+            // Create an Oriented Bounding Box from the AABB
+            ObjectBox = OrientedBoundingBox.FromAABB(temporaryCubeAABB);
+            // Move the center
+            ObjectBox.Center = Position;
+            // Then set its orientation!
+            // Hacerlo que funcione cuando se inclina
+            ObjectBox.Orientation = Matrix.CreateRotationY(ObjectAngle);
         }
 
         public new void Initialize(){
@@ -49,7 +74,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             Weapon.Initialize();
             //MGBulletsList = new List<BulletObject>();
         }
-        
+
         public static void Load(ContentManager content){
             DefaultLoad(content, "RacingCarA/RacingCar", "CarShader");
             WeaponObject.Load(content);
@@ -61,6 +86,10 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             World = ScaleMatrix;
             World *= Matrix.CreateRotationY(Rotation);
 
+            // Rotate the box
+            //ObjectAngle += 0.01f;
+            //ObjectBox.Orientation = Matrix.CreateRotationY(Rotation);
+
             // Calculo la nueva posicion
             Position = new Vector3(Position.X - Speed * World.Forward.X * elapsedTime, Math.Max(Position.Y + VerticalSpeed * elapsedTime, 0), Position.Z - Speed * World.Forward.Z * elapsedTime);
 
@@ -68,6 +97,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             WheelAngle += Speed * elapsedTime / 250f;
 
             World *= Matrix.CreateTranslation(Position);
+
+            
 
             Weapon.FollowCar(World);
         }

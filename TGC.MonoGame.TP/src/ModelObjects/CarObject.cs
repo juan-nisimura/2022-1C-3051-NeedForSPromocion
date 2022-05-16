@@ -35,6 +35,10 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         protected float WheelAngle { get; set; } = 0;
         protected Vector3 Position { get; set; }
         protected WeaponObject Weapon { get; set; } = new WeaponObject();
+
+        protected float SpeedBoostTime {get; set;}=0;
+        protected float MachineGunTime {get; set;}=0;
+        protected float MisileTime {get; set;}=0;
         //protected BulletObject[] MGBullets {get;set;}
         //protected int indexBullet {get; set;}=0;
         //protected List<BulletObject> MGBulletsList {get;set;}
@@ -121,6 +125,15 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public Vector3 GetPosition()
         {
             return Position;
+        }
+        public void SetSpeedBoostTime(){
+            SpeedBoostTime = 2f;
+        }
+        public void SetMachineGunTime(){
+            MachineGunTime = 10f;
+        }
+        public void SetMisileTime(){
+            MisileTime = 5f;
         }
     }
 }

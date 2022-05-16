@@ -13,16 +13,16 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 {
     class PlayerCarObject : CarObject
     {
-        private Boolean SpeedBoostActive {get; set;}
-        private float SpeedBoostTime {get; set;}=0;
-        private Boolean MachineGunActive {get; set;}
-        private float MachineGunTime {get; set;}=0;
-        private BulletObject bullet  {get; set;}
+        //private Boolean SpeedBoostActive {get; set;}
+        
+        //private Boolean MachineGunActive {get; set;}
+        
+        //private BulletObject bullet  {get; set;}
         //private List<Matrix> bulletsMatrix  {get; set;}
         private BulletObject[] MGBullets {get;set;}
-        private int index {get;set;}=1;
-        private Boolean MisileActive {get; set;}
-        private float MisileTime {get; set;}=0;
+        //private int index {get;set;}=1;
+        //private Boolean MisileActive {get; set;}
+
         public PlayerCarObject(GraphicsDevice graphicsDevice, Vector3 position, Color color)
              : base(graphicsDevice, position, color)
         {
@@ -142,15 +142,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         /*public void SetSpeedBoostActive(Boolean isActive){
             SpeedBoostActive = isActive;
         }*/
-        public void SetSpeedBoostTime(){
-            SpeedBoostTime = 2f;
-        }
-        public void SetMachineGunTime(){
-            MachineGunTime = 10f;
-        }
-        public void SetMisileTime(){
-            MisileTime = 5f;
-        }
+        
         public BulletObject[] GetMGBullets(){
             return MGBullets;
         }

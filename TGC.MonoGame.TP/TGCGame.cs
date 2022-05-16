@@ -312,7 +312,7 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Ramps.Length; i++)      Ramps[i].Update(gameTime);
             for (int i = 0; i < BridgeColumns.Length; i++)  BridgeColumns[i].Update(gameTime);
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Update(gameTime);
-            for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Update(gameTime);
+            for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Update(gameTime, Car);
 
             // TODO: Revisar
             /*

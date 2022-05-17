@@ -8,7 +8,7 @@ using System;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
-    class RampObject : DefaultPrimitiveObject <RampObject>
+    class RampObject <T> : DefaultPrimitiveObject <T>
     {
         protected RampPrimitive RampPrimitive { get; }
         protected Vector3 Position;

@@ -18,7 +18,9 @@ using TGC.Monogame.TP.Src.CompoundObjects.Tree;
 using TGC.Monogame.TP.Src.CompoundObjects.Missile;
 using TGC.Monogame.TP.Src.CompoundObjects.Bridge;
 using TGC.MonoGame.TP.Src.Geometries;
-
+using TGC.Monogame.TP.Src.CompoundObjects.Map;
+using TGC.Monogame.TP.Src.CompoundObjects.Mount;
+using TGC.Monogame.TP.Src.CompoundObjects.Building;
 
 namespace TGC.MonoGame.TP
 {
@@ -62,10 +64,13 @@ namespace TGC.MonoGame.TP
         private CameraObject Camera { get; set; }
         private PlayerCarObject Car { get; set; }
         private IACarObject IACar { get; set; }
-        private BoxObject[] Boxes { get; set; }
+
+        private BridgeObject Bridge { get; set; }
+
+        private MapWallObject[] MapWalls { get; set; }
+        private BuildingsObject Buildings { get; set; }
+
         private PowerUpObject[] PowerUps { get; set; }
-        private RampObject[] Ramps { get; set; }
-        private BridgeColumnObject[] BridgeColumns { get; set; }
         private MountObject[] Mounts { get; set; }
         private BoostPadObject[] BoostPads { get; set; }
         private TreeObject[] Trees { get; set; }
@@ -92,34 +97,6 @@ namespace TGC.MonoGame.TP
 
             Camera = new CameraObject();
 
-            Ramps = new RampObject[] {
-                new RampObject(GraphicsDevice, new Vector3(370f, 15f, -90f), new Vector3(100f, 30f, 80f), MathF.PI / 2, Color.Yellow),
-                new RampObject(GraphicsDevice, new Vector3(-370f, 15f, 90f), new Vector3(100f, 30f, 80f), - MathF.PI / 2, Color.Yellow),
-
-                new RampObject(GraphicsDevice, new Vector3(550f, 20f, 350f), new Vector3(100f, 40f, 100f), MathF.PI / 2, Color.Yellow),
-                new RampObject(GraphicsDevice, new Vector3(350f, 20f, 550f), new Vector3(100f, 40f, 100f), MathF.PI, Color.Yellow),
-
-                new RampObject(GraphicsDevice, new Vector3(550f, 20f, -350f), new Vector3(100f, 40f, 100f), - MathF.PI / 2, Color.Yellow),
-                new RampObject(GraphicsDevice, new Vector3(350f, 20f, -550f), new Vector3(100f, 40f, 100f), MathF.PI, Color.Yellow),
-
-                new RampObject(GraphicsDevice, new Vector3(-550f, 20f, -350f), new Vector3(100f, 40f, 100f), - MathF.PI / 2, Color.Yellow),
-                new RampObject(GraphicsDevice, new Vector3(-350f, 20f, -550f), new Vector3(100f, 40f, 100f), 0, Color.Yellow),
-
-                new RampObject(GraphicsDevice, new Vector3(-550f, 20f, 350f), new Vector3(100f, 40f, 100f), MathF.PI / 2, Color.Yellow),
-                new RampObject(GraphicsDevice, new Vector3(-350f, 20f, 550f), new Vector3(100f, 40f, 100f), 0, Color.Yellow),
-            };
-
-            BridgeColumns = new BridgeColumnObject[]{
-                new BridgeColumnObject(GraphicsDevice, new Vector3(150f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-                new BridgeColumnObject(GraphicsDevice, new Vector3(150f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-                new BridgeColumnObject(GraphicsDevice, new Vector3(300f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-                new BridgeColumnObject(GraphicsDevice, new Vector3(300f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-                new BridgeColumnObject(GraphicsDevice, new Vector3(-150f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-                new BridgeColumnObject(GraphicsDevice, new Vector3(-150f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-                new BridgeColumnObject(GraphicsDevice, new Vector3(-300f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-                new BridgeColumnObject(GraphicsDevice, new Vector3(-300f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-            };
-
             BoostPads = new BoostPadObject[]{
                 new BoostPadObject(GraphicsDevice, new Vector3(0,0.1f,575f),new Vector3(22.5f,1f,27.5f), - MathF.PI / 2),
                 new BoostPadObject(GraphicsDevice, new Vector3(0,0.1f,525f),new Vector3(22.5f,1f,27.5f), - MathF.PI / 2),
@@ -144,12 +121,6 @@ namespace TGC.MonoGame.TP
 
             Floor = new FloorObject(GraphicsDevice, new Vector3(0f,0f,0f),new Vector3(700f,1f,700f),0);           
 
-            for (int i = 0; i < Ramps.Length; i++)          Ramps[i].Initialize();
-            for (int i = 0; i < BridgeColumns.Length; i++)  BridgeColumns[i].Initialize();
-            for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Initialize();
-            for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Initialize();
-            
-            
             //bullet2.Initialize();
             Floor.Initialize();
 
@@ -173,14 +144,14 @@ namespace TGC.MonoGame.TP
 
             TreeObject.Load(Content);
             BoostPadObject.Load(Content, "BoostPadShader");
-            BoxObject.Load(Content, "BasicShader", "Floor");
+
+            MapWallObject.Load(Content, "BoxTextureShader", "large_red_bricks_diff_4k");
+            BridgeObject.Load(Content);
+            BuildingsObject.Load(Content);
             MissileObject.Load(Content);
-            FloorObject.Load(Content, "FloorShader", "asphalt/textures/asphalt_02_diff_4k");
-            
-            MountObject.Load(Content, "BasicShader");
+            FloorObject.Load(Content, "FloorShader", "brown_mud_leaves_01_diff_4k");
+            MountObject.Load(Content);
             PowerUpObject.Load(Content, "BasicShader", "Floor");
-            RampObject.Load(Content, "BasicShader");
-            BridgeColumnObject.Load(Content, "BasicShader");
 
             //MGBulletsList = new List<BulletObject>();
             Car = new PlayerCarObject(new Vector3(-100f,0,-100f), Color.Blue);
@@ -212,41 +183,15 @@ namespace TGC.MonoGame.TP
                 new TreeObject(GraphicsDevice, new Vector3(300f,0f,300f), 40f),
             };
 
-            Boxes = new BoxObject[] {
-                new BoxObject(GraphicsDevice, new Vector3(705f, 32.5f, 0f), new Vector3(10f, 65f, 1420f), Color.White),
-                new BoxObject(GraphicsDevice, new Vector3(-705f, 32.5f, 0f), new Vector3(10f, 65f, 1420f), Color.White),
-                new BoxObject(GraphicsDevice, new Vector3(0f, 32.5f, 705f), new Vector3(1400f, 65f, 10f), Color.White),
-                new BoxObject(GraphicsDevice, new Vector3(0f, 32.5f, -705f), new Vector3(1400f, 65f, 10f), Color.White),
+            MapWalls = new MapWallObject[] {
+                new MapWallObject(GraphicsDevice, new Vector3(705f, 32.5f, 0f), new Vector3(10f, 65f, 1420f), Color.White),
+                new MapWallObject(GraphicsDevice, new Vector3(-705f, 32.5f, 0f), new Vector3(10f, 65f, 1420f), Color.White),
+                new MapWallObject(GraphicsDevice, new Vector3(0f, 32.5f, 705f), new Vector3(1400f, 65f, 10f), Color.White),
+                new MapWallObject(GraphicsDevice, new Vector3(0f, 32.5f, -705f), new Vector3(1400f, 65f, 10f), Color.White),
 
-                new BoxObject(GraphicsDevice, new Vector3(235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown),
-                new BoxObject(GraphicsDevice, new Vector3(0f, 15f, 0f), new Vector3(120f, 30f, 80f), Color.Gray),
-                new BoxObject(GraphicsDevice, new Vector3(-235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown),
-
-                new BoxObject(GraphicsDevice, new Vector3(550f, 20f, 550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
-                new BoxObject(GraphicsDevice, new Vector3(-550f, 20f, 550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
-                new BoxObject(GraphicsDevice, new Vector3(-550f, 20f, -550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
-                new BoxObject(GraphicsDevice, new Vector3(550f, 20f, -550f), new Vector3(300f, 40f, 300f), Color.Chocolate),
-            
-                new BoxObject(GraphicsDevice, new Vector3(405f, 45f, 450f), new Vector3(10f, 10f, 100f), Color.Gray),
-                new BoxObject(GraphicsDevice, new Vector3(455f, 45f, 405f), new Vector3(90f, 10f, 10f), Color.Gray),  
-                new BoxObject(GraphicsDevice, new Vector3(405f, 45f, 650f), new Vector3(10f, 10f, 100f), Color.Gray),
-                new BoxObject(GraphicsDevice, new Vector3(650f, 45f, 405f), new Vector3(100f, 10f, 10f), Color.Gray),
-            
-                new BoxObject(GraphicsDevice, new Vector3(-405f, 45f, 450f), new Vector3(10f, 10f, 100f), Color.Gray),
-                new BoxObject(GraphicsDevice, new Vector3(-455f, 45f, 405f), new Vector3(90f, 10f, 10f), Color.Gray),  
-                new BoxObject(GraphicsDevice, new Vector3(-405f, 45f, 650f), new Vector3(10f, 10f, 100f), Color.Gray),
-                new BoxObject(GraphicsDevice, new Vector3(-650f, 45f, 405f), new Vector3(100f, 10f, 10f), Color.Gray),
-            
-                new BoxObject(GraphicsDevice, new Vector3(-405f, 45f, -450f), new Vector3(10f, 10f, 100f), Color.Gray),
-                new BoxObject(GraphicsDevice, new Vector3(-455f, 45f, -405f), new Vector3(90f, 10f, 10f), Color.Gray),  
-                new BoxObject(GraphicsDevice, new Vector3(-405f, 45f, -650f), new Vector3(10f, 10f, 100f), Color.Gray),
-                new BoxObject(GraphicsDevice, new Vector3(-650f, 45f, -405f), new Vector3(100f, 10f, 10f), Color.Gray),
-
-                new BoxObject(GraphicsDevice, new Vector3(405f, 45f, -450f), new Vector3(10f, 10f, 100f), Color.Gray),
-                new BoxObject(GraphicsDevice, new Vector3(455f, 45f, -405f), new Vector3(90f, 10f, 10f), Color.Gray),  
-                new BoxObject(GraphicsDevice, new Vector3(405f, 45f, -650f), new Vector3(10f, 10f, 100f), Color.Gray),
-                new BoxObject(GraphicsDevice, new Vector3(650f, 45f, -405f), new Vector3(100f, 10f, 10f), Color.Gray),           
             };
+
+            Buildings = new BuildingsObject(GraphicsDevice);
 
             PowerUps = new PowerUpObject[] {
                 new PowerUpObject(GraphicsDevice, new Vector3(0f,30f,0f)),
@@ -267,19 +212,27 @@ namespace TGC.MonoGame.TP
                 new PowerUpObject(GraphicsDevice, new Vector3(-550f, 40f, 550f)),
                 new PowerUpObject(GraphicsDevice, new Vector3(550f, 40f, -550f))
             };
+            
+            Bridge = new BridgeObject(GraphicsDevice);
 
-            for (int i = 0; i < Boxes.Length; i++)      Boxes[i].Initialize();
+            Bridge.Initialize();
+            Buildings.Initialize();
+
             for (int i = 0; i < PowerUps.Length; i++)   PowerUps[i].Initialize();
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Initialize();
             for (int i = 0; i < Trees.Length; i++)      Trees[i].Initialize();
+            for (int i = 0; i < BoostPads.Length; i++)      BoostPads[i].Initialize();
+            for (int i = 0; i < Missiles.Length; i++)       Missiles[i].Initialize();
+            for (int i = 0; i < MapWalls.Length; i++)   MapWalls[i].Initialize();
 
             // Inicializo el HeightMap
             for(int x =-710; x <= 710; x++) {
                 for(int z = -710; z <= 710; z++) {
                     HeightMap.SetHeight(x, z, 0);
                     HeightMap.MoveRay(x, z);
-                    for (int i = 0; i < Boxes.Length; i++)      Boxes[i].UpdateHeightMap(x, z);
-                    for (int i = 0; i < Ramps.Length; i++)      Ramps[i].UpdateHeightMap(x, z);
+                    Bridge.UpdateHeightMap(x, z);
+                    Buildings.UpdateHeightMap(x, z);
+                    for (int i = 0; i < MapWalls.Length; i++)   MapWalls[i].UpdateHeightMap(x, z);
                     for (int i = 0; i < Mounts.Length; i++)     Mounts[i].UpdateHeightMap(x, z);
                 }
             }
@@ -317,9 +270,11 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < BoostPads.Length; i++)      BoostPads[i].Update(gameTime, Car);
             for (int i = 0; i < Missiles.Length; i++)       Missiles[i].Update(gameTime);
 
-            for (int i = 0; i < Boxes.Length; i++)          Boxes[i].Update(gameTime, Car);
-            for (int i = 0; i < Ramps.Length; i++)          Ramps[i].Update(gameTime);
-            for (int i = 0; i < BridgeColumns.Length; i++)  BridgeColumns[i].Update(gameTime);
+            Buildings.Update(gameTime, Car);
+            Bridge.Update(gameTime, Car);
+            
+            
+            for (int i = 0; i < MapWalls.Length; i++)       MapWalls[i].Update(gameTime, Car);
             for (int i = 0; i < Mounts.Length; i++)         Mounts[i].Update(gameTime, Car);
             for (int i = 0; i < Trees.Length; i++)          Trees[i].Update(gameTime);
 
@@ -362,16 +317,19 @@ namespace TGC.MonoGame.TP
         protected void SolveCollisions(GameTime gameTime, CarObject car) {
             var collided = true;
             car.HasCrashed = false;
+            if(HeightMap.GetHeight(car.Position.X, car.Position.Z) == 0)
+                Car.GroundLevel = 0;
             while(collided){
                 collided = false;
-                for (int i = 0; i < Boxes.Length; i++)          collided = collided || Boxes[i].SolveHorizontalCollision(gameTime, car);
-                for (int i = 0; i < Ramps.Length; i++)          collided = collided || Ramps[i].SolveHorizontalCollision(gameTime, car);
-                for (int i = 0; i < BridgeColumns.Length; i++)  collided = collided || BridgeColumns[i].SolveHorizontalCollision(gameTime, car);
+                Buildings.SolveHorizontalCollision(gameTime, car);
+                Bridge.SolveHorizontalCollision(gameTime, car);
                 for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveHorizontalCollision(gameTime, car);
+                for (int i = 0; i < MapWalls.Length; i++)       collided = collided || MapWalls[i].SolveHorizontalCollision(gameTime, car);
                 for (int i = 0; i < Trees.Length; i++)          collided = collided || Trees[i].SolveHorizontalCollision(gameTime, car);
-                for (int i = 0; i < Boxes.Length; i++)          collided = collided || Boxes[i].SolveVerticalCollision(gameTime, car);
-                for (int i = 0; i < Ramps.Length; i++)          collided = collided || Ramps[i].SolveVerticalCollision(gameTime, car);
                 for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveVerticalCollision(gameTime, car);
+                for (int i = 0; i < MapWalls.Length; i++)       collided = collided || MapWalls[i].SolveVerticalCollision(gameTime, car);
+                Buildings.SolveVerticalCollision(gameTime, car);
+                Bridge.SolveVerticalCollision(gameTime, car);
             }
             if(car.HasCrashed)  car.Crash();
         }
@@ -387,16 +345,16 @@ namespace TGC.MonoGame.TP
 
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
             Car.Draw(View, Projection);
-            //IACar.Draw(View, Projection);
+            IACar.Draw(View, Projection);
             
             Floor.Draw(View, Projection);
-            for (int i = 0; i < Boxes.Length; i++)      Boxes[i].Draw(View, Projection);
-            for (int i = 0; i < PowerUps.Length; i++)   PowerUps[i].Draw(View, Projection);
-            for (int i = 0; i < Ramps.Length; i++)      Ramps[i].Draw(View, Projection);
-            for (int i = 0; i < BridgeColumns.Length; i++)  BridgeColumns[i].Draw(View, Projection);
-            for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Draw(View, Projection);
-            for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Draw(View, Projection);
-            for (int i = 0; i < Trees.Length; i++)      Trees[i].Draw(View, Projection);
+            Bridge.Draw(View, Projection);
+            Buildings.Draw(View, Projection);
+            for (int i = 0; i < PowerUps.Length; i++)       PowerUps[i].Draw(View, Projection);
+            for (int i = 0; i < Mounts.Length; i++)         Mounts[i].Draw(View, Projection);
+            for (int i = 0; i < BoostPads.Length; i++)      BoostPads[i].Draw(View, Projection);
+            for (int i = 0; i < Trees.Length; i++)          Trees[i].Draw(View, Projection);
+            for (int i = 0; i < MapWalls.Length; i++)       MapWalls[i].Draw(View, Projection);
             //for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Draw(View, Projection);
 
             //MGBulletsList.ForEach(bullet => bullet.Draw(View, Projection));

@@ -25,6 +25,18 @@
 /processorParam:DebugMode=Auto
 /build:Effects/BoostPadShader.fx
 
+#begin Effects/BoxTextureShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/BoxTextureShader.fx
+
+#begin Effects/BridgeFloorTextureShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/BridgeFloorTextureShader.fx
+
 #begin Effects/CarShader.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -36,6 +48,12 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:Effects/FloorShader.fx
+
+#begin Effects/RampTextureShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/RampTextureShader.fx
 
 #begin Effects/TreeTrunkShader.fx
 /importer:EffectImporter
@@ -262,6 +280,30 @@
 /processorParam:TextureFormat=Color
 /build:Textures/bark brown/textures/bark_brown_01_diff_4k.jpg
 
+#begin Textures/brick_moss_001_diff_4k.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/brick_moss_001_diff_4k.jpg
+
+#begin Textures/brown_mud_leaves_01_diff_4k.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/brown_mud_leaves_01_diff_4k.jpg
+
 #begin Textures/Floor.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -286,7 +328,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/forest leaves/textures/forest_leaves_03_diff_4k.jpg
 
-#begin Textures/stone brick wall/textures/stone_brick_wall_001_diff_4k.jpg
+#begin Textures/large_red_bricks_diff_4k.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -296,9 +338,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/stone brick wall/textures/stone_brick_wall_001_diff_4k.jpg
+/build:Textures/large_red_bricks_diff_4k.jpg
 
-#begin Textures/stone brick wall/textures/stone_brick_wall_001_rough_4k.jpg
+#begin Textures/rock_01_diff_4k.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -308,5 +350,29 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/stone brick wall/textures/stone_brick_wall_001_rough_4k.jpg
+/build:Textures/rock_01_diff_4k.jpg
+
+#begin Textures/t_brick_floor_002_diffuse_4k.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/t_brick_floor_002_diffuse_4k.jpg
+
+#begin Textures/weathered_brown_planks_diff_4k.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/weathered_brown_planks_diff_4k.jpg
 

@@ -48,6 +48,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
 
                     // RandomPowerUp.Next(2);  // Hay que usar enums del 0 al 2
                     // car.setPowerUp(PowerUp);
+                    car.SetMachineGunTime();
                 }
 
             } else {

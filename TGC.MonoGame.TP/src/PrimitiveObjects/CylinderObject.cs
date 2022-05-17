@@ -11,13 +11,12 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
     {
         protected BoundingCylinder BoundingCylinder;
         protected CylinderPrimitive CylinderPrimitive { get; }
-        public CylinderObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotation, Color color){
+        public CylinderObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotationX, float rotationY, Color color){
             CylinderPrimitive = new CylinderPrimitive(graphicsDevice);
             ScaleMatrix = Matrix.CreateScale(size);
             TranslateMatrix = Matrix.CreateTranslation(position);
-            RotationMatrix = Matrix.CreateRotationY(rotation);
+            RotationMatrix = Matrix.CreateRotationY(rotationY);
             DiffuseColor = color.ToVector3();
-
             BoundingCylinder = new BoundingCylinder(position, size.X / 2, size.Y/2);
         }
         protected override void DrawPrimitive() { CylinderPrimitive.Draw(getEffect()); }

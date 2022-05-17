@@ -8,8 +8,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
     class BoostPadObject : QuadObject <BoostPadObject>
     {
         private OrientedBoundingBox OrientedBoundingBox;
-        bool isAvailable = true;
-
+        private Vector3 Position;
         public BoostPadObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotation)
             : base(graphicsDevice, position, size, rotation, Color.GreenYellow){
 
@@ -19,19 +18,10 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
 
         public void Update(GameTime gameTime, CarObject car){
         
-
             // Chequeo si colisionó con el auto
-            if(car.ObjectBox.Intersects(OrientedBoundingBox)){
+            if(car.ObjectBox.Intersects(OrientedBoundingBox))
                 // Si colisionó con el auto, el auto obtiene un speed boost
-                isAvailable = false;
-            } else {
-                isAvailable = true;
-            }
-        }
-
-        protected override void DrawPrimitive() {
-            if(isAvailable)   
-                QuadPrimitive.Draw(getEffect());
+                car.SetSpeedBoostTime();    
         }
     }
 }

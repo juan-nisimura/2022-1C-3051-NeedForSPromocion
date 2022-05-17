@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -16,6 +17,7 @@ using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.Monogame.TP.Src.CompoundObjects.Tree;
 using TGC.Monogame.TP.Src.CompoundObjects.Missile;
 using TGC.Monogame.TP.Src.CompoundObjects.Bridge;
+using TGC.MonoGame.TP.Src.Geometries;
 
 
 namespace TGC.MonoGame.TP
@@ -70,6 +72,10 @@ namespace TGC.MonoGame.TP
         private FloorObject Floor { get; set; }
         private Boolean TouchingObject { get; set; }
         private MissileObject[] Missiles { get; set; }
+        private BulletObject[] MGBullets {get; set;}
+        private List<BulletObject> MGBulletsList {get; set;}
+        private BulletObject bullet2 {get;set;}
+        private SpherePrimitive Sphere { get; set; }
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -132,13 +138,19 @@ namespace TGC.MonoGame.TP
                 new MissileObject(GraphicsDevice, new Vector3(-100f, 0f, -100f), 40f),
             };
 
+            
+            //bullet2 = new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-150f),10f);
+
+
             Floor = new FloorObject(GraphicsDevice, new Vector3(0f,0f,0f),new Vector3(700f,1f,700f),0);           
 
             for (int i = 0; i < Ramps.Length; i++)          Ramps[i].Initialize();
             for (int i = 0; i < BridgeColumns.Length; i++)  BridgeColumns[i].Initialize();
-            for (int i = 0; i < BoostPads.Length; i++)      BoostPads[i].Initialize();
-            for (int i = 0; i < Missiles.Length; i++)       Missiles[i].Initialize();
-
+            for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Initialize();
+            for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Initialize();
+            
+            
+            //bullet2.Initialize();
             Floor.Initialize();
 
             ControllerKeyG = new KeyController(Keys.G);
@@ -170,6 +182,7 @@ namespace TGC.MonoGame.TP
             RampObject.Load(Content, "BasicShader");
             BridgeColumnObject.Load(Content, "BasicShader");
 
+            //MGBulletsList = new List<BulletObject>();
             Car = new PlayerCarObject(new Vector3(-100f,0,-100f), Color.Blue);
             Car.Initialize();
 
@@ -280,6 +293,7 @@ namespace TGC.MonoGame.TP
         protected override void Update(GameTime gameTime)
         {
             // Aca deberiamos poner toda la logica de actualizacion del juego.
+            
             var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
 
             // Capturar Input teclado
@@ -295,9 +309,9 @@ namespace TGC.MonoGame.TP
                 View = Camera.MoveCameraByKeyboard(gameTime).GetView();
                 return;
             }
-            
-            Car.Update(gameTime);
-            //IACar.Update(gameTime);
+
+            Car.Update(gameTime, GraphicsDevice, View, Projection);
+            IACar.Update(gameTime);
             Floor.Update(gameTime);
             for (int i = 0; i < PowerUps.Length; i++)       PowerUps[i].Update(gameTime, Car);
             for (int i = 0; i < BoostPads.Length; i++)      BoostPads[i].Update(gameTime, Car);
@@ -309,52 +323,43 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Mounts.Length; i++)         Mounts[i].Update(gameTime, Car);
             for (int i = 0; i < Trees.Length; i++)          Trees[i].Update(gameTime);
 
-            SolveHorizontalCollisions(gameTime, Car);
-            SolveVerticalCollisions(gameTime, Car);
+            SolveCollisions(gameTime, Car);
 
-            // TODO: Revisar
-            /*
-            TouchingObject = Car.ObjectBox.Intersects(IACar.ObjectBox);
-            if(TouchingObject){
-                //Car.Speed = -2f ;
-                Car.DiffuseColor = Color.Yellow.ToVector3();*/
-                /*IACar.RotationMatrix *= Matrix.CreateRotationY(IACar.Rotation);
-                IACar.TranslateMatrix = Matrix.CreateTranslation(IACar.Position);
-                IACar.World = IACar.ScaleMatrix * IACar.RotationMatrix * IACar.TranslateMatrix;
-                IACar.Speed= 5f;
-                IACar.Position = new Vector3(IACar.Position.X - IACar.Speed * World.Forward.X * elapsedTime, 0, IACar.Position.Z - IACar.Speed * World.Forward.Z * elapsedTime);
-                IACar.World *= Matrix.CreateTranslation(IACar.Position);*/
-                /*
-                float num = 6f;
-                IACar.Position= new Vector3(IACar.Position.X - Car.Speed * num * Car.World.Forward.X * elapsedTime, 0, IACar.Position.Z - Car.Speed * num * Car.World.Forward.Z * elapsedTime);
-                Car.Speed *= 0.8f;
-                IACar.Speed = Car.Speed*0.6f;
-                //IACar.ObjectBox.Orientation = Matrix.CreateRotationY(IACar.Rotation);
-                //IACar.ObjectBox.Center = IACar.Position;
-                
-                //Car.Speed = -5;
+            //MGBulletsList = Car.GetMGBulletsList();
+            MGBullets = Car.GetMGBullets();
+            /*MGBullets = new BulletObject[]{
+                new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-150f),10f),
+                new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-200f),10f),
+                new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-250f),10f)
+            };
+            for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Initialize();
+            for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime);*/
+            //bullet2.Update(gameTime);
 
-
-            }else{
-                Car.DiffuseColor = Color.Blue.ToVector3();
-            }*/
             
+            var keyboardState = Keyboard.GetState();
+            //TouchSpeedBoost = Car.ObjectBox.Intersects(SpeedBoost.ObjectBox);
+            if (keyboardState.IsKeyDown(Keys.LeftShift)) {
+                //Car.SetSpeedBoostActive(true);
+                Car.SetSpeedBoostTime();
+            }else{
+                //Car.SetSpeedBoostActive(false);
+            }
+
+            //TouchMachineGunBoost = Car.ObjectBox.Intersects(MachineGun.ObjectBox);
+            if (keyboardState.IsKeyDown(Keys.LeftControl)) {
+                //Car.SetSpeedBoostActive(true);
+                Car.SetMachineGunTime();
+            }else{
+                //Car.SetSpeedBoostActive(false);
+            }
+
             View = Camera.FollowCamera(Car.GetPosition()).GetView();
 
             base.Update(gameTime);
         }
 
-        protected void SolveVerticalCollisions(GameTime gameTime, CarObject car) {
-            /*var collided = true;
-            while(collided){
-                collided = false;
-                for (int i = 0; i < Boxes.Length; i++)          collided = collided || Boxes[i].SolveVerticalCollision(gameTime, car);
-                for (int i = 0; i < Ramps.Length; i++)          collided = collided || Ramps[i].SolveVerticalCollision(gameTime, car);
-                for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveVerticalCollision(gameTime, car);
-            } */ 
-        }
-
-        protected void SolveHorizontalCollisions(GameTime gameTime, CarObject car) {
+        protected void SolveCollisions(GameTime gameTime, CarObject car) {
             var collided = true;
             car.HasCrashed = false;
             while(collided){
@@ -392,8 +397,14 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Draw(View, Projection);
             for (int i = 0; i < BoostPads.Length; i++)  BoostPads[i].Draw(View, Projection);
             for (int i = 0; i < Trees.Length; i++)      Trees[i].Draw(View, Projection);
-            for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Draw(View, Projection);
+            //for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Draw(View, Projection);
+
+            //MGBulletsList.ForEach(bullet => bullet.Draw(View, Projection));
+            if(MGBullets != null){
+                for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
+            }
             
+            //bullet2.Draw(View, Projection);
         }
 
         /// <summary>

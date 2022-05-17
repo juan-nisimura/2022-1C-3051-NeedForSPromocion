@@ -52,6 +52,9 @@ namespace TGC.Monogame.TP.Src
             return v1 + (v2 - v1) * factorDeInterpolacion;
         }
 
+        public Matrix GetWorld(){
+            return World;
+        }
         abstract public void Update(GameTime gameTime);
         
         public abstract void Draw(Matrix view, Matrix projection);

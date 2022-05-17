@@ -11,7 +11,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
         protected MissileHeadObject BulletHead { get; set; }
         
         public BulletObject(GraphicsDevice graphicsDevice, Vector3 position, float size, float rotationY){
-            BulletBody = new MissileBodyObject(graphicsDevice, position + new Vector3(0f, size/2, 0f), new Vector3(size/2, size, size/2),MathHelper.PiOver2, rotationY, Color.Blue);
+            BulletBody = new MissileBodyObject(graphicsDevice, position + new Vector3(0f, size/2, 0f), new Vector3(size/2, size, size/2),MathHelper.PiOver2, rotationY, Color.Black);
             BulletHead = new MissileHeadObject(graphicsDevice, position + new Vector3(0f, size, size/2), new Vector3(0.5f, 1f, 0.5f) * size,rotationY, Color.Red);
         }
 

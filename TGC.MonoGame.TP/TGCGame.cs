@@ -357,7 +357,7 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < MapWalls.Length; i++)       MapWalls[i].Draw(View, Projection);
             //for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Draw(View, Projection);
 
-            //MGBulletsList.ForEach(bullet => bullet.Draw(View, Projection));
+            if(Car.GetMGBulletsList()!=null ){Car.GetMGBulletsList().ForEach(bullet => bullet.Draw(View, Projection));}
             if(MGBullets != null){
                 for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
             }

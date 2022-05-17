@@ -171,10 +171,10 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             SpeedBoostTime = 2f;
         }
         public void SetMachineGunTime(){
-            MachineGunTime = 2f;
+            MachineGunTime = 5f;
         }
         public void SetMisileTime(){
-            MisileTime = 2f;
+            MisileTime = 5f;
         }
     }
 }

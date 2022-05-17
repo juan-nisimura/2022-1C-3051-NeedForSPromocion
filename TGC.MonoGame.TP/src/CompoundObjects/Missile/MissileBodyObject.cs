@@ -16,16 +16,16 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
             forward += World.Forward * counter * counter;
             counter+=1500f;
             var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
-            Position = new Vector3(Position.X+forward.X, 10, Position.Z+forward.Z);
+            Position = new Vector3(Position.X+forward.X, Position.Y+5, Position.Z+forward.Z);
             World = ScaleMatrix;
             World *= Matrix.CreateRotationX(MathHelper.PiOver2);
             World *= Matrix.CreateRotationY(Rotation);
             
-            World *= Matrix.CreateTranslation(new Vector3(Position.X, 10, Position.Z));
+            World *= Matrix.CreateTranslation(new Vector3(Position.X, Position.Y+5, Position.Z));
         }
 
         /*
-        //buen efecto para el cohete
+        //efecto para el cohete
         public void Update(GameTime gameTime, Vector3 Position, float Rotation){
             var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
             Position = new Vector3(Position.X+forward.X, 10, Position.Z+forward.Z);

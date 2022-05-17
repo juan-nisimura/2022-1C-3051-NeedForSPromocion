@@ -21,8 +21,11 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         //private List<Matrix> bulletsMatrix  {get; set;}
         private BulletObject[] MGBullets {get;set;}
         private Vector3 BulletPosicion {get;set;}
+        private Vector3 BulletPosicion2 {get;set;}
         private float BulletRotation {get;set;}
-        //private int index {get;set;}=1;
+        private int index {get;set;}=0;
+        private List<BulletObject> MGBulletsList {get;set;}= new List<BulletObject>();
+        private float shootDelay{get;set;}=0f;
         //private Boolean MisileActive {get; set;}
 
         public PlayerCarObject(Vector3 position, Color color)
@@ -81,31 +84,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
                 
 
-                if(MachineGunTime > 0){
-                    if (keyboardState.IsKeyDown(Keys.RightShift)) {
-                        MachineGunActive = true;
-                        BulletPosicion = Position;
-                        BulletRotation = Rotation;
-                        //TO DO solo genera una sola bala, falta generar la lista dinamicamente
-                        MGBullets = new BulletObject[]{
-                            new BulletObject(graphicsDevice,BulletPosicion,5f,BulletRotation)
-                        };
-                        //BulletObject bullet = new BulletObject(graphicsDevice,Position,10f,Rotation);
-
-                        
-                        //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, Position, Rotation);
-                        //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
-                    }
-                    MachineGunTime-=elapsedTime;
-                }
-                if(MGBullets != null){
-                    if(MachineGunActive){
-                        for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Initialize();
-                        MachineGunActive = false;
-                    }
                 
-                for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, BulletPosicion, BulletRotation);
-                }
 
                 
                 // Calculo aceleracion y velocidad de giro
@@ -143,6 +122,45 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             
             // Esto calcula la posición del auto
             base.Update(gameTime);
+
+            if(MachineGunTime > 0){
+                //MGBullets = new BulletObject[10];
+                //MGBulletsList = new List<BulletObject>();
+                
+                    if (keyboardState.IsKeyDown(Keys.RightShift)&& shootDelay<=0) {
+                        //MachineGunActive = true;
+                        BulletPosicion = Position;
+                        BulletRotation = Rotation;
+                        //TO DO solo genera una sola bala, falta generar la lista dinamicamente
+                        /*MGBullets = new BulletObject[]{
+                            new BulletObject(graphicsDevice,BulletPosicion,5f,BulletRotation),
+                            new BulletObject(graphicsDevice,BulletPosicion2,10f,BulletRotation)
+                        };*/
+                        
+                        var bullet = new BulletObject(graphicsDevice,BulletPosicion2,5f,BulletRotation);
+                        MGBulletsList.Add(bullet);
+                        bullet.Initialize();
+                        shootDelay=0.2f;
+                        
+                        //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, Position, Rotation);
+                        //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
+                    }
+                    shootDelay-=elapsedTime;
+                    MachineGunTime-=elapsedTime;
+                    //MGBulletsList.ForEach(bullet => bullet.Initialize());
+                    MGBulletsList.ForEach(bullet => bullet.Update(gameTime, BulletPosicion, BulletRotation));
+                }else{
+                    MGBulletsList.Clear();
+                }
+                
+                /*if(MGBullets != null){
+                    if(MachineGunActive){
+                        for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Initialize();
+                        MachineGunActive = false;
+                    }
+                
+                for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, BulletPosicion, BulletRotation);
+                }*/
         
             ObjectBox.Center = Position;
             // Hacerlo que funcione cuando se incline
@@ -155,6 +173,9 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         
         public BulletObject[] GetMGBullets(){
             return MGBullets;
+        }
+        public List<BulletObject> GetMGBulletsList(){
+            return MGBulletsList;
         }
         
     }

@@ -7,7 +7,7 @@ using TGC.MonoGame.TP.Src.Geometries;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
-    class BoxObject : CubeObject <BoxObject>
+    class BoxObject <T> : CubeObject <T>
     {
 
         private BoundingBox BoundingBox; 

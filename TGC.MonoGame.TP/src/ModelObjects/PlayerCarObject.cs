@@ -15,11 +15,12 @@ namespace TGC.Monogame.TP.Src.ModelObjects
     {
         //private Boolean SpeedBoostActive {get; set;}
         
-        //private Boolean MachineGunActive {get; set;}
+        private Boolean MachineGunActive {get; set;}
         
         //private BulletObject bullet  {get; set;}
         //private List<Matrix> bulletsMatrix  {get; set;}
         private BulletObject[] MGBullets {get;set;}
+        private Vector3 BulletPosicion {get;set;}
         //private int index {get;set;}=1;
         //private Boolean MisileActive {get; set;}
 
@@ -81,8 +82,11 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
                 if(MachineGunTime > 0){
                     if (keyboardState.IsKeyDown(Keys.RightShift)) {
+                        MachineGunActive = true;
+                        BulletPosicion = Position;
+                        //TO DO solo genera una sola bala, falta generar la lista dinamicamente
                         MGBullets = new BulletObject[]{
-                            new BulletObject(graphicsDevice,Position,10f,Rotation)
+                            new BulletObject(graphicsDevice,BulletPosicion,10f,Rotation)
                         };
                         //BulletObject bullet = new BulletObject(graphicsDevice,Position,10f,Rotation);
 
@@ -93,8 +97,12 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                     MachineGunTime-=elapsedTime;
                 }
                 if(MGBullets != null){
-                for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Initialize();
-                for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime);
+                    if(MachineGunActive){
+                        for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Initialize();
+                        MachineGunActive = false;
+                    }
+                
+                for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, BulletPosicion, Rotation);
                 }
 
                 

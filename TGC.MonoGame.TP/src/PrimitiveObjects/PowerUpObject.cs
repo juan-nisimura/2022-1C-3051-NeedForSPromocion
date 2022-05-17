@@ -43,7 +43,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
                     // Si colisionó con el auto, el auto obtiene un powerup
                     isAvailable = false;
                     RespawnActualTime = 0;
-                    car.SetSpeedBoostTime();
+                    car.SetMachineGunTime();
                 }
 
             } else {

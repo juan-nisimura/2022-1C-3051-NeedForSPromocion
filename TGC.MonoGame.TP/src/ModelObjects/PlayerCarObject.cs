@@ -171,9 +171,9 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             SpeedBoostActive = isActive;
         }*/
         
-        public BulletObject[] GetMGBullets(){
+        /*public BulletObject[] GetMGBullets(){
             return MGBullets;
-        }
+        }*/
         public List<BulletObject> GetMGBulletsList(){
             return MGBulletsList;
         }

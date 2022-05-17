@@ -281,7 +281,7 @@ namespace TGC.MonoGame.TP
             SolveCollisions(gameTime, Car);
 
             //MGBulletsList = Car.GetMGBulletsList();
-            MGBullets = Car.GetMGBullets();
+            //MGBullets = Car.GetMGBullets();
             /*MGBullets = new BulletObject[]{
                 new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-150f),10f),
                 new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-200f),10f),
@@ -358,9 +358,9 @@ namespace TGC.MonoGame.TP
             //for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Draw(View, Projection);
 
             if(Car.GetMGBulletsList()!=null ){Car.GetMGBulletsList().ForEach(bullet => bullet.Draw(View, Projection));}
-            if(MGBullets != null){
+            /*if(MGBullets != null){
                 for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
-            }
+            }*/
             
             //bullet2.Draw(View, Projection);
         }

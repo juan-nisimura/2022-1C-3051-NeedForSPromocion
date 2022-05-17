@@ -21,6 +21,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         //private List<Matrix> bulletsMatrix  {get; set;}
         private BulletObject[] MGBullets {get;set;}
         private Vector3 BulletPosicion {get;set;}
+        private float BulletRotation {get;set;}
         //private int index {get;set;}=1;
         //private Boolean MisileActive {get; set;}
 
@@ -84,9 +85,10 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                     if (keyboardState.IsKeyDown(Keys.RightShift)) {
                         MachineGunActive = true;
                         BulletPosicion = Position;
+                        BulletRotation = Rotation;
                         //TO DO solo genera una sola bala, falta generar la lista dinamicamente
                         MGBullets = new BulletObject[]{
-                            new BulletObject(graphicsDevice,BulletPosicion,10f,Rotation)
+                            new BulletObject(graphicsDevice,BulletPosicion,5f,BulletRotation)
                         };
                         //BulletObject bullet = new BulletObject(graphicsDevice,Position,10f,Rotation);
 
@@ -102,7 +104,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                         MachineGunActive = false;
                     }
                 
-                for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, BulletPosicion, Rotation);
+                for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, BulletPosicion, BulletRotation);
                 }
 
                 

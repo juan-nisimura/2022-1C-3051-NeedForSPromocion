@@ -14,7 +14,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
         }
         public void Update(GameTime gameTime, Vector3 Position, float Rotation){
             forward += World.Forward * counter * counter;
-            counter+=5000f;
+            counter+=500f;
             var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
             Position = new Vector3(Position.X+forward.X, 10, Position.Z+forward.Z);
             World = ScaleMatrix;

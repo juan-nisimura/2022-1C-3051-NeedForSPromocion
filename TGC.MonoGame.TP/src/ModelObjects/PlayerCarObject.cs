@@ -7,19 +7,21 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 {
     class PlayerCarObject : CarObject
     {
-        public PlayerCarObject(GraphicsDevice graphicsDevice, Vector3 position, Color color)
-             : base(graphicsDevice, position, color)
+        public PlayerCarObject(Vector3 position, Color color)
+             : base(position, color)
         {
         }
 
         public override void Update(GameTime gameTime){
             // Capturo el estado del teclado
             var keyboardState = Keyboard.GetState();
-
+    
             var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
 
+            Console.WriteLine("{0}", OnTheGround);
+
             // Si el auto esta tocando el piso
-            if(Position.Y == 0){
+            if(OnTheGround){
 
                 // Calculo la aceleracion y la velocidad
                 if (keyboardState.IsKeyDown(Keys.W)) {
@@ -69,7 +71,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             // Si el auto esta en el aire
             else{
                 // Calculo velocidad vertical
-                VerticalSpeed = VerticalSpeed - Gravity * elapsedTime;
+                VerticalSpeed = VerticalSpeed - GRAVITY * elapsedTime;
             }
             
             // Esto calcula la posición del auto

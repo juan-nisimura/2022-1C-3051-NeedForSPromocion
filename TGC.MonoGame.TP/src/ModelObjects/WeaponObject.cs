@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TGC.Monogame.TP.Src.ModelObjects
 {
-    class WeaponObject : DefaultModelObject <WeaponObject>
+    public class WeaponObject : DefaultModelObject <WeaponObject>
     {
         public new void Initialize(){
             base.Initialize();

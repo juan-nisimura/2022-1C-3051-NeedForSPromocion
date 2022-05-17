@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace TGC.Monogame.TP.Src   
 {
-    abstract class DefaultModelObject <T> : DefaultObject <T>
+    public abstract class DefaultModelObject <T> : DefaultObject <T>
     {
 
         protected static Dictionary<Type, Model> Models = new Dictionary<Type, Model>();

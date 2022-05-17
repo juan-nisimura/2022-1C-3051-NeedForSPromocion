@@ -8,7 +8,7 @@ using TGC.Monogame.TP.Src.PrimitiveObjects;
 namespace TGC.Monogame.TP.Src.ModelObjects
 
 {
-    class CarObject : DefaultModelObject <CarObject>
+    public class CarObject : DefaultModelObject <CarObject>
     {
         protected float MaxSpeed { get; set; } = 3000f;
         protected float MaxReverseSpeed { get; set; } = 1500f;
@@ -17,7 +17,6 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         protected float StopAcceleration { get; set; } = 2500f;
         protected float MaxTurningAcceleration { get; set; } = MathF.PI * 5;
         protected float MaxTurningSpeed { get; set; } = MathF.PI / 1.25f;
-        protected float Gravity { get; set; } = 400f;
         protected float JumpInitialSpeed { get; set; } = 100f;
 
         public float Speed { get; set; } = 0;
@@ -28,7 +27,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         protected float VerticalSpeed { get; set; } = 0;
 
         protected float WheelAngle { get; set; } = 0;
-        protected Vector3 Position { get; set; }
+        public Vector3 Position { get; set; }
         protected WeaponObject Weapon { get; set; } = new WeaponObject();
 
         //colisions
@@ -40,8 +39,14 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         
         // The Y Angle for the Chair
         private float ObjectAngle { get; set; } = 0;
+        public bool HasCrashed = false;
+        public static float HIPOTENUSA_AL_VERTICE;
+        public static float ANGULO_AL_VERTICE;
+        public float GroundLevel = 0;
+        public bool OnTheGround = true;
+        public Vector3 Size;
 
-        public CarObject(GraphicsDevice graphicsDevice, Vector3 position, Color color){
+        public CarObject(Vector3 position, Color color){
             Position = position;
             DiffuseColor = color.ToVector3();
 
@@ -50,6 +55,9 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             var temporaryCubeAABB = BoundingVolumesExtensions.CreateAABBFrom(getModel());
             // Scale it to match the model's transform
             temporaryCubeAABB = BoundingVolumesExtensions.Scale(temporaryCubeAABB, 0.05f);
+
+            Size = temporaryCubeAABB.Max - temporaryCubeAABB.Min;
+
             // Create an Oriented Bounding Box from the AABB
             ObjectBox = OrientedBoundingBox.FromAABB(temporaryCubeAABB);
             // Move the center
@@ -68,25 +76,52 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public static void Load(ContentManager content){
             DefaultLoad(content, "RacingCarA/RacingCar", "CarShader");
             WeaponObject.Load(content);
+
+            var temporalCarObject = new CarObject(new Vector3(0f, 0f, 0f), Color.Green);
+
+            ANGULO_AL_VERTICE = MathF.Atan(temporalCarObject.Size.X / temporalCarObject.Size.Z);
+            HIPOTENUSA_AL_VERTICE = MathF.Sqrt(MathF.Pow(temporalCarObject.Size.X / 2, 2) + MathF.Pow(temporalCarObject.Size.Z / 2, 2));
+        }
+
+        public void RotateX(Vector3 normal) {
+            var angulo = MathF.Acos(Convert.ToSingle(Vector3.Dot(Vector3.Normalize(new Vector3(normal.X, 0f, normal.Z)), normal)));
+            RotationMatrix = Matrix.CreateRotationX(angulo - MathF.PI / 2) * Matrix.CreateRotationY(Rotation);
         }
 
         public override void Update(GameTime gameTime){
+            
             var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
 
-            World = ScaleMatrix;
-            World *= Matrix.CreateRotationY(Rotation);
-
-            // Rotate the box
-            //ObjectAngle += 0.01f;
-            //ObjectBox.Orientation = Matrix.CreateRotationY(Rotation);
+            RotationMatrix = Matrix.CreateRotationY(Rotation);
 
             // Calculo la nueva posicion
-            Position = new Vector3(Position.X - Speed * World.Forward.X * elapsedTime, Math.Max(Position.Y + VerticalSpeed * elapsedTime, 0), Position.Z - Speed * World.Forward.Z * elapsedTime);
+            var x = Position.X - Speed * World.Forward.X * elapsedTime;
+            var z = Position.Z - Speed * World.Forward.Z * elapsedTime;
+            var y = Math.Max(Position.Y - Speed * World.Forward.Y * elapsedTime + VerticalSpeed * elapsedTime, GroundLevel);
+
+            Position = new Vector3(x, y, z);
+
+            OnTheGround = Position.Y - GroundLevel < 0.5f;
 
             // Calculo el nuevo ángulo de las ruedas
-            WheelAngle += Speed * elapsedTime / 250f;
+            WheelAngle += Speed * elapsedTime / 125f;
 
-            World *= Matrix.CreateTranslation(Position);
+            TranslateMatrix = Matrix.CreateTranslation(Position);
+
+            var forward = RotationMatrix.Forward;
+
+            var differentialAngleX = HeightMap.GetDifferentialAngle(Position, forward);
+            var differentialAngleZ = HeightMap.GetDifferentialAngle(Position, new Vector3(forward.Z, 0f, -forward.X));
+
+            if(MathF.Abs(differentialAngleX) < MathF.PI / 6)
+                RotationMatrix = Matrix.CreateRotationX(differentialAngleX) * RotationMatrix;
+            if(MathF.Abs(differentialAngleZ) < MathF.PI / 6)
+                RotationMatrix = Matrix.CreateRotationZ(-differentialAngleZ) * RotationMatrix;
+
+            // Rotate the box
+            ObjectBox.Orientation = RotationMatrix;
+
+            World = ScaleMatrix * RotationMatrix * TranslateMatrix;
 
             Weapon.FollowCar(World);
         }
@@ -94,13 +129,15 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public new void Draw(Matrix view, Matrix projection)
         {
             // Para dibujar el modelo necesitamos pasarle informacion que el efecto esta esperando.
+            World = ScaleMatrix * RotationMatrix * TranslateMatrix;
+
             getEffect().Parameters["View"]?.SetValue(view);
             getEffect().Parameters["Projection"]?.SetValue(projection);
             getEffect().Parameters["ModelTexture"]?.SetValue(getTexture());
 
             CarBodyObject.Draw(getEffect(), getModel().Meshes["Car"], World);
-            WheelObject.Draw(getEffect(), getModel().Meshes["WheelA"], World, WheelAngle, TurningSpeed);
-            WheelObject.Draw(getEffect(), getModel().Meshes["WheelB"], World, WheelAngle, TurningSpeed);
+            WheelObject.Draw(getEffect(), getModel().Meshes["WheelA"], World, WheelAngle, TurningSpeed * MathF.Sign(Speed));
+            WheelObject.Draw(getEffect(), getModel().Meshes["WheelB"], World, WheelAngle, TurningSpeed * MathF.Sign(Speed));
             WheelObject.Draw(getEffect(), getModel().Meshes["WheelC"], World, WheelAngle, 0);
             WheelObject.Draw(getEffect(), getModel().Meshes["WheelD"], World, WheelAngle, 0);
 
@@ -110,6 +147,11 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public Vector3 GetPosition()
         {
             return Position;
+        }
+
+        internal void Crash()
+        {
+            Speed = 0;
         }
     }
 }

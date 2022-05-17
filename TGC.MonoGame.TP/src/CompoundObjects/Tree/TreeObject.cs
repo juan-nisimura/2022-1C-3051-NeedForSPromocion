@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using TGC.Monogame.TP.Src.ModelObjects;
+using System;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
 {
@@ -29,6 +31,11 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
         public override void Draw(Matrix view, Matrix projection){
             TreeTrunk.Draw(view, projection);
             TreeTop.Draw(view, projection);
+        }
+
+        public bool SolveHorizontalCollision(GameTime gameTime, CarObject car)
+        {
+            return TreeTrunk.SolveHorizontalCollision(gameTime, car);
         }
     }
 }

@@ -358,6 +358,17 @@ namespace TGC.MonoGame.Samples.Collisions
             return aabb.Intersects(obbSpaceSphere);
         }
 
+        public bool Intersects(BoundingCylinder cylinder)
+        {
+            // Transform sphere to OBB-Space
+            var obbSpaceCylinder = new BoundingCylinder(ToOBBSpace(cylinder.Center), cylinder.Radius, cylinder.HalfHeight);
+
+            // Create AABB enclosing the OBB
+            var aabb = new BoundingBox(-Extents, Extents);
+
+            return obbSpaceCylinder.Intersects(aabb) == BoxCylinderIntersection.Intersecting;
+        }
+
 
 
         /// <summary>

@@ -61,7 +61,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	float2 coordinates = input.TextureCoordinate;
 	coordinates = coordinates * 15;
-	return float4(0.4,0.4,0.4,0) + tex2D(textureSampler, coordinates);
+	return tex2D(textureSampler, coordinates);
 }
 
 technique BasicColorDrawing

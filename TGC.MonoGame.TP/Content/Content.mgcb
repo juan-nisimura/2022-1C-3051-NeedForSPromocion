@@ -226,6 +226,30 @@
 /processorParam:TextureFormat=Color
 /build:Models/RacingCarA/Vehicle_rougness.png
 
+#begin Textures/asphalt/textures/asphalt_02_diff_4k.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/asphalt/textures/asphalt_02_diff_4k.jpg
+
+#begin Textures/asphalt/textures/asphalt_02_rough_4k.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/asphalt/textures/asphalt_02_rough_4k.jpg
+
 #begin Textures/bark brown/textures/bark_brown_01_diff_4k.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -261,4 +285,28 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/forest leaves/textures/forest_leaves_03_diff_4k.jpg
+
+#begin Textures/stone brick wall/textures/stone_brick_wall_001_diff_4k.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/stone brick wall/textures/stone_brick_wall_001_diff_4k.jpg
+
+#begin Textures/stone brick wall/textures/stone_brick_wall_001_rough_4k.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/stone brick wall/textures/stone_brick_wall_001_rough_4k.jpg
 

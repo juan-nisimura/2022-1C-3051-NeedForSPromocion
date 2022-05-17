@@ -68,9 +68,7 @@ namespace TGC.MonoGame.TP
         private BoostPadObject[] BoostPads { get; set; }
         private TreeObject[] Trees { get; set; }
         private FloorObject Floor { get; set; }
-
         private Boolean TouchingObject { get; set; }
-
         private MissileObject[] Missiles { get; set; }
 
         /// <summary>
@@ -144,8 +142,6 @@ namespace TGC.MonoGame.TP
             Floor.Initialize();
 
             ControllerKeyG = new KeyController(Keys.G);
-
-            Console.WriteLine("Cantidad de objectos = {0}", DefaultObject<Type>.ObjectCount);
             
             base.Initialize();
         }
@@ -167,17 +163,17 @@ namespace TGC.MonoGame.TP
             BoostPadObject.Load(Content, "BoostPadShader");
             BoxObject.Load(Content, "BasicShader", "Floor");
             MissileObject.Load(Content);
-            FloorObject.Load(Content, "FloorShader", "Floor");
+            FloorObject.Load(Content, "FloorShader", "asphalt/textures/asphalt_02_diff_4k");
             
             MountObject.Load(Content, "BasicShader");
             PowerUpObject.Load(Content, "BasicShader", "Floor");
             RampObject.Load(Content, "BasicShader");
             BridgeColumnObject.Load(Content, "BasicShader");
 
-            Car = new PlayerCarObject(GraphicsDevice, new Vector3(-100f,0,-100f), Color.Blue);
+            Car = new PlayerCarObject(new Vector3(-100f,0,-100f), Color.Blue);
             Car.Initialize();
 
-            IACar = new IACarObject(GraphicsDevice, new Vector3(-100f,0,-50f), Color.Red);
+            IACar = new IACarObject(new Vector3(-100f,0,-50f), Color.Red);
             IACar.Initialize();
 
             base.LoadContent();
@@ -204,10 +200,10 @@ namespace TGC.MonoGame.TP
             };
 
             Boxes = new BoxObject[] {
-                new BoxObject(GraphicsDevice, new Vector3(705f, 25f, 0f), new Vector3(10f, 50f, 1420f), Color.White),
-                new BoxObject(GraphicsDevice, new Vector3(-705f, 25f, 0f), new Vector3(10f, 50f, 1420f), Color.White),
-                new BoxObject(GraphicsDevice, new Vector3(0f, 25f, 705f), new Vector3(1400f, 50f, 10f), Color.White),
-                new BoxObject(GraphicsDevice, new Vector3(0f, 25f, -705f), new Vector3(1400f, 50f, 10f), Color.White),
+                new BoxObject(GraphicsDevice, new Vector3(705f, 32.5f, 0f), new Vector3(10f, 65f, 1420f), Color.White),
+                new BoxObject(GraphicsDevice, new Vector3(-705f, 32.5f, 0f), new Vector3(10f, 65f, 1420f), Color.White),
+                new BoxObject(GraphicsDevice, new Vector3(0f, 32.5f, 705f), new Vector3(1400f, 65f, 10f), Color.White),
+                new BoxObject(GraphicsDevice, new Vector3(0f, 32.5f, -705f), new Vector3(1400f, 65f, 10f), Color.White),
 
                 new BoxObject(GraphicsDevice, new Vector3(235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown),
                 new BoxObject(GraphicsDevice, new Vector3(0f, 15f, 0f), new Vector3(120f, 30f, 80f), Color.Gray),
@@ -263,6 +259,17 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < PowerUps.Length; i++)   PowerUps[i].Initialize();
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Initialize();
             for (int i = 0; i < Trees.Length; i++)      Trees[i].Initialize();
+
+            // Inicializo el HeightMap
+            for(int x =-710; x <= 710; x++) {
+                for(int z = -710; z <= 710; z++) {
+                    HeightMap.SetHeight(x, z, 0);
+                    HeightMap.MoveRay(x, z);
+                    for (int i = 0; i < Boxes.Length; i++)      Boxes[i].UpdateHeightMap(x, z);
+                    for (int i = 0; i < Ramps.Length; i++)      Ramps[i].UpdateHeightMap(x, z);
+                    for (int i = 0; i < Mounts.Length; i++)     Mounts[i].UpdateHeightMap(x, z);
+                }
+            }
         }
 
         /// <summary>
@@ -284,21 +291,26 @@ namespace TGC.MonoGame.TP
                 GodModeIsActive = !GodModeIsActive;
             }
 
-            for (int i = 0; i < PowerUps.Length; i++)   PowerUps[i].Update(gameTime, Car);
-
             if(GodModeIsActive){
                 View = Camera.MoveCameraByKeyboard(gameTime).GetView();
                 return;
             }
             
             Car.Update(gameTime);
-            IACar.Update(gameTime);
+            //IACar.Update(gameTime);
             Floor.Update(gameTime);
-            for (int i = 0; i < Boxes.Length; i++)          Boxes[i].Update(gameTime);
+            for (int i = 0; i < PowerUps.Length; i++)       PowerUps[i].Update(gameTime, Car);
+            for (int i = 0; i < BoostPads.Length; i++)      BoostPads[i].Update(gameTime, Car);
+            for (int i = 0; i < Missiles.Length; i++)       Missiles[i].Update(gameTime);
+
+            for (int i = 0; i < Boxes.Length; i++)          Boxes[i].Update(gameTime, Car);
             for (int i = 0; i < Ramps.Length; i++)          Ramps[i].Update(gameTime);
             for (int i = 0; i < BridgeColumns.Length; i++)  BridgeColumns[i].Update(gameTime);
-            for (int i = 0; i < Mounts.Length; i++)         Mounts[i].Update(gameTime);
-            for (int i = 0; i < BoostPads.Length; i++)      BoostPads[i].Update(gameTime, Car);
+            for (int i = 0; i < Mounts.Length; i++)         Mounts[i].Update(gameTime, Car);
+            for (int i = 0; i < Trees.Length; i++)          Trees[i].Update(gameTime);
+
+            SolveHorizontalCollisions(gameTime, Car);
+            SolveVerticalCollisions(gameTime, Car);
 
             // TODO: Revisar
             /*
@@ -321,16 +333,42 @@ namespace TGC.MonoGame.TP
                 //IACar.ObjectBox.Center = IACar.Position;
                 
                 //Car.Speed = -5;
+
+
             }else{
                 Car.DiffuseColor = Color.Blue.ToVector3();
             }*/
             
-            for (int i = 0; i < Trees.Length; i++)      Trees[i].Update(gameTime);
-            for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Update(gameTime);
-
             View = Camera.FollowCamera(Car.GetPosition()).GetView();
 
             base.Update(gameTime);
+        }
+
+        protected void SolveVerticalCollisions(GameTime gameTime, CarObject car) {
+            /*var collided = true;
+            while(collided){
+                collided = false;
+                for (int i = 0; i < Boxes.Length; i++)          collided = collided || Boxes[i].SolveVerticalCollision(gameTime, car);
+                for (int i = 0; i < Ramps.Length; i++)          collided = collided || Ramps[i].SolveVerticalCollision(gameTime, car);
+                for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveVerticalCollision(gameTime, car);
+            } */ 
+        }
+
+        protected void SolveHorizontalCollisions(GameTime gameTime, CarObject car) {
+            var collided = true;
+            car.HasCrashed = false;
+            while(collided){
+                collided = false;
+                for (int i = 0; i < Boxes.Length; i++)          collided = collided || Boxes[i].SolveHorizontalCollision(gameTime, car);
+                for (int i = 0; i < Ramps.Length; i++)          collided = collided || Ramps[i].SolveHorizontalCollision(gameTime, car);
+                for (int i = 0; i < BridgeColumns.Length; i++)  collided = collided || BridgeColumns[i].SolveHorizontalCollision(gameTime, car);
+                for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveHorizontalCollision(gameTime, car);
+                for (int i = 0; i < Trees.Length; i++)          collided = collided || Trees[i].SolveHorizontalCollision(gameTime, car);
+                for (int i = 0; i < Boxes.Length; i++)          collided = collided || Boxes[i].SolveVerticalCollision(gameTime, car);
+                for (int i = 0; i < Ramps.Length; i++)          collided = collided || Ramps[i].SolveVerticalCollision(gameTime, car);
+                for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveVerticalCollision(gameTime, car);
+            }
+            if(car.HasCrashed)  car.Crash();
         }
 
         /// <summary>
@@ -344,7 +382,7 @@ namespace TGC.MonoGame.TP
 
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
             Car.Draw(View, Projection);
-            IACar.Draw(View, Projection);
+            //IACar.Draw(View, Projection);
             
             Floor.Draw(View, Projection);
             for (int i = 0; i < Boxes.Length; i++)      Boxes[i].Draw(View, Projection);

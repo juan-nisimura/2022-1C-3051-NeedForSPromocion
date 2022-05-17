@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.Monogame.TP.Src.ModelObjects;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects 
 {
@@ -21,32 +22,44 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
 
         public new void Initialize(){
             Box.Initialize();
-            for (int i = 0; i < Ramps.Length; i++)
-            {
-                Ramps[i].Initialize();
-            }
+            for (int i = 0; i < Ramps.Length; i++)  Ramps[i].Initialize();
         }
 
-        public override void Update(GameTime gameTime){
+        public override void Update(GameTime gameTime){   
+        }
 
+        public void Update(GameTime gameTime, CarObject car){
+            Box.Update(gameTime, car);
+            for (int i = 0; i < Ramps.Length; i++)  Ramps[i].Update(gameTime, car);
         }
         
         public static void Load(ContentManager content, string shaderDirectory){
-            // Cargo efecto
-            /*
-            Box.Load(content);
-            for (int i = 0; i < Ramps.Length; i++)
-            {
-                Ramps[i].Load(content);
-            }*/
+        }
+
+        public bool SolveHorizontalCollision(GameTime gameTime, CarObject car){
+            bool collided = false;
+            collided = Box.SolveHorizontalCollision(gameTime, car);
+            for (int i = 0; i < Ramps.Length; i++)  collided = collided || Ramps[i].SolveHorizontalCollision(gameTime, car);
+            return collided;
         }
 
         public override void Draw(Matrix view, Matrix projection){
             Box.Draw(view, projection);
-            for (int i = 0; i < Ramps.Length; i++)
-            {
-                Ramps[i].Draw(view, projection);
-            }
+            for (int i = 0; i < Ramps.Length; i++)  Ramps[i].Draw(view, projection);
+        }
+
+        internal bool SolveVerticalCollision(GameTime gameTime, CarObject car)
+        {
+            bool collided = false;
+            collided = Box.SolveVerticalCollision(gameTime, car);
+            for (int i = 0; i < Ramps.Length; i++)  collided = collided || Ramps[i].SolveVerticalCollision(gameTime, car);
+            return collided;
+        }
+
+        internal void UpdateHeightMap(int x, int z)
+        {
+            Box.UpdateHeightMap(x, z);
+            for (int i = 0; i < Ramps.Length; i++)  Ramps[i].UpdateHeightMap(x, z);
         }
     }
 }

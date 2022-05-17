@@ -9,7 +9,7 @@ namespace TGC.MonoGame.Samples.Collisions
     /// <summary>
     ///     Represents a Bounding Cylinder to test for intersections
     /// </summary>
-    class BoundingCylinder
+    public class BoundingCylinder
     {
         // The center of the Cylinder in World Space
         private Vector3 _center;

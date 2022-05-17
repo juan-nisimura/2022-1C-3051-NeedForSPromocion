@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace TGC.Monogame.TP.Src   
 {
-    abstract class DefaultObject <T>
+    public abstract class DefaultObject <T>
     {
         public const string ContentFolder3D = "Models/";
         public const string ContentFolderEffects = "Effects/";
@@ -13,6 +13,7 @@ namespace TGC.Monogame.TP.Src
         public const string ContentFolderSounds = "Sounds/";
         public const string ContentFolderSpriteFonts = "SpriteFonts/";
         public const string ContentFolderTextures = "Textures/";
+        public const float GRAVITY = 400f;
         protected static Dictionary<Type, Effect> Effects = new Dictionary<Type, Effect>(); 
         protected static Dictionary<Type, Texture> Textures = new Dictionary<Type, Texture>();
         
@@ -46,7 +47,13 @@ namespace TGC.Monogame.TP.Src
             World = Matrix.Identity;
             return this;
         }
+
+        public float Lerp(float v1, float v2, float factorDeInterpolacion) {
+            return v1 + (v2 - v1) * factorDeInterpolacion;
+        }
+
         abstract public void Update(GameTime gameTime);
+        
         public abstract void Draw(Matrix view, Matrix projection);
     }
 }

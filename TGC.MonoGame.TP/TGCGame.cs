@@ -4,14 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.Monogame.TP.Src;
-
-// BEPU
-using TGC.MonoGame.Samples.Physics.Bepu;
-using BepuPhysics;
-using BepuPhysics.Collidables;
-using BepuUtilities.Memory;
-using NumericVector3 = System.Numerics.Vector3;
-
 using TGC.Monogame.TP.Src.PrimitiveObjects;
 using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.Monogame.TP.Src.CompoundObjects.Tree;
@@ -112,7 +104,7 @@ namespace TGC.MonoGame.TP
             };
             
             Missiles = new MissileObject[] {
-                new MissileObject(GraphicsDevice, new Vector3(-100f, 0f, -100f), 40f),
+                //new MissileObject(GraphicsDevice, new Vector3(-100f, 0f, -100f), 40f),
             };
 
             
@@ -309,6 +301,13 @@ namespace TGC.MonoGame.TP
                 //Car.SetSpeedBoostActive(false);
             }
 
+            if (keyboardState.IsKeyDown(Keys.LeftAlt)) {
+                //Car.SetSpeedBoostActive(true);
+                Car.SetMisileTime();
+            }else{
+                //Car.SetSpeedBoostActive(false);
+            }
+
             View = Camera.FollowCamera(Car.GetPosition()).GetView();
 
             base.Update(gameTime);
@@ -355,9 +354,10 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < BoostPads.Length; i++)      BoostPads[i].Draw(View, Projection);
             for (int i = 0; i < Trees.Length; i++)          Trees[i].Draw(View, Projection);
             for (int i = 0; i < MapWalls.Length; i++)       MapWalls[i].Draw(View, Projection);
-            //for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Draw(View, Projection);
+            for (int i = 0; i < Missiles.Length; i++)   Missiles[i].Draw(View, Projection);
 
             if(Car.GetMGBulletsList()!=null ){Car.GetMGBulletsList().ForEach(bullet => bullet.Draw(View, Projection));}
+            if(Car.GetMissileList()!=null ){Car.GetMissileList().ForEach(missile => missile.Draw(View, Projection));}
             /*if(MGBullets != null){
                 for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
             }*/

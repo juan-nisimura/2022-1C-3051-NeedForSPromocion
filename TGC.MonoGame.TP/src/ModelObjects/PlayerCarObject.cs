@@ -21,11 +21,15 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         //private List<Matrix> bulletsMatrix  {get; set;}
         private BulletObject[] MGBullets {get;set;}
         private Vector3 BulletPosicion {get;set;}
-        private Vector3 BulletPosicion2 {get;set;}
         private float BulletRotation {get;set;}
+        private Vector3 MissilePosicion { get; set; }
+        private float MissileRotation { get; set; }
         private int index {get;set;}=0;
         private List<BulletObject> MGBulletsList {get;set;}= new List<BulletObject>();
-        private float shootDelay{get;set;}=0f;
+        private float MGShootDelay{get;set;}=0f;
+        private List<MissileObject> MissileList {get;set;}= new List<MissileObject>();
+        private float MissileShootDelay{get;set;}=0f;
+        
         //private Boolean MisileActive {get; set;}
 
         public PlayerCarObject(Vector3 position, Color color)
@@ -127,7 +131,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                 //MGBullets = new BulletObject[10];
                 //MGBulletsList = new List<BulletObject>();
                 
-                    if (keyboardState.IsKeyDown(Keys.RightShift)&& shootDelay<=0) {
+                    if (keyboardState.IsKeyDown(Keys.RightShift)&& MGShootDelay<=0) {
                         //MachineGunActive = true;
                         BulletPosicion = Position;
                         BulletRotation = Rotation;
@@ -137,21 +141,21 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                             new BulletObject(graphicsDevice,BulletPosicion2,10f,BulletRotation)
                         };*/
                         
-                        var bullet = new BulletObject(graphicsDevice,BulletPosicion2,5f,BulletRotation);
+                        var bullet = new BulletObject(graphicsDevice,BulletPosicion,5f,BulletRotation);
                         MGBulletsList.Add(bullet);
                         bullet.Initialize();
-                        shootDelay=0.2f;
+                        MGShootDelay=0.2f;
                         
                         //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, Position, Rotation);
                         //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
                     }
-                    shootDelay-=elapsedTime;
+                    MGShootDelay-=elapsedTime;
                     MachineGunTime-=elapsedTime;
                     //MGBulletsList.ForEach(bullet => bullet.Initialize());
-                    MGBulletsList.ForEach(bullet => bullet.Update(gameTime, BulletPosicion, BulletRotation));
-                }else{
-                    MGBulletsList.Clear();
-                }
+                    MGBulletsList.ForEach(bullet => bullet.Update(gameTime, bullet.bulletPosition, bullet.bulletRotationY,Speed));
+            }else{
+                MGBulletsList.Clear();
+            }
                 
                 /*if(MGBullets != null){
                     if(MachineGunActive){
@@ -161,10 +165,39 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                 
                 for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, BulletPosicion, BulletRotation);
                 }*/
+            if(MissileTime > 0){
+                //MGBullets = new BulletObject[10];
+                //MGBulletsList = new List<BulletObject>();
+                
+                    if (keyboardState.IsKeyDown(Keys.RightControl)&& MissileShootDelay<=0) {
+                        //MachineGunActive = true;
+                        MissilePosicion = Position;
+                        MissileRotation = Rotation;
+                        //TO DO solo genera una sola bala, falta generar la lista dinamicamente
+                        /*MGBullets = new BulletObject[]{
+                            new BulletObject(graphicsDevice,BulletPosicion,5f,BulletRotation),
+                            new BulletObject(graphicsDevice,BulletPosicion2,10f,BulletRotation)
+                        };*/
+                        
+                        var misile = new MissileObject(graphicsDevice, MissilePosicion, 15f,MissileRotation);
+                        MissileList.Add(misile);
+                        misile.Initialize();
+                        MissileShootDelay=1f;
+                        
+                        //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, Position, Rotation);
+                        //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
+                    }
+                    MissileShootDelay-=elapsedTime;
+                    MissileTime-=elapsedTime;
+                    //MGBulletsList.ForEach(bullet => bullet.Initialize());
+                    MissileList.ForEach(missile => missile.Update(gameTime, missile.missilePosition, missile.missileRotationY));
+            }else{
+                MissileList.Clear();
+            }
         
             ObjectBox.Center = Position;
             // Hacerlo que funcione cuando se incline
-            ObjectBox.Orientation = Matrix.CreateRotationY(Rotation);
+            //ObjectBox.Orientation = Matrix.CreateRotationY(Rotation);
         }
 
         /*public void SetSpeedBoostActive(Boolean isActive){
@@ -176,6 +209,9 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         }*/
         public List<BulletObject> GetMGBulletsList(){
             return MGBulletsList;
+        }
+        public List<MissileObject> GetMissileList(){
+            return MissileList;
         }
         
     }

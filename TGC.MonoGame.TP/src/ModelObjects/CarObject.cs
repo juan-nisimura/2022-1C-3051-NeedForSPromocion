@@ -37,7 +37,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
         protected float SpeedBoostTime {get; set;}=0;
         protected float MachineGunTime {get; set;}=0;
-        protected float MisileTime {get; set;}=0;
+        protected float MissileTime {get; set;}=0;
         //protected BulletObject[] MGBullets {get;set;}
         //protected int indexBullet {get; set;}=0;
         //protected List<BulletObject> MGBulletsList {get;set;}
@@ -164,7 +164,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
         public void Crash()
         {
-            Speed = 0;
+            Speed = -Speed/4;
         }
 
         public void SetSpeedBoostTime(){
@@ -174,7 +174,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             MachineGunTime = 5f;
         }
         public void SetMisileTime(){
-            MisileTime = 5f;
+            MissileTime = 5f;
         }
     }
 }

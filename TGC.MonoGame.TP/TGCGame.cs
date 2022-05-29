@@ -67,12 +67,21 @@ namespace TGC.MonoGame.TP
         private BoostPadObject[] BoostPads { get; set; }
         private TreeObject[] Trees { get; set; }
         private FloorObject Floor { get; set; }
-        private Boolean TouchingObject { get; set; }
         private MissileObject[] Missiles { get; set; }
-        private BulletObject[] MGBullets {get; set;}
-        private List<BulletObject> MGBulletsList {get; set;}
-        private BulletObject bullet2 {get;set;}
-        private SpherePrimitive Sphere { get; set; }
+
+        //post procesing
+        private Effect BloomEffect { get; set; }
+        private Effect BlurEffect { get; set; }
+
+        private const int PassCount = 2;
+
+        private RenderTarget2D FirstPassBloomRenderTarget;
+
+        private FullScreenQuad FullScreenQuad;
+
+        private RenderTarget2D MainSceneRenderTarget;
+
+        private RenderTarget2D SecondPassBloomRenderTarget;
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -108,12 +117,10 @@ namespace TGC.MonoGame.TP
             };
 
             
-            //bullet2 = new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-150f),10f);
 
 
             Floor = new FloorObject(GraphicsDevice, new Vector3(0f,0f,0f),new Vector3(700f,1f,700f),0);           
 
-            //bullet2.Initialize();
             Floor.Initialize();
 
             ControllerKeyG = new KeyController(Keys.G);
@@ -228,6 +235,29 @@ namespace TGC.MonoGame.TP
                     for (int i = 0; i < Mounts.Length; i++)     Mounts[i].UpdateHeightMap(x, z);
                 }
             }
+
+            //cargo efectos para bloom y blur
+            BloomEffect = Content.Load<Effect>(ContentFolderEffects + "Bloom");
+            BlurEffect = Content.Load<Effect>(ContentFolderEffects + "GaussianBlur");
+            BlurEffect.Parameters["screenSize"]
+                .SetValue(new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
+
+            // Create a full screen quad to post-process
+            FullScreenQuad = new FullScreenQuad(GraphicsDevice);
+
+            // Create render targets. 
+            // MainRenderTarget is used to store the scene color
+            // BloomRenderTarget is used to store the bloom color and switches with MultipassBloomRenderTarget
+            // depending on the pass count, to blur the bloom color
+            MainSceneRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width,
+                GraphicsDevice.Viewport.Height, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 0,
+                RenderTargetUsage.DiscardContents);
+            FirstPassBloomRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width,
+                GraphicsDevice.Viewport.Height, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 0,
+                RenderTargetUsage.DiscardContents);
+            SecondPassBloomRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width,
+                GraphicsDevice.Viewport.Height, false, SurfaceFormat.Color, DepthFormat.None, 0,
+                RenderTargetUsage.DiscardContents);
         }
 
         /// <summary>
@@ -271,17 +301,6 @@ namespace TGC.MonoGame.TP
             for (int i = 0; i < Trees.Length; i++)          Trees[i].Update(gameTime);
 
             SolveCollisions(gameTime, Car);
-
-            //MGBulletsList = Car.GetMGBulletsList();
-            //MGBullets = Car.GetMGBullets();
-            /*MGBullets = new BulletObject[]{
-                new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-150f),10f),
-                new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-200f),10f),
-                new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-250f),10f)
-            };
-            for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Initialize();
-            for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime);*/
-            //bullet2.Update(gameTime);
 
             
             var keyboardState = Keyboard.GetState();
@@ -339,6 +358,16 @@ namespace TGC.MonoGame.TP
         /// </summary>
         protected override void Draw(GameTime gameTime)
         {
+            #region Pass 1
+
+            // Use the default blend and depth configuration
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.BlendState = BlendState.Opaque;
+
+            // Set the main render target, here we'll draw the base scene
+            GraphicsDevice.SetRenderTarget(MainSceneRenderTarget);
+            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
+
             // Aca deberiamos poner toda la logica de renderizado del juego.
             GraphicsDevice.Clear(Color.LightBlue);
 
@@ -358,11 +387,37 @@ namespace TGC.MonoGame.TP
 
             if(Car.GetMGBulletsList()!=null ){Car.GetMGBulletsList().ForEach(bullet => bullet.Draw(View, Projection));}
             if(Car.GetMissileList()!=null ){Car.GetMissileList().ForEach(missile => missile.Draw(View, Projection));}
-            /*if(MGBullets != null){
-                for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
-            }*/
+            #endregion
+
+            #region Pass 2
+            // Set the render target as our bloomRenderTarget, we are drawing the bloom color into this texture
+            GraphicsDevice.SetRenderTarget(FirstPassBloomRenderTarget);
+            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
+
             
-            //bullet2.Draw(View, Projection);
+
+            Car.DrawBloom(BloomEffect, View, Projection);
+
+            #endregion
+
+            #region Final Pass
+
+            // Set the depth configuration as none, as we don't use depth in this pass
+            GraphicsDevice.DepthStencilState = DepthStencilState.None;
+
+            // Set the render target as null, we are drawing into the screen now!
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.Clear(Color.Black);
+
+            // Set the technique to our blur technique
+            // Then draw a texture into a full-screen quad
+            // using our rendertarget as texture
+            BloomEffect.CurrentTechnique = BloomEffect.Techniques["Integrate"];
+            BloomEffect.Parameters["baseTexture"].SetValue(MainSceneRenderTarget);
+            BloomEffect.Parameters["bloomTexture"].SetValue(FirstPassBloomRenderTarget);
+            FullScreenQuad.Draw(BloomEffect);
+
+            #endregion
         }
 
         /// <summary>
@@ -374,6 +429,10 @@ namespace TGC.MonoGame.TP
             Content.Unload();
 
             base.UnloadContent();
+            FullScreenQuad.Dispose();
+            FirstPassBloomRenderTarget.Dispose();
+            MainSceneRenderTarget.Dispose();
+            SecondPassBloomRenderTarget.Dispose();
         }
     }
 }

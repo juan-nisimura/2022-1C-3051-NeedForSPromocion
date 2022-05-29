@@ -156,6 +156,16 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             WheelObject.Draw(getEffect(), getModel().Meshes["WheelD"], World, WheelAngle, 0);
             Weapon.Draw(view, projection);
         }
+        public new void DrawBloom(Effect effect, Matrix view, Matrix projection)
+        {
+            // Para dibujar el modelo necesitamos pasarle informacion que el efecto esta esperando.
+            World = ScaleMatrix * RotationMatrix * TranslateMatrix;
+
+            effect.CurrentTechnique = effect.Techniques["BloomPass"];
+            effect.Parameters["baseTexture"].SetValue(getTexture());
+            CarBodyObject.Draw(getEffect(), getModel().Meshes["Car"], World);
+            Weapon.Draw(view, projection);
+        }
 
         public Vector3 GetPosition()
         {

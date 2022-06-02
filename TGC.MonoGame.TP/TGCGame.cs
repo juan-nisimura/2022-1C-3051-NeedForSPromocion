@@ -13,6 +13,7 @@ using TGC.MonoGame.TP.Src.Geometries;
 using TGC.Monogame.TP.Src.CompoundObjects.Map;
 using TGC.Monogame.TP.Src.CompoundObjects.Mount;
 using TGC.Monogame.TP.Src.CompoundObjects.Building;
+using TGC.Monogame.TP.Src.Screens;
 
 namespace TGC.MonoGame.TP
 {
@@ -30,6 +31,10 @@ namespace TGC.MonoGame.TP
         public const string ContentFolderSpriteFonts = "SpriteFonts/";
         public const string ContentFolderTextures = "Textures/";
 
+        private GraphicsDeviceManager Graphics { get; }
+        
+        private SpriteBatch SpriteBatch { get; set; }
+
         /// <summary>
         ///     Constructor del juego.
         /// </summary>
@@ -45,6 +50,9 @@ namespace TGC.MonoGame.TP
             IsMouseVisible = true;
         }
 
+        private KeyController ControllerKeyR { get; set; } 
+
+        /*
         private Boolean GodModeIsActive { get; set; } = false;
         private KeyController ControllerKeyG { get; set; }
         private GraphicsDeviceManager Graphics { get; }
@@ -73,6 +81,8 @@ namespace TGC.MonoGame.TP
         private List<BulletObject> MGBulletsList {get; set;}
         private BulletObject bullet2 {get;set;}
         private SpherePrimitive Sphere { get; set; }
+*/
+        private Screen ActiveScreen { get; set; } = MainMenuScreen.GetInstance();
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -82,13 +92,14 @@ namespace TGC.MonoGame.TP
         {
             // La logica de inicializacion que no depende del contenido se recomienda poner en este metodo.
 
+            /*
             // Configuramos nuestras matrices de la escena.
             World = Matrix.Identity;
             Projection =
                 Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 500);
 
             Camera = new CameraObject();
-
+            
             BoostPads = new BoostPadObject[]{
                 new BoostPadObject(GraphicsDevice, new Vector3(0,0.1f,575f),new Vector3(22.5f,1f,27.5f), - MathF.PI / 2),
                 new BoostPadObject(GraphicsDevice, new Vector3(0,0.1f,525f),new Vector3(22.5f,1f,27.5f), - MathF.PI / 2),
@@ -117,7 +128,12 @@ namespace TGC.MonoGame.TP
             Floor.Initialize();
 
             ControllerKeyG = new KeyController(Keys.G);
-            
+            */
+            ControllerKeyR = new KeyController(Keys.R);
+
+            MainMenuScreen.GetInstance().Initialize(GraphicsDevice);
+            LevelScreen.GetInstance().Initialize(GraphicsDevice);
+
             base.Initialize();
         }
 
@@ -131,6 +147,7 @@ namespace TGC.MonoGame.TP
             // Aca es donde deberiamos cargar todos los contenido necesarios antes de iniciar el juego.
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
+            /*
             // Cargo los efectos, modelos y texturas
             CarObject.Load(Content);
 
@@ -227,7 +244,13 @@ namespace TGC.MonoGame.TP
                     for (int i = 0; i < MapWalls.Length; i++)   MapWalls[i].UpdateHeightMap(x, z);
                     for (int i = 0; i < Mounts.Length; i++)     Mounts[i].UpdateHeightMap(x, z);
                 }
-            }
+            }*/
+            base.LoadContent();
+
+            MainMenuScreen.GetInstance().Load(GraphicsDevice, Content);
+            LevelScreen.GetInstance().Load(GraphicsDevice, Content);
+
+            ActiveScreen.Start();
         }
 
         /// <summary>
@@ -246,6 +269,17 @@ namespace TGC.MonoGame.TP
                 //Salgo del juego.
                 Exit();
 
+            if (ControllerKeyR.Update().IsKeyToPressed()){
+                ActiveScreen.Stop();
+                if(ActiveScreen == MainMenuScreen.GetInstance())
+                    ActiveScreen = LevelScreen.GetInstance();
+                else
+                    ActiveScreen = MainMenuScreen.GetInstance();
+                ActiveScreen.Reset();
+                ActiveScreen.Start();
+            }
+
+            /*
             if (ControllerKeyG.Update().IsKeyToPressed()){
                 GodModeIsActive = !GodModeIsActive;
             }
@@ -265,7 +299,6 @@ namespace TGC.MonoGame.TP
             Buildings.Update(gameTime, Car);
             Bridge.Update(gameTime, Car);
             
-            
             for (int i = 0; i < MapWalls.Length; i++)       MapWalls[i].Update(gameTime, Car);
             for (int i = 0; i < Mounts.Length; i++)         Mounts[i].Update(gameTime, Car);
             for (int i = 0; i < Trees.Length; i++)          Trees[i].Update(gameTime);
@@ -274,13 +307,13 @@ namespace TGC.MonoGame.TP
 
             //MGBulletsList = Car.GetMGBulletsList();
             //MGBullets = Car.GetMGBullets();
-            /*MGBullets = new BulletObject[]{
-                new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-150f),10f),
-                new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-200f),10f),
-                new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-250f),10f)
-            };
-            for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Initialize();
-            for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime);*/
+            //MGBullets = new BulletObject[]{
+            //    new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-150f),10f),
+            //    new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-200f),10f),
+            //    new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-250f),10f)
+            //};
+            //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Initialize();
+            //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime);
             //bullet2.Update(gameTime);
 
             
@@ -309,10 +342,14 @@ namespace TGC.MonoGame.TP
             }
 
             View = Camera.FollowCamera(Car.GetPosition()).GetView();
+            */
+
+            ActiveScreen.Update(gameTime, GraphicsDevice);
 
             base.Update(gameTime);
         }
 
+        /*
         protected void SolveCollisions(GameTime gameTime, CarObject car) {
             var collided = true;
             car.HasCrashed = false;
@@ -331,7 +368,7 @@ namespace TGC.MonoGame.TP
                 Bridge.SolveVerticalCollision(gameTime, car);
             }
             if(car.HasCrashed)  car.Crash();
-        }
+        }*/
 
         /// <summary>
         ///     Se llama cada vez que hay que refrescar la pantalla.
@@ -342,6 +379,7 @@ namespace TGC.MonoGame.TP
             // Aca deberiamos poner toda la logica de renderizado del juego.
             GraphicsDevice.Clear(Color.LightBlue);
 
+            /*
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
             Car.Draw(View, Projection);
             IACar.Draw(View, Projection);
@@ -358,11 +396,14 @@ namespace TGC.MonoGame.TP
 
             if(Car.GetMGBulletsList()!=null ){Car.GetMGBulletsList().ForEach(bullet => bullet.Draw(View, Projection));}
             if(Car.GetMissileList()!=null ){Car.GetMissileList().ForEach(missile => missile.Draw(View, Projection));}
-            /*if(MGBullets != null){
-                for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
-            }*/
+            //if(MGBullets != null){
+            //    for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
+            //}
             
-            //bullet2.Draw(View, Projection);
+            //bullet2.Draw(View, Projection);*/
+
+            ActiveScreen.Draw(gameTime, SpriteBatch, GraphicsDevice);
+            base.Draw(gameTime);
         }
 
         /// <summary>

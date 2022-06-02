@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace TGC.Monogame.TP.Src   
 {
-    abstract class DefaultPrimitiveObject <T> : DefaultObject <T>
+    public abstract class DefaultPrimitiveObject <T> : DefaultObject <T>
     {
         public new void Initialize(){
             base.Initialize();

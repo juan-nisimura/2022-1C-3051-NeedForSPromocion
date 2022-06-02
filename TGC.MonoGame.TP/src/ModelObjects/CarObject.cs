@@ -15,14 +15,15 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 {
     public class CarObject : DefaultModelObject <CarObject>
     {
-        protected float MaxSpeed { get; set; } = 3000f;
-        protected float MaxReverseSpeed { get; set; } = 1500f;
-        protected float ForwardAcceleration { get; set; } = 3500f;
-        protected float BackwardAcceleration { get; set; } = 3500f;
-        protected float StopAcceleration { get; set; } = 2500f;
-        protected float MaxTurningAcceleration { get; set; } = MathF.PI * 5;
-        protected float MaxTurningSpeed { get; set; } = MathF.PI / 1.25f;
-        protected float JumpInitialSpeed { get; set; } = 100f;
+        public static float  FAST_SPEED = 2000f;
+        protected static float MaxSpeed { get; set; } = 3000f;
+        protected static float MaxReverseSpeed { get; set; } = 1500f;
+        protected static float ForwardAcceleration { get; set; } = 3500f;
+        protected static float BackwardAcceleration { get; set; } = 3500f;
+        protected static float StopAcceleration { get; set; } = 2500f;
+        protected static float MaxTurningAcceleration { get; set; } = MathF.PI * 5;
+        protected static float MaxTurningSpeed { get; set; } = MathF.PI / 1.25f;
+        protected static float JumpInitialSpeed { get; set; } = 100f;
 
         public float Speed { get; set; } = 0;
         public float Acceleration { get; set; } = 0;
@@ -41,7 +42,6 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         //protected BulletObject[] MGBullets {get;set;}
         //protected int indexBullet {get; set;}=0;
         //protected List<BulletObject> MGBulletsList {get;set;}
-        
 
         //colisions
         // The World Matrix for the Chair Oriented Bounding Box
@@ -58,6 +58,12 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public float GroundLevel = 0;
         public bool OnTheGround = true;
         public Vector3 Size;
+
+        public HealthBarObject HealthBar;
+        public CarSoundEffects CarSoundEffects;
+
+        public static float MAX_HEALTH = 100;
+        public float Health = MAX_HEALTH;
 
         public CarObject(Vector3 position, Color color){
             Position = position;
@@ -80,16 +86,21 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             ObjectBox.Orientation = Matrix.CreateRotationY(ObjectAngle);
         }
 
-        public new void Initialize(){
+        public void Initialize(GraphicsDevice graphicsDevice){
             base.Initialize();
             ScaleMatrix = Matrix.CreateScale(0.05f, 0.05f, 0.05f);
             Weapon.Initialize();
             //MGBulletsList = new List<BulletObject>();
+            HealthBar = new HealthBarObject(graphicsDevice);
+            HealthBar.Initialize();
+            CarSoundEffects = new CarSoundEffects();
+            CarSoundEffects.Initialize();
         }
 
         public static void Load(ContentManager content){
             DefaultLoad(content, "RacingCarA/RacingCar", "CarShader");
             WeaponObject.Load(content);
+            CarSoundEffects.Load(content);
 
             var temporalCarObject = new CarObject(new Vector3(0f, 0f, 0f), Color.Green);
 
@@ -138,6 +149,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             World = ScaleMatrix * RotationMatrix * TranslateMatrix;
 
             Weapon.FollowCar(World);
+            HealthBar.Update(gameTime, this);
+            CarSoundEffects.Update(gameTime, this);
         }
 
         public new void Draw(Matrix view, Matrix projection)
@@ -155,6 +168,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             WheelObject.Draw(getEffect(), getModel().Meshes["WheelC"], World, WheelAngle, 0);
             WheelObject.Draw(getEffect(), getModel().Meshes["WheelD"], World, WheelAngle, 0);
             Weapon.Draw(view, projection);
+            HealthBar.Draw(view, projection);
         }
 
         public Vector3 GetPosition()

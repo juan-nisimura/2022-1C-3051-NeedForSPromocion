@@ -5,7 +5,7 @@ using TGC.MonoGame.TP.Src.Geometries.Textures;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects 
 {
-    class QuadObject <T> : DefaultPrimitiveObject <T>
+    public class QuadObject <T> : DefaultPrimitiveObject <T>
     {
         protected QuadPrimitive QuadPrimitive;
 

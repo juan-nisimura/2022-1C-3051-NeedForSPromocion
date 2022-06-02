@@ -49,6 +49,12 @@
 /processorParam:DebugMode=Auto
 /build:Effects/FloorShader.fx
 
+#begin Effects/HealthBarShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/HealthBarShader.fx
+
 #begin Effects/RampTextureShader.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -243,6 +249,61 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Models/RacingCarA/Vehicle_rougness.png
+
+#begin Music/Hot Air Skyway (Final Lap).mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/Hot Air Skyway (Final Lap).mp3
+
+#begin Music/Hot Air Skyway.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/Hot Air Skyway.mp3
+
+#begin Music/Main Menu.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/Main Menu.mp3
+
+#begin Sounds/fast engine.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/fast engine.mp3
+
+#begin Sounds/slow engine.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/slow engine.mp3
+
+#begin Sounds/start engine 1.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/start engine 1.mp3
+
+#begin Sounds/start engine 2.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/start engine 2.mp3
+
+#begin Sounds/stop engine.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/stop engine.mp3
+
+#begin SpriteFonts/CascadiaCode/CascadiaCodePL.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:SpriteFonts/CascadiaCode/CascadiaCodePL.spritefont
 
 #begin Textures/asphalt/textures/asphalt_02_diff_4k.jpg
 /importer:TextureImporter

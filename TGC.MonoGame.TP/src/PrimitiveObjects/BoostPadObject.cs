@@ -8,7 +8,6 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
     class BoostPadObject : QuadObject <BoostPadObject>
     {
         private OrientedBoundingBox OrientedBoundingBox;
-        private Vector3 Position;
         public BoostPadObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotation)
             : base(graphicsDevice, position, size, rotation, Color.GreenYellow){
 

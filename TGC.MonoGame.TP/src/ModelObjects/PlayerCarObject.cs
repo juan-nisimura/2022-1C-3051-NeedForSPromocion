@@ -11,7 +11,7 @@ using TGC.Monogame.TP.Src.CompoundObjects.Missile;
 
 namespace TGC.Monogame.TP.Src.ModelObjects
 {
-    class PlayerCarObject : CarObject
+    public class PlayerCarObject : CarObject
     {
         //private Boolean SpeedBoostActive {get; set;}
         

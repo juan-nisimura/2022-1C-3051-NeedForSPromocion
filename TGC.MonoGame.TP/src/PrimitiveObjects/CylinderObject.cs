@@ -7,7 +7,7 @@ using TGC.MonoGame.TP.Src.Geometries;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
-    class CylinderObject<T> : DefaultPrimitiveObject <T>
+    public class CylinderObject<T> : DefaultPrimitiveObject <T>
     {
         protected BoundingCylinder BoundingCylinder;
         protected CylinderPrimitive CylinderPrimitive { get; }

@@ -32,11 +32,11 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         }
 
         public void Start() {
-            
+            EngineInstance.Resume();
         }
 
         public void Stop() {
-            
+            EngineInstance.Pause();
         }
 
         public void Reset(){

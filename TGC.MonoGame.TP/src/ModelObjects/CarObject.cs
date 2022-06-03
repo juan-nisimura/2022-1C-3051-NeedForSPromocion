@@ -24,7 +24,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         protected static float MaxTurningAcceleration { get; set; } = MathF.PI * 5;
         protected static float MaxTurningSpeed { get; set; } = MathF.PI / 1.25f;
         protected static float JumpInitialSpeed { get; set; } = 100f;
-
+        protected Vector3 InitialPosition { get; set; }
+ 
         public float Speed { get; set; } = 0;
         public float Acceleration { get; set; } = 0;
         public float Rotation { get; set; } = 0;
@@ -66,6 +67,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public float Health = MAX_HEALTH;
 
         public CarObject(Vector3 position, Color color){
+            InitialPosition = position;
             Position = position;
             DiffuseColor = color.ToVector3();
 
@@ -97,6 +99,32 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             CarSoundEffects.Initialize();
         }
 
+        public void Reset(){
+            Health = MAX_HEALTH;
+            Speed = 0f;
+            Acceleration = 0f;
+            VerticalSpeed = 0f;
+            Position = InitialPosition;
+            CarSoundEffects.Reset();
+            Rotation = 0;
+            TurningSpeed = 0;
+            TurningAcceleration = 0;
+            WheelAngle = 0;
+            Weapon = new WeaponObject();
+            SpeedBoostTime = 0;
+            MachineGunTime = 0;
+            MissileTime = 0;
+            
+        }
+
+        public void Stop(){
+            CarSoundEffects.Stop();
+        }
+
+        public void Start(){
+            CarSoundEffects.Start();
+        }
+
         public static void Load(ContentManager content){
             DefaultLoad(content, "RacingCarA/RacingCar", "CarShader");
             WeaponObject.Load(content);
@@ -106,6 +134,10 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
             ANGULO_AL_VERTICE = MathF.Atan(temporalCarObject.Size.X / temporalCarObject.Size.Z);
             HIPOTENUSA_AL_VERTICE = MathF.Sqrt(MathF.Pow(temporalCarObject.Size.X / 2, 2) + MathF.Pow(temporalCarObject.Size.Z / 2, 2));
+        }
+
+        public bool IsDead() {
+            return Health <= 0;
         }
 
         public void RotateX(Vector3 normal) {

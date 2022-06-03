@@ -5,7 +5,7 @@ using TGC.Monogame.TP.Src.PrimitiveObjects;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
 {
-    class MissileHeadObject : SphereObject <MissileHeadObject>
+    public class MissileHeadObject : SphereObject <MissileHeadObject>
     {
         private Vector3 forward {get;set;}
         private float counter {get;set;}=-2f;

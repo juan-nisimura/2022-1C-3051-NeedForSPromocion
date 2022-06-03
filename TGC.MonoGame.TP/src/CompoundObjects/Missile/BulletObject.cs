@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
 {
-    class BulletObject : DefaultObject <MissileObject>
+    public class BulletObject : DefaultObject <MissileObject>
     {
         protected BulletBodyObject BulletBody { get; set; }
         protected BulletHeadObject BulletHead { get; set; }

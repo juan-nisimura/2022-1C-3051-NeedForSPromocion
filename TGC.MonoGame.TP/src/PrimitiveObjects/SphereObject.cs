@@ -6,7 +6,7 @@ using TGC.MonoGame.TP.Src.Geometries;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
-    class SphereObject<T> : DefaultPrimitiveObject <T>
+    public class SphereObject<T> : DefaultPrimitiveObject <T>
     {
         protected SpherePrimitive SpherePrimitive { get; }
         public SphereObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size,Color color){

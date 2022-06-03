@@ -31,6 +31,10 @@ namespace TGC.MonoGame.TP
         public const string ContentFolderSpriteFonts = "SpriteFonts/";
         public const string ContentFolderTextures = "Textures/";
 
+        public static PlayerCarObject Car { get; set; }
+        public static IACarObject IACar { get; set; }
+        public static Clock Clock = new Clock();
+
         private GraphicsDeviceManager Graphics { get; }
         
         private SpriteBatch SpriteBatch { get; set; }
@@ -50,7 +54,9 @@ namespace TGC.MonoGame.TP
             IsMouseVisible = true;
         }
 
-        private KeyController ControllerKeyR { get; set; } 
+        public static KeyController ControllerKeyP { get; set; } 
+
+        public static KeyController ControllerKeyEnter { get; set; }
 
         /*
         private Boolean GodModeIsActive { get; set; } = false;
@@ -82,7 +88,7 @@ namespace TGC.MonoGame.TP
         private BulletObject bullet2 {get;set;}
         private SpherePrimitive Sphere { get; set; }
 */
-        private Screen ActiveScreen { get; set; } = MainMenuScreen.GetInstance();
+        public static Screen ActiveScreen { get; set; } = MainMenuScreen.GetInstance();
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -129,10 +135,15 @@ namespace TGC.MonoGame.TP
 
             ControllerKeyG = new KeyController(Keys.G);
             */
-            ControllerKeyR = new KeyController(Keys.R);
+            ControllerKeyP = new KeyController(Keys.P);
+            ControllerKeyEnter = new KeyController(Keys.Enter);
 
             MainMenuScreen.GetInstance().Initialize(GraphicsDevice);
             LevelScreen.GetInstance().Initialize(GraphicsDevice);
+            TimeOutScreen.GetInstance().Initialize(GraphicsDevice);
+            WinScreen.GetInstance().Initialize(GraphicsDevice);
+            LoseScreen.GetInstance().Initialize(GraphicsDevice);
+            PauseScreen.GetInstance().Initialize(GraphicsDevice);
 
             base.Initialize();
         }
@@ -249,7 +260,11 @@ namespace TGC.MonoGame.TP
 
             MainMenuScreen.GetInstance().Load(GraphicsDevice, Content);
             LevelScreen.GetInstance().Load(GraphicsDevice, Content);
-
+            TimeOutScreen.GetInstance().Load(GraphicsDevice, Content);
+            WinScreen.GetInstance().Load(GraphicsDevice, Content);
+            LoseScreen.GetInstance().Load(GraphicsDevice, Content);
+            PauseScreen.GetInstance().Load(GraphicsDevice, Content);
+            
             ActiveScreen.Start();
         }
 
@@ -268,16 +283,6 @@ namespace TGC.MonoGame.TP
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 //Salgo del juego.
                 Exit();
-
-            if (ControllerKeyR.Update().IsKeyToPressed()){
-                ActiveScreen.Stop();
-                if(ActiveScreen == MainMenuScreen.GetInstance())
-                    ActiveScreen = LevelScreen.GetInstance();
-                else
-                    ActiveScreen = MainMenuScreen.GetInstance();
-                ActiveScreen.Reset();
-                ActiveScreen.Start();
-            }
 
             /*
             if (ControllerKeyG.Update().IsKeyToPressed()){
@@ -377,7 +382,6 @@ namespace TGC.MonoGame.TP
         protected override void Draw(GameTime gameTime)
         {
             // Aca deberiamos poner toda la logica de renderizado del juego.
-            GraphicsDevice.Clear(Color.LightBlue);
 
             /*
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
@@ -415,6 +419,13 @@ namespace TGC.MonoGame.TP
             Content.Unload();
 
             base.UnloadContent();
+        }
+
+        public static void SwitchActiveScreen(Func<Screen> screenFunction) {
+            ActiveScreen.Stop();
+            ActiveScreen = screenFunction();
+            //ActiveScreen.Reset();
+            ActiveScreen.Start();
         }
     }
 }

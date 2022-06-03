@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using TGC.Monogame.TP.Src;
 using TGC.Monogame.TP.Src.PrimitiveObjects;
 using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.Monogame.TP.Src.CompoundObjects.Tree;
@@ -15,12 +14,16 @@ using TGC.Monogame.TP.Src.CompoundObjects.Mount;
 using TGC.Monogame.TP.Src.CompoundObjects.Building;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Content;
+using TGC.MonoGame.TP;
 
 namespace TGC.Monogame.TP.Src.Screens 
 {
     public class LevelScreen : Screen
-    {
-
+    {        
+        protected override String SongName() { return "Riders On The Storm Fredwreck Remix"; }
+        protected override String FontName() { return "CascadiaCode/CascadiaCodePL"; }
+        protected static Screen Instance { get; set; } = new LevelScreen();
+        public static Screen GetInstance() { return Instance; }
         private Boolean GodModeIsActive { get; set; } = false;
         private KeyController ControllerKeyG { get; set; }
         private float Rotation { get; set; }
@@ -28,8 +31,8 @@ namespace TGC.Monogame.TP.Src.Screens
         private Matrix View { get; set; }
         private Matrix Projection { get; set; }
         private CameraObject Camera { get; set; }
-        private PlayerCarObject Car { get; set; }
-        private IACarObject IACar { get; set; }
+        public PlayerCarObject Car { get; set; }
+        public IACarObject IACar { get; set; }
 
         private BridgeObject Bridge { get; set; }
 
@@ -47,12 +50,7 @@ namespace TGC.Monogame.TP.Src.Screens
         private List<BulletObject> MGBulletsList {get; set;}
         private BulletObject bullet2 {get;set;}
         private SpherePrimitive Sphere { get; set; }
-
-        public static LevelScreen Instance { get; set; } = new LevelScreen();
-        
-        public static Screen GetInstance() {
-            return Instance;
-        }
+        public Clock Clock = new Clock();
 
         public override void Initialize(GraphicsDevice graphicsDevice) {
 
@@ -94,18 +92,27 @@ namespace TGC.Monogame.TP.Src.Screens
         }
 
         public override void Start() {
-            //MediaPlayer.Play(Song);
+            MediaPlayer.Play(Song);
+            Car.Start();
+            IACar.Start();
         }
 
         public override void Stop() {
             MediaPlayer.Stop();
+            Car.Stop();
+            IACar.Stop();
         }
 
         public override void Reset(){
-            
+            Clock.Reset();
+            Car.Reset();
+            IACar.Reset();
         }
 
         public override void Load(GraphicsDevice graphicsDevice, ContentManager content) {
+
+            Song = content.Load<Song>(ContentFolderMusic + SongName());
+            MediaPlayer.IsRepeating = true;
 
             // Cargo los efectos, modelos y texturas
             CarObject.Load(content);
@@ -204,12 +211,32 @@ namespace TGC.Monogame.TP.Src.Screens
             }
 
             
-            Song = content.Load<Song>(ContentFolderMusic + "Hot Air Skyway");
+            Song = content.Load<Song>(ContentFolderMusic + "Riders On The Storm Fredwreck Remix");
             MediaPlayer.IsRepeating = true;
             Reset();
         }
 
         public override void Update(GameTime gameTime, GraphicsDevice graphicsDevice) {
+
+            Clock.Update(gameTime);
+
+            // Si termina el juego de alguna forma, no hace los demás updates
+            if(Clock.NoTimeLeft()){
+                TGCGame.SwitchActiveScreen(() => TimeOutScreen.GetInstance());
+            }
+
+            if(Car.IsDead()){
+                TGCGame.SwitchActiveScreen(() => LoseScreen.GetInstance());
+            }
+
+            if(IACar.IsDead()){
+                TGCGame.SwitchActiveScreen(() => WinScreen.GetInstance());
+            }
+
+            if (TGCGame.ControllerKeyP.Update().IsKeyToPressed()){
+                TGCGame.SwitchActiveScreen(() => PauseScreen.GetInstance());
+            }
+
             if (ControllerKeyG.Update().IsKeyToPressed()){
                 GodModeIsActive = !GodModeIsActive;
             }
@@ -296,6 +323,7 @@ namespace TGC.Monogame.TP.Src.Screens
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
+            graphicsDevice.Clear(Color.LightBlue);
             graphicsDevice.DepthStencilState = DepthStencilState.Default;
 
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  

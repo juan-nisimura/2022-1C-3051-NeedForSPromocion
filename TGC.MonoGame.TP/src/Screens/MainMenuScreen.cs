@@ -19,7 +19,7 @@ namespace TGC.Monogame.TP.Src.Screens
 
         public override void DrawText(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            DrawCenterTextY("Need For Spromocion", 100, 3, spriteBatch, graphicsDevice);
+            DrawCenterTextY("Need For Spromocion", 100, 2.5f, spriteBatch, graphicsDevice);
             DrawCenterTextY("Presione ENTER para jugar", 200, 1, spriteBatch, graphicsDevice);
         }
     }

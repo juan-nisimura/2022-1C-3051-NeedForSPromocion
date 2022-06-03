@@ -7,7 +7,7 @@ namespace TGC.Monogame.TP.Src
 {
     public class Clock
     {
-        private float END_GAME_TOTAL_TIME = 10f;
+        private float END_GAME_TOTAL_TIME = 300f;
         private float totalTime = 0;
         public void Update(GameTime gameTime) {
             var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);

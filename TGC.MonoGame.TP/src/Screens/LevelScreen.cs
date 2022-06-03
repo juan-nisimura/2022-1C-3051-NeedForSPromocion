@@ -107,6 +107,7 @@ namespace TGC.Monogame.TP.Src.Screens
             Clock.Reset();
             Car.Reset();
             IACar.Reset();
+            for (int i = 0; i < PowerUps.Length; i++)   PowerUps[i].Reset();
         }
 
         public override void Load(GraphicsDevice graphicsDevice, ContentManager content) {

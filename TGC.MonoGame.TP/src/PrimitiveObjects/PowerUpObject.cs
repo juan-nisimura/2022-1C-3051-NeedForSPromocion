@@ -29,6 +29,10 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             Rotation = 0;
         }
 
+        public void Reset() {
+            isAvailable = true;
+        }
+
         public void Update(GameTime gameTime, CarObject car){
 
             // Actualizo la matrix de mundo

@@ -85,12 +85,6 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                     }
                 }
 
-
-                
-
-                
-
-                
                 // Calculo aceleracion y velocidad de giro
                 if (keyboardState.IsKeyDown(Keys.A) && Speed != 0){
                     TurningAcceleration = MaxTurningAcceleration * Speed / MaxSpeed;
@@ -127,36 +121,37 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             // Esto calcula la posición del auto
             base.Update(gameTime);
 
-            if(MachineGunTime > 0){
-                //MGBullets = new BulletObject[10];
-                //MGBulletsList = new List<BulletObject>();
-                
-                    if (keyboardState.IsKeyDown(Keys.RightShift)&& MGShootDelay<=0) {
-                        //MachineGunActive = true;
-                        BulletPosicion = Position;
-                        BulletRotation = Rotation;
-                        //TO DO solo genera una sola bala, falta generar la lista dinamicamente
-                        /*MGBullets = new BulletObject[]{
-                            new BulletObject(graphicsDevice,BulletPosicion,5f,BulletRotation),
-                            new BulletObject(graphicsDevice,BulletPosicion2,10f,BulletRotation)
-                        };*/
-                        
-                        var bullet = new BulletObject(graphicsDevice,BulletPosicion,5f,BulletRotation);
-                        MGBulletsList.Add(bullet);
-                        bullet.Initialize();
-                        MGShootDelay=0.2f;
-                        
-                        //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, Position, Rotation);
-                        //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
-                    }
-                    MGShootDelay-=elapsedTime;
-                    MachineGunTime-=elapsedTime;
-                    //MGBulletsList.ForEach(bullet => bullet.Initialize());
-                    MGBulletsList.ForEach(bullet => bullet.Update(gameTime, bullet.bulletPosition, bullet.bulletRotationY,Speed));
-            }else{
-                MGBulletsList.Clear();
-            }
-                
+            if(keyboardState.IsKeyDown(Keys.F)){
+                if(MachineGunTime > 0){
+                    //MGBullets = new BulletObject[10];
+                    //MGBulletsList = new List<BulletObject>();
+                    
+                        if (MGShootDelay<=0) {
+                            //MachineGunActive = true;
+                            BulletPosicion = Position;
+                            BulletRotation = Rotation;
+                            //TO DO solo genera una sola bala, falta generar la lista dinamicamente
+                            /*MGBullets = new BulletObject[]{
+                                new BulletObject(graphicsDevice,BulletPosicion,5f,BulletRotation),
+                                new BulletObject(graphicsDevice,BulletPosicion2,10f,BulletRotation)
+                            };*/
+                            
+                            var bullet = new BulletObject(graphicsDevice,BulletPosicion,5f,BulletRotation);
+                            MGBulletsList.Add(bullet);
+                            bullet.Initialize();
+                            MGShootDelay=0.2f;
+                            
+                            //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, Position, Rotation);
+                            //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
+                        }
+                        MGShootDelay-=elapsedTime;
+                        MachineGunTime-=elapsedTime;
+                        //MGBulletsList.ForEach(bullet => bullet.Initialize());
+                        MGBulletsList.ForEach(bullet => bullet.Update(gameTime, bullet.bulletPosition, bullet.bulletRotationY,Speed));
+                }else{
+                    MGBulletsList.Clear();
+                }
+
                 /*if(MGBullets != null){
                     if(MachineGunActive){
                         for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Initialize();
@@ -165,37 +160,40 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                 
                 for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, BulletPosicion, BulletRotation);
                 }*/
-            if(MissileTime > 0){
-                //MGBullets = new BulletObject[10];
-                //MGBulletsList = new List<BulletObject>();
-                
-                    if (keyboardState.IsKeyDown(Keys.RightControl)&& MissileShootDelay<=0) {
-                        //MachineGunActive = true;
-                        MissilePosicion = Position;
-                        MissileRotation = Rotation;
-                        //TO DO solo genera una sola bala, falta generar la lista dinamicamente
-                        /*MGBullets = new BulletObject[]{
-                            new BulletObject(graphicsDevice,BulletPosicion,5f,BulletRotation),
-                            new BulletObject(graphicsDevice,BulletPosicion2,10f,BulletRotation)
-                        };*/
-                        
-                        var misile = new MissileObject(graphicsDevice, MissilePosicion, 15f,MissileRotation);
-                        MissileList.Add(misile);
-                        misile.Initialize();
-                        MissileShootDelay=1f;
-                        
-                        //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, Position, Rotation);
-                        //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
-                    }
-                    MissileShootDelay-=elapsedTime;
-                    MissileTime-=elapsedTime;
-                    //MGBulletsList.ForEach(bullet => bullet.Initialize());
-                    MissileList.ForEach(missile => missile.Update(gameTime, missile.missilePosition, missile.missileRotationY));
-            }else{
-                MissileList.Clear();
+
+                if(MissileTime > 0){
+                    //MGBullets = new BulletObject[10];
+                    //MGBulletsList = new List<BulletObject>();
+                    
+                        if (MissileShootDelay<=0) {
+                            //MachineGunActive = true;
+                            MissilePosicion = Position;
+                            MissileRotation = Rotation;
+                            //TO DO solo genera una sola bala, falta generar la lista dinamicamente
+                            /*MGBullets = new BulletObject[]{
+                                new BulletObject(graphicsDevice,BulletPosicion,5f,BulletRotation),
+                                new BulletObject(graphicsDevice,BulletPosicion2,10f,BulletRotation)
+                            };*/
+                            
+                            var misile = new MissileObject(graphicsDevice, MissilePosicion, 15f,MissileRotation);
+                            MissileList.Add(misile);
+                            misile.Initialize();
+                            MissileShootDelay=1f;
+                            
+                            //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime, Position, Rotation);
+                            //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
+                        }
+                        MissileShootDelay-=elapsedTime;
+                        MissileTime-=elapsedTime;
+                        //MGBulletsList.ForEach(bullet => bullet.Initialize());
+                        MissileList.ForEach(missile => missile.Update(gameTime, missile.missilePosition, missile.missileRotationY));
+                }else{
+                    MissileList.Clear();
+                }
             }
         
             ObjectBox.Center = Position;
+            ObjectBox.Orientation = RotationMatrix;
             // Hacerlo que funcione cuando se incline
             //ObjectBox.Orientation = Matrix.CreateRotationY(Rotation);
         }

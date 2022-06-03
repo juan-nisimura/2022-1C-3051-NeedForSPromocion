@@ -19,6 +19,12 @@
 /processorParam:DebugMode=Auto
 /build:Effects/BasicShader.fx
 
+#begin Effects/BlinnPhong.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/BlinnPhong.fx
+
 #begin Effects/Bloom.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -60,6 +66,12 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:Effects/GaussianBlur.fx
+
+#begin Effects/HudShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/HudShader.fx
 
 #begin Effects/RampTextureShader.fx
 /importer:EffectImporter

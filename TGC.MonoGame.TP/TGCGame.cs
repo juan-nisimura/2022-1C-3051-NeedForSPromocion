@@ -70,8 +70,13 @@ namespace TGC.MonoGame.TP
         private MissileObject[] Missiles { get; set; }
 
         //post procesing
+        private Effect CarEffect { get; set; }
         private Effect BloomEffect { get; set; }
         private Effect BlurEffect { get; set; }
+        private Effect BlinnPhongEffect { get; set; }
+        private Effect FloorShader { get; set; }
+        private Vector3 LightPosition { get; set; }
+        private float Timer { get; set; }
 
         private const int PassCount = 2;
 
@@ -82,6 +87,7 @@ namespace TGC.MonoGame.TP
         private RenderTarget2D MainSceneRenderTarget;
 
         private RenderTarget2D SecondPassBloomRenderTarget;
+        private CylinderPrimitive HealthBar;
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -116,6 +122,7 @@ namespace TGC.MonoGame.TP
                 //new MissileObject(GraphicsDevice, new Vector3(-100f, 0f, -100f), 40f),
             };
 
+            HealthBar = new CylinderPrimitive(GraphicsDevice,10,1,32);
             
 
 
@@ -138,6 +145,28 @@ namespace TGC.MonoGame.TP
             // Aca es donde deberiamos cargar todos los contenido necesarios antes de iniciar el juego.
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
+            //cargo efectos y parametros para blinn phong
+           
+            BlinnPhongEffect = Content.Load<Effect>(ContentFolderEffects + "BlinnPhong");
+            BlinnPhongEffect.Parameters["ambientColor"].SetValue(new Color(1f, 1f, 1f).ToVector3());
+            BlinnPhongEffect.Parameters["diffuseColor"].SetValue(new Color(0.5f, 0.5f, 0.5f).ToVector3());
+            BlinnPhongEffect.Parameters["specularColor"].SetValue(Color.White.ToVector3());
+            BlinnPhongEffect.Parameters["KAmbient"].SetValue(0.3f);
+            BlinnPhongEffect.Parameters["KDiffuse"].SetValue(0.5f);
+            BlinnPhongEffect.Parameters["KSpecular"].SetValue(0.5f);
+            BlinnPhongEffect.Parameters["shininess"].SetValue(3.0f);
+            
+
+            /*FloorShader = Content.Load<Effect>(ContentFolderEffects + "FloorShader");
+            FloorShader.Parameters["ambientColor"].SetValue(new Color(1f, 1f, 1f).ToVector3());
+            FloorShader.Parameters["diffuseColor"].SetValue(new Color(0.5f, 0.5f, 0.5f).ToVector3());
+            FloorShader.Parameters["specularColor"].SetValue(Color.White.ToVector3());
+            FloorShader.Parameters["KAmbient"].SetValue(0.1f);
+            FloorShader.Parameters["KDiffuse"].SetValue(1f);
+            FloorShader.Parameters["KSpecular"].SetValue(0.8f);
+            FloorShader.Parameters["shininess"].SetValue(2.0f);
+            FloorShader.Parameters["lightPosition"].SetValue(LightPosition);*/
+
             // Cargo los efectos, modelos y texturas
             CarObject.Load(Content);
 
@@ -148,7 +177,7 @@ namespace TGC.MonoGame.TP
             BridgeObject.Load(Content);
             BuildingsObject.Load(Content);
             MissileObject.Load(Content);
-            FloorObject.Load(Content, "FloorShader", "brown_mud_leaves_01_diff_4k");
+            FloorObject.Load(Content, "BlinnPhong", "brown_mud_leaves_01_diff_4k");
             MountObject.Load(Content);
             PowerUpObject.Load(Content, "BasicShader", "Floor");
 
@@ -237,10 +266,14 @@ namespace TGC.MonoGame.TP
             }
 
             //cargo efectos para bloom y blur
+            CarEffect = Content.Load<Effect>(ContentFolderEffects + "CarShader");
             BloomEffect = Content.Load<Effect>(ContentFolderEffects + "Bloom");
             BlurEffect = Content.Load<Effect>(ContentFolderEffects + "GaussianBlur");
             BlurEffect.Parameters["screenSize"]
                 .SetValue(new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
+
+            
+
 
             // Create a full screen quad to post-process
             FullScreenQuad = new FullScreenQuad(GraphicsDevice);
@@ -258,6 +291,8 @@ namespace TGC.MonoGame.TP
             SecondPassBloomRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width,
                 GraphicsDevice.Viewport.Height, false, SurfaceFormat.Color, DepthFormat.None, 0,
                 RenderTargetUsage.DiscardContents);
+
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
         }
 
         /// <summary>
@@ -270,6 +305,8 @@ namespace TGC.MonoGame.TP
             // Aca deberiamos poner toda la logica de actualizacion del juego.
             
             var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
+
+            
 
             // Capturar Input teclado
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -329,6 +366,13 @@ namespace TGC.MonoGame.TP
 
             View = Camera.FollowCamera(Car.GetPosition()).GetView();
 
+            var LightPosition = new Vector3((float)Math.Cos(Timer) * 800f, Math.Max(100f, (float)Math.Cos(Timer) * 400f), (float)Math.Sin(Timer) * 800f);
+            var eyePosition = new Vector3(Car.Position.X, 50f, Car.Position.Z);
+            BlinnPhongEffect.Parameters["lightPosition"].SetValue(LightPosition);
+            
+            BlinnPhongEffect.Parameters["eyePosition"].SetValue(eyePosition);
+            //FloorShader.Parameters["eyePosition"].SetValue(Vector3.Up * 10f);
+            Timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             base.Update(gameTime);
         }
 
@@ -358,6 +402,7 @@ namespace TGC.MonoGame.TP
         /// </summary>
         protected override void Draw(GameTime gameTime)
         {
+            
             #region Pass 1
 
             // Use the default blend and depth configuration
@@ -371,12 +416,13 @@ namespace TGC.MonoGame.TP
             // Aca deberiamos poner toda la logica de renderizado del juego.
             GraphicsDevice.Clear(Color.LightBlue);
 
-            // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
-            Car.Draw(View, Projection);
-            IACar.Draw(View, Projection);
-            
-            Floor.Draw(View, Projection);
-            Bridge.Draw(View, Projection);
+            // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.
+            BlinnPhongEffect.CurrentTechnique = BlinnPhongEffect.Techniques["CarColorDrawing"];
+            Car.DrawBlinnPhong(BlinnPhongEffect, View, Projection);
+            //IACar.Draw(CarEffect ,View, Projection);
+            BlinnPhongEffect.CurrentTechnique = BlinnPhongEffect.Techniques["FloorColorDrawing"];
+            Floor.DrawBlinnPhong(BlinnPhongEffect, View, Projection);
+            Bridge.DrawBlinnPhong(BlinnPhongEffect,View, Projection);
             Buildings.Draw(View, Projection);
             for (int i = 0; i < PowerUps.Length; i++)       PowerUps[i].Draw(View, Projection);
             for (int i = 0; i < Mounts.Length; i++)         Mounts[i].Draw(View, Projection);
@@ -401,6 +447,7 @@ namespace TGC.MonoGame.TP
             #endregion
 
             #region Final Pass
+            //no blur pass
 
             // Set the depth configuration as none, as we don't use depth in this pass
             GraphicsDevice.DepthStencilState = DepthStencilState.None;

@@ -9,6 +9,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
              : base(position, color)
         {
         }
+
         public override void Update(GameTime gameTime)
         {
             var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
@@ -38,5 +39,6 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             // Hacer que funcione cuando se incline
             ObjectBox.Orientation = Matrix.CreateRotationY(Rotation);
         }
+
     }
 }

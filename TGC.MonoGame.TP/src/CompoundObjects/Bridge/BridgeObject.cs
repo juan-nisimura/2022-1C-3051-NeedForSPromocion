@@ -59,10 +59,10 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
         }
         
         public static void Load(ContentManager content){
-            BridgeColumnObject.Load(content, "TreeTrunkShader", "bark brown/textures/bark_brown_01_diff_4k");
-            BridgeRampObject.Load(content, "RampTextureShader", "weathered_brown_planks_diff_4k");
-            BridgeBlockObject.Load(content, "BoxTextureShader", "rock_01_diff_4k");
-            BridgeFloorObject.Load(content, "BridgeFloorTextureShader", "weathered_brown_planks_diff_4k");
+            BridgeColumnObject.Load(content, "BlinnPhong", "bark brown/textures/bark_brown_01_diff_4k");
+            BridgeRampObject.Load(content, "BlinnPhong", "weathered_brown_planks_diff_4k");
+            BridgeBlockObject.Load(content, "BlinnPhong", "rock_01_diff_4k");
+            BridgeFloorObject.Load(content, "BlinnPhong", "weathered_brown_planks_diff_4k");
         }
 
         public override void Draw(Matrix view, Matrix projection){
@@ -70,6 +70,13 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
             for (int i = 0; i < RAMPS_QUANTITY; i++)  Ramps[i].Draw(view, projection);
             for (int i = 0; i < FLOORS_QUANTITY; i++)  Floors[i].Draw(view, projection);
             for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].Draw(view, projection);
+        }
+        public void DrawBlinnPhong(Effect effect,Matrix view, Matrix projection)
+        {
+            Block.DrawBlinnPhong(effect, view, projection);
+            for (int i = 0; i < RAMPS_QUANTITY; i++) Ramps[i].DrawBlinnPhong(effect, view, projection);
+            for (int i = 0; i < FLOORS_QUANTITY; i++) Floors[i].DrawBlinnPhong(effect, view, projection);
+            for (int i = 0; i < COLUMNS_QUANTITY; i++) Columns[i].DrawBlinnPhong(effect, view, projection);
         }
 
         public bool SolveHorizontalCollision(GameTime gameTime, CarObject car){

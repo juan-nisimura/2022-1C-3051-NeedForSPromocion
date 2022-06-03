@@ -88,7 +88,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         }
 
         public static void Load(ContentManager content){
-            DefaultLoad(content, "RacingCarA/RacingCar", "CarShader");
+            DefaultLoad(content, "RacingCarA/RacingCar", "BlinnPhong");
             WeaponObject.Load(content);
 
             var temporalCarObject = new CarObject(new Vector3(0f, 0f, 0f), Color.Green);
@@ -140,15 +140,17 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             Weapon.FollowCar(World);
         }
 
-        public new void Draw(Matrix view, Matrix projection)
+        public void Draw(Effect effect, Matrix view, Matrix projection)
         {
             // Para dibujar el modelo necesitamos pasarle informacion que el efecto esta esperando.
             World = ScaleMatrix * RotationMatrix * TranslateMatrix;
-
+            foreach (var meshPart in getModel().Meshes["Car"].MeshParts)
+                meshPart.Effect = effect;
             getEffect().Parameters["View"]?.SetValue(view);
             getEffect().Parameters["Projection"]?.SetValue(projection);
             getEffect().Parameters["ModelTexture"]?.SetValue(getTexture());
 
+            
             CarBodyObject.Draw(getEffect(), getModel().Meshes["Car"], World);
             WheelObject.Draw(getEffect(), getModel().Meshes["WheelA"], World, WheelAngle, TurningSpeed * MathF.Sign(Speed));
             WheelObject.Draw(getEffect(), getModel().Meshes["WheelB"], World, WheelAngle, TurningSpeed * MathF.Sign(Speed));
@@ -156,15 +158,45 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             WheelObject.Draw(getEffect(), getModel().Meshes["WheelD"], World, WheelAngle, 0);
             Weapon.Draw(view, projection);
         }
-        public new void DrawBloom(Effect effect, Matrix view, Matrix projection)
+
+        public void DrawBlinnPhong(Effect effect, Matrix view, Matrix projection)
+        {
+            // Para dibujar el modelo necesitamos pasarle informacion que el efecto esta esperando.
+            World = ScaleMatrix * RotationMatrix * TranslateMatrix;
+            var meshWorld = getModel().Meshes["Car"].ParentBone.Transform * World;
+            foreach (var meshPart in getModel().Meshes["Car"].MeshParts)
+                meshPart.Effect = effect;
+            //effect.Parameters["shininess"].SetValue(1.0f);
+            effect.Parameters["baseTexture"]?.SetValue(getTexture());
+            effect.Parameters["World"].SetValue(World);
+            effect.Parameters["InverseTransposeWorld"].SetValue(Matrix.Invert(Matrix.Transpose(meshWorld)));
+            effect.Parameters["WorldViewProjection"].SetValue(meshWorld * view * projection);
+            //CarBodyObject.Draw(effect, getModel().Meshes["Car"], World);
+            CarBodyObject.DrawBlinnPhong(getEffect(), getModel().Meshes["Car"], World, view, projection);
+            WheelObject.DrawBlinnPhong(getEffect(), getModel().Meshes["WheelA"], World, WheelAngle, TurningSpeed * MathF.Sign(Speed),view,projection);
+            WheelObject.DrawBlinnPhong(getEffect(), getModel().Meshes["WheelB"], World, WheelAngle, TurningSpeed * MathF.Sign(Speed), view, projection);
+            WheelObject.DrawBlinnPhong(getEffect(), getModel().Meshes["WheelC"], World, WheelAngle, 0, view, projection);
+            WheelObject.DrawBlinnPhong(getEffect(), getModel().Meshes["WheelD"], World, WheelAngle, 0, view, projection);
+            Weapon.DrawBlinnPhong(getEffect(), view, projection);
+        }
+        public void DrawBloom(Effect bloom, Matrix view, Matrix projection)
         {
             // Para dibujar el modelo necesitamos pasarle informacion que el efecto esta esperando.
             World = ScaleMatrix * RotationMatrix * TranslateMatrix;
 
-            effect.CurrentTechnique = effect.Techniques["BloomPass"];
-            effect.Parameters["baseTexture"].SetValue(getTexture());
-            CarBodyObject.Draw(getEffect(), getModel().Meshes["Car"], World);
-            Weapon.Draw(view, projection);
+            bloom.CurrentTechnique = bloom.Techniques["BloomPass"];
+            bloom.Parameters["baseTexture"].SetValue(getTexture());
+            //CarBodyObject.Draw(getEffect(), getModel().Meshes["Car"], World);
+            var meshWorld = getModel().Meshes["Car"].ParentBone.Transform * World;
+            foreach (var meshPart in getModel().Meshes["Car"].MeshParts)
+                meshPart.Effect = bloom;
+            bloom.Parameters["WorldViewProjection"].SetValue(meshWorld * view * projection);
+            //getModel().Meshes["Car"].Draw();
+
+            CarBodyObject.DrawBlinnPhong(getEffect(), getModel().Meshes["Car"], World, view, projection);
+            Weapon.DrawBlinnPhong(getEffect(), view, projection);
+
+
         }
 
         public Vector3 GetPosition()
@@ -174,7 +206,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
         public void Crash()
         {
-            Speed = -Speed/4;
+            Speed = 0;
         }
 
         public void SetSpeedBoostTime(){

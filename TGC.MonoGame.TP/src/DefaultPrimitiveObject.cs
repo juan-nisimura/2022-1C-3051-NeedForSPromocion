@@ -27,14 +27,24 @@ namespace TGC.Monogame.TP.Src
         }
 
         public override void Draw(Matrix view, Matrix projection){
-            Effects[typeof(T)].Parameters["World"].SetValue(World);
-            Effects[typeof(T)].Parameters["View"].SetValue(view);
-            Effects[typeof(T)].Parameters["Projection"].SetValue(projection);
+            Effects[typeof(T)].Parameters["World"]?.SetValue(World);
+            Effects[typeof(T)].Parameters["View"]?.SetValue(view);
+            Effects[typeof(T)].Parameters["Projection"]?.SetValue(projection);
             Effects[typeof(T)].Parameters["DiffuseColor"]?.SetValue(DiffuseColor);
             Effects[typeof(T)].Parameters["Texture"]?.SetValue(getTexture());
             DrawPrimitive();
         }
-    
+        /*public void DrawBlinnPhong(Effect effect, Matrix view, Matrix projection)
+        {
+            // Para dibujar el modelo necesitamos pasarle informacion que el efecto esta esperando.
+            World = ScaleMatrix * RotationMatrix * TranslateMatrix;
+            effect.Parameters["baseTexture"]?.SetValue(getTexture());
+            effect.Parameters["World"].SetValue(World);
+            effect.Parameters["InverseTransposeWorld"].SetValue(Matrix.Invert(Matrix.Transpose(World)));
+            effect.Parameters["WorldViewProjection"].SetValue(World * view * projection);
+            DrawPrimitive();
+        }*/
+
         protected abstract void DrawPrimitive();
     }
 }

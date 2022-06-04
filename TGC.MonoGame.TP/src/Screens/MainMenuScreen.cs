@@ -16,11 +16,18 @@ namespace TGC.Monogame.TP.Src.Screens
         {
         
         }
-
+        public override void Update(GameTime gameTime, GraphicsDevice graphicsDevice) {
+            LevelScreen.GetInstance().Update(gameTime, graphicsDevice);
+            base.Update(gameTime, graphicsDevice);
+        }
+        
         public override void DrawText(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
+            LevelScreen.GetInstance().Draw(gameTime,spriteBatch,graphicsDevice);
             DrawCenterTextY("Need For Spromocion", 100, 2.5f, spriteBatch, graphicsDevice);
             DrawCenterTextY("Presione ENTER para jugar", 200, 1, spriteBatch, graphicsDevice);
+
+
         }
     }
 }

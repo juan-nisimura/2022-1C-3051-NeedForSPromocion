@@ -350,6 +350,7 @@ namespace TGC.MonoGame.TP
             */
 
             ActiveScreen.Update(gameTime, GraphicsDevice);
+            
 
             base.Update(gameTime);
         }
@@ -407,6 +408,7 @@ namespace TGC.MonoGame.TP
             //bullet2.Draw(View, Projection);*/
 
             ActiveScreen.Draw(gameTime, SpriteBatch, GraphicsDevice);
+            
             base.Draw(gameTime);
         }
 

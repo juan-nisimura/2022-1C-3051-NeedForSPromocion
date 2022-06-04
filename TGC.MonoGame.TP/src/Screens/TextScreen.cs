@@ -10,6 +10,7 @@ namespace TGC.Monogame.TP.Src.Screens
     {
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
+
             LevelScreen.GetInstance().Draw(gameTime, spriteBatch, graphicsDevice);
             DrawText(gameTime, spriteBatch, graphicsDevice);
         }

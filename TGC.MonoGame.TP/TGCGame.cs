@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.Monogame.TP.Src;
-using TGC.Monogame.TP.Src.PrimitiveObjects;
-using TGC.Monogame.TP.Src.ModelObjects;
-using TGC.Monogame.TP.Src.CompoundObjects.Tree;
-using TGC.Monogame.TP.Src.CompoundObjects.Missile;
-using TGC.Monogame.TP.Src.CompoundObjects.Bridge;
-using TGC.MonoGame.TP.Src.Geometries;
-using TGC.Monogame.TP.Src.CompoundObjects.Map;
-using TGC.Monogame.TP.Src.CompoundObjects.Mount;
-using TGC.Monogame.TP.Src.CompoundObjects.Building;
 using TGC.Monogame.TP.Src.Screens;
 
 namespace TGC.MonoGame.TP

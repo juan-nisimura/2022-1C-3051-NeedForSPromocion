@@ -1,35 +1,14 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using TGC.MonoGame.TP.Src;
-using TGC.MonoGame.TP.Src.Geometries;
-using TGC.Monogame.TP.Src.ModelObjects;
-using TGC.Monogame.TP.Src.PrimitiveObjects;
-using TGC.Monogame.TP.Src.CompoundObjects.Missile;
 using TGC.Monogame.TP.Src.PowerUps;
 using TGC.MonoGame.TP;
-using TGC.Monogame.TP.Src.CompoundObjects.Bullet;
 
 namespace TGC.Monogame.TP.Src.ModelObjects
 {
     public class PlayerCarObject : CarObject
     {
-        //private Boolean SpeedBoostActive {get; set;}
-        
-        private Boolean MachineGunActive {get; set;}
-        
-        //private BulletObject bullet  {get; set;}
-        //private List<Matrix> bulletsMatrix  {get; set;}
-        private BulletObject[] MGBullets {get;set;}
-        private Vector3 BulletPosicion {get;set;}
-        private float BulletRotation {get;set;}
-        private Vector3 MissilePosicion { get; set; }
-        private float MissileRotation { get; set; }
-        private int index {get;set;}=0;
-
-
         public PlayerCarObject(Vector3 position, Color color)
              : base(position, color)
         {
@@ -43,7 +22,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             if(OnTheGround){
 
                 // Calculo la aceleracion y la velocidad
-                //checkeo si queda tiempo de boostSpeed
+                // checkeo si queda tiempo de boostSpeed
                 if( SpeedBoostTime > 0){
                     if (keyboardState.IsKeyDown(Keys.W)) {
                         Acceleration = ForwardAcceleration*5;
@@ -124,13 +103,5 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             ObjectBox.Center = Position;
             ObjectBox.Orientation = RotationMatrix;
         }
-
-        public BulletObject[] GetBulletsPool(){
-            return BulletsPool;
-        }
-        public MissileObject[] GetMissilesPool(){
-            return MissilesPool;
-        }
-        
     }
 }

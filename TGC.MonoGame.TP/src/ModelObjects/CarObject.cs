@@ -223,7 +223,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
         public void Crash()
         {
-            Speed = -Speed/4;
+            Speed = 0;
         }
 
         public void SetSpeedBoostTime(){

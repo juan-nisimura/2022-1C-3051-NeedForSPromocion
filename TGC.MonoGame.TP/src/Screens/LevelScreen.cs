@@ -51,6 +51,7 @@ namespace TGC.Monogame.TP.Src.Screens
         private BulletObject bullet2 {get;set;}
         private SpherePrimitive Sphere { get; set; }
         public Clock Clock = new Clock();
+        private SpeedoMeter SpeedoMeter = new SpeedoMeter();
         private Boolean isStart { get; set; } = false;
         private float Timer { get; set; }
 
@@ -137,7 +138,9 @@ namespace TGC.Monogame.TP.Src.Screens
             FloorObject.Load(content, "FloorShader", "brown_mud_leaves_01_diff_4k");
             MountObject.Load(content);
             PowerUpObject.Load(content, "BasicShader", "Floor");
-
+            Clock.Load(content);
+            SpeedoMeter.Load(content);
+            
             blurEffect = content.Load<Effect>("Effects/" + "GaussianBlur");
             // Create a full screen quad to post-process
             FullScreenQuad = new FullScreenQuad(graphicsDevice);
@@ -245,7 +248,7 @@ namespace TGC.Monogame.TP.Src.Screens
         }
 
         public override void Update(GameTime gameTime, GraphicsDevice graphicsDevice) {
-            Clock.Update(gameTime);
+            
             Timer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (!isStart) {
                 //Car.Update(gameTime, graphicsDevice, View, Projection);
@@ -274,6 +277,8 @@ namespace TGC.Monogame.TP.Src.Screens
                 IACar.Rotation = -Timer-MathHelper.Pi;
             }
             else {
+                Clock.Update(gameTime);
+                
                 // Si termina el juego de alguna forma, no hace los demás updates
                 if (Clock.NoTimeLeft())
                 {
@@ -308,6 +313,7 @@ namespace TGC.Monogame.TP.Src.Screens
                 }
 
                 Car.Update(gameTime, graphicsDevice, View, Projection);
+                SpeedoMeter.Update(gameTime, Car.Speed);
                 IACar.Update(gameTime);
                 Floor.Update(gameTime);
                 for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(gameTime, Car);
@@ -413,7 +419,6 @@ namespace TGC.Monogame.TP.Src.Screens
                 // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
                 Car.Draw(View, Projection);
                 IACar.Draw(View, Projection);
-
                 Floor.Draw(View, Projection);
                 Bridge.Draw(View, Projection);
                 Buildings.Draw(View, Projection);
@@ -479,6 +484,8 @@ namespace TGC.Monogame.TP.Src.Screens
                 //}
 
                 //bullet2.Draw(View, Projection);
+                Clock.Draw(View, Projection,spriteBatch, graphicsDevice);
+                SpeedoMeter.Draw(View, Projection,spriteBatch, graphicsDevice);
                 #endregion
             }
             

@@ -317,6 +317,13 @@
 /processorParam:TextureFormat=Compressed
 /build:SpriteFonts/CascadiaCode/CascadiaCodePL.spritefont
 
+#begin SpriteFonts/DS-Digital/DS-Digital.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:SpriteFonts/DS-Digital/DS-Digital.spritefont
+
 #begin Textures/asphalt/textures/asphalt_02_diff_4k.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -377,6 +384,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/brown_mud_leaves_01_diff_4k.jpg
 
+#begin Textures/ezgif-1-edba6bc46a.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,255,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/ezgif-1-edba6bc46a.png;Textures/speedo_needle.png
+
 #begin Textures/Floor.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -424,6 +443,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/rock_01_diff_4k.jpg
+
+#begin Textures/speedo_tex.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/speedo_tex.png
+
+#begin Textures/speedoneedle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,255,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/speedoneedle.png
 
 #begin Textures/t_brick_floor_002_diffuse_4k.jpg
 /importer:TextureImporter

@@ -5,10 +5,10 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using TGC.MonoGame.Samples.Collisions;
 using TGC.Monogame.TP.Src.PrimitiveObjects;
-using TGC.MonoGame.TP.Src.Geometries;
-using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.Monogame.TP.Src.CompoundObjects.Missile;
-
+using TGC.Monogame.TP.Src.PowerUps;
+using TGC.MonoGame.TP;
+using TGC.Monogame.TP.Src.CompoundObjects.Bullet;
 
 namespace TGC.Monogame.TP.Src.ModelObjects
 
@@ -32,17 +32,21 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public float TurningSpeed { get; set; } = 0;
         protected float TurningAcceleration { get; set; } = 0;
         protected float VerticalSpeed { get; set; } = 0;
-
         protected float WheelAngle { get; set; } = 0;
         public Vector3 Position { get; set; }
         protected WeaponObject Weapon { get; set; } = new WeaponObject();
 
         protected float SpeedBoostTime {get; set;}=0;
-        protected float MachineGunTime {get; set;}=0;
-        protected float MissileTime {get; set;}=0;
-        //protected BulletObject[] MGBullets {get;set;}
-        //protected int indexBullet {get; set;}=0;
-        //protected List<BulletObject> MGBulletsList {get;set;}
+
+        protected const int BULLETS_POOL_SIZE = 20;
+        protected const int MISSILES_POOL_SIZE = 2;
+
+        public BulletObject[] BulletsPool = new BulletObject[BULLETS_POOL_SIZE];
+        public MissileObject[] MissilesPool = new MissileObject[MISSILES_POOL_SIZE];
+
+        protected int NextBulletIndex = 0;
+        protected int NextMissileIndex = 0;
+        protected CarObject[] Enemies;
 
         //colisions
         // The World Matrix for the Chair Oriented Bounding Box
@@ -63,6 +67,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public HealthBarObject HealthBar;
         public CarSoundEffects CarSoundEffects;
 
+        protected PowerUp PowerUp;
         public static float MAX_HEALTH = 100;
         public float Health = MAX_HEALTH;
 
@@ -88,15 +93,24 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             ObjectBox.Orientation = Matrix.CreateRotationY(ObjectAngle);
         }
 
-        public void Initialize(GraphicsDevice graphicsDevice){
+        public void Initialize(GraphicsDevice graphicsDevice, CarObject[] enemies){
             base.Initialize();
             ScaleMatrix = Matrix.CreateScale(0.05f, 0.05f, 0.05f);
             Weapon.Initialize();
-            //MGBulletsList = new List<BulletObject>();
             HealthBar = new HealthBarObject(graphicsDevice);
             HealthBar.Initialize();
             CarSoundEffects = new CarSoundEffects();
             CarSoundEffects.Initialize();
+            Enemies = enemies;
+            for(int i = 0; i < BULLETS_POOL_SIZE; i++){
+                BulletsPool[i] = new BulletObject(graphicsDevice);
+                BulletsPool[i].Initialize(Enemies);
+            }  
+
+            for(int i = 0; i < MISSILES_POOL_SIZE; i++){
+                MissilesPool[i] = new MissileObject(graphicsDevice);
+                MissilesPool[i].Initialize(Enemies);
+            }
         }
 
         public void Reset(){
@@ -110,11 +124,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             TurningSpeed = 0;
             TurningAcceleration = 0;
             WheelAngle = 0;
-            Weapon = new WeaponObject();
             SpeedBoostTime = 0;
-            MachineGunTime = 0;
-            MissileTime = 0;
-            
         }
 
         public void Stop(){
@@ -145,23 +155,21 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             RotationMatrix = Matrix.CreateRotationX(angulo - MathF.PI / 2) * Matrix.CreateRotationY(Rotation);
         }
 
-        public override void Update(GameTime gameTime){
-            
-            var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
+        public override void Update(){
 
             RotationMatrix = Matrix.CreateRotationY(Rotation);
 
             // Calculo la nueva posicion
-            var x = Position.X - Speed * World.Forward.X * elapsedTime;
-            var z = Position.Z - Speed * World.Forward.Z * elapsedTime;
-            var y = Math.Max(Position.Y - Speed * World.Forward.Y * elapsedTime + VerticalSpeed * elapsedTime, GroundLevel);
+            var x = Position.X - Speed * World.Forward.X * TGCGame.GetElapsedTime();
+            var z = Position.Z - Speed * World.Forward.Z * TGCGame.GetElapsedTime();
+            var y = Math.Max(Position.Y - Speed * World.Forward.Y * TGCGame.GetElapsedTime() + VerticalSpeed * TGCGame.GetElapsedTime(), GroundLevel);
 
             Position = new Vector3(x, y, z);
 
             OnTheGround = Position.Y - GroundLevel < 0.5f;
 
             // Calculo el nuevo ángulo de las ruedas
-            WheelAngle += Speed * elapsedTime / 125f;
+            WheelAngle += Speed * TGCGame.GetElapsedTime() / 125f;
 
             TranslateMatrix = Matrix.CreateTranslation(Position);
 
@@ -181,8 +189,11 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             World = ScaleMatrix * RotationMatrix * TranslateMatrix;
 
             Weapon.FollowCar(World);
-            HealthBar.Update(gameTime, this);
-            CarSoundEffects.Update(gameTime, this);
+            HealthBar.Update(this);
+            CarSoundEffects.Update(this);
+
+            for(int i = 0; i < BULLETS_POOL_SIZE; i++)  BulletsPool[i].Update();
+            for(int i = 0; i < MISSILES_POOL_SIZE; i++) MissilesPool[i].Update();
         }
 
         public new void Draw(Matrix view, Matrix projection)
@@ -201,6 +212,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             WheelObject.Draw(getEffect(), getModel().Meshes["WheelD"], World, WheelAngle, 0);
             Weapon.Draw(view, projection);
             HealthBar.Draw(view, projection);
+            for(int i = 0; i < BULLETS_POOL_SIZE; i++)  BulletsPool[i].Draw(view, projection);
+            for(int i = 0; i < MISSILES_POOL_SIZE; i++) MissilesPool[i].Draw(view, projection);
         }
 
         public Vector3 GetPosition()
@@ -216,11 +229,33 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public void SetSpeedBoostTime(){
             SpeedBoostTime = 2f;
         }
-        public void SetMachineGunTime(){
-            MachineGunTime = 5f;
+
+        public void SetPowerUp(PowerUp powerUp) {
+            this.PowerUp = powerUp;
         }
-        public void SetMisileTime(){
-            MissileTime = 5f;
+        
+        public void ShootBullet() {
+            BulletsPool[GetNextBulletIndex()].Activate(Position, World.Forward, RotationMatrix);
+        }
+
+        protected int GetNextBulletIndex() {
+            if(++NextBulletIndex >= BULLETS_POOL_SIZE)
+                NextBulletIndex = 0;
+            return NextBulletIndex;
+        }
+
+        public void ShootMissile() {
+            MissilesPool[GetNextMissileIndex()].Activate(Position, World.Forward, RotationMatrix);
+        }
+
+        protected int GetNextMissileIndex() {
+            if(++NextMissileIndex >= MISSILES_POOL_SIZE)
+                NextMissileIndex = 0;
+            return NextMissileIndex;
+        }
+
+        public void TakeDamage(float damage){
+            Health -= damage;
         }
     }
 }

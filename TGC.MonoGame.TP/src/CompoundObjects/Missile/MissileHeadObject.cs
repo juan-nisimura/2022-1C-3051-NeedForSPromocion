@@ -7,27 +7,19 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
 {
     public class MissileHeadObject : SphereObject <MissileHeadObject>
     {
-        private Vector3 forward {get;set;}
-        private float counter {get;set;}=-2f;
-        public MissileHeadObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, Color color) :
-            base(graphicsDevice, position, size, color){
-        }
-        public MissileHeadObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotationY, Color color) :
-            base(graphicsDevice, position, size, rotationY,color){
-        }
-        public void Update(GameTime gameTime, Vector3 Position, float Rotation, float size)
+        private const float MISSILE_HEAD_FORWARD_DISTANCE = 100f;
+        private const float MISSILE_DISTANCE_FROM_FLOOR = 10f;
+        public MissileHeadObject(GraphicsDevice graphicsDevice) :
+            base(graphicsDevice, new Vector3(0f, MissileObject.MISSILE_MODEL_SIZE, MissileObject.MISSILE_MODEL_SIZE/2), new Vector3(0.5f, 1, 0.5f) * MissileObject.MISSILE_MODEL_SIZE, 0f, Color.Red)
         {
-            forward += World.Forward * counter ;
-            counter += 2000000f;
-            //var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
-            Position = new Vector3(Position.X+forward.X, Position.Y+5, Position.Z+forward.Z);
+        }
+        public void Update(Vector3 position, Vector3 forward, Matrix rotationMatrix)
+        {
+            position = new Vector3(position.X, position.Y + MISSILE_DISTANCE_FROM_FLOOR, position.Z) - MISSILE_HEAD_FORWARD_DISTANCE * forward;
             World = ScaleMatrix;
-            //World *= Matrix.CreateRotationX(MathHelper.PiOver2);
             World *= Matrix.CreateRotationX(MathHelper.PiOver2);
-            World *= Matrix.CreateRotationY(Rotation);
-
-            
-            World *= Matrix.CreateTranslation(new Vector3(Position.X, Position.Y+5, Position.Z));
+            World *= rotationMatrix;
+            World *= Matrix.CreateTranslation(position);
         }
     }
 }

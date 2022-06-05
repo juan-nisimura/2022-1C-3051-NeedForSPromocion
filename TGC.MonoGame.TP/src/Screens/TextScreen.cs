@@ -8,11 +8,10 @@ namespace TGC.Monogame.TP.Src.Screens
 {
     public abstract class TextScreen : Screen
     {
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public override void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-
-            LevelScreen.GetInstance().Draw(gameTime, spriteBatch, graphicsDevice);
-            DrawText(gameTime, spriteBatch, graphicsDevice);
+            LevelScreen.GetInstance().Draw(spriteBatch, graphicsDevice);
+            DrawText(spriteBatch, graphicsDevice);
         }
         
         public override void Load(GraphicsDevice graphicsDevice, ContentManager content) 
@@ -22,7 +21,7 @@ namespace TGC.Monogame.TP.Src.Screens
             Font = content.Load<SpriteFont>(ContentFolderSpriteFonts + FontName());
         }
 
-        public override void Update(GameTime gameTime, GraphicsDevice graphicsDevice){
+        public override void Update(GraphicsDevice graphicsDevice){
             if (TGCGame.ControllerKeyEnter.Update().IsKeyToPressed()){
                 LevelScreen.GetInstance().Reset();
                 TGCGame.SwitchActiveScreen(() => LevelScreen.GetInstance());
@@ -40,7 +39,7 @@ namespace TGC.Monogame.TP.Src.Screens
 
         }
 
-        public abstract void DrawText(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice);
+        public abstract void DrawText(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice);
 
         public void DrawCenterTextY(string msg, float Y, float escala, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {

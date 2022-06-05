@@ -15,6 +15,8 @@ using TGC.Monogame.TP.Src.CompoundObjects.Building;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Content;
 using TGC.MonoGame.TP;
+using TGC.Monogame.TP.Src.PowerUps;
+using TGC.Monogame.TP.Src.CompoundObjects.Bullet;
 
 namespace TGC.Monogame.TP.Src.Screens 
 {
@@ -24,6 +26,7 @@ namespace TGC.Monogame.TP.Src.Screens
         protected override String FontName() { return "CascadiaCode/CascadiaCodePL"; }
         protected static Screen Instance { get; set; } = new LevelScreen();
         public static Screen GetInstance() { return Instance; }
+        public static LevelScreen GetLevelScreenInstance() { return (LevelScreen) Instance; }
         private Boolean GodModeIsActive { get; set; } = false;
         private KeyController ControllerKeyG { get; set; }
         private float Rotation { get; set; }
@@ -44,12 +47,6 @@ namespace TGC.Monogame.TP.Src.Screens
         private BoostPadObject[] BoostPads { get; set; }
         private TreeObject[] Trees { get; set; }
         private FloorObject Floor { get; set; }
-        private Boolean TouchingObject { get; set; }
-        private MissileObject[] Missiles { get; set; }
-        private BulletObject[] MGBullets {get; set;}
-        private List<BulletObject> MGBulletsList {get; set;}
-        private BulletObject bullet2 {get;set;}
-        private SpherePrimitive Sphere { get; set; }
         public Clock Clock = new Clock();
         private SpeedoMeter SpeedoMeter = new SpeedoMeter();
         private Boolean isStart { get; set; } = false;
@@ -83,17 +80,8 @@ namespace TGC.Monogame.TP.Src.Screens
                 new BoostPadObject(graphicsDevice, new Vector3(-525,0.1f,0f),new Vector3(22.5f,1f,27.5f), MathF.PI),
             };
             
-            Missiles = new MissileObject[] {
-                //new MissileObject(GraphicsDevice, new Vector3(-100f, 0f, -100f), 40f),
-            };
-
-            
-            //bullet2 = new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-150f),10f);
-
-
             Floor = new FloorObject(graphicsDevice, new Vector3(0f,0f,0f),new Vector3(700f,1f,700f),0);           
 
-            //bullet2.Initialize();
             Floor.Initialize();
 
             ControllerKeyG = new KeyController(Keys.G);
@@ -103,7 +91,6 @@ namespace TGC.Monogame.TP.Src.Screens
             MediaPlayer.Play(Song);
             Car.Start();
             IACar.Start();
-            isStart = true;
         }
 
         public override void Stop() {
@@ -158,14 +145,11 @@ namespace TGC.Monogame.TP.Src.Screens
             blurEffect.Parameters["screenSize"]
                 .SetValue(new Vector2(graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height));
 
-
-
-            //MGBulletsList = new List<BulletObject>();
             Car = new PlayerCarObject(new Vector3(-100f,0,-100f), Color.Blue);
-            Car.Initialize(graphicsDevice);
-
             IACar = new IACarObject(new Vector3(-100f,0,-50f), Color.Red);
-            IACar.Initialize(graphicsDevice);
+
+            Car.Initialize(graphicsDevice, new CarObject[] { IACar });
+            IACar.Initialize(graphicsDevice, new CarObject[] { Car });
             
             Mounts = new MountObject[]{
                 new MountObject(graphicsDevice, new Vector3(235f,2.5f,-400f),new Vector3(60f,5f,60f),0,Color.White),
@@ -226,7 +210,6 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < Mounts.Length; i++)     Mounts[i].Initialize();
             for (int i = 0; i < Trees.Length; i++)      Trees[i].Initialize();
             for (int i = 0; i < BoostPads.Length; i++)      BoostPads[i].Initialize();
-            for (int i = 0; i < Missiles.Length; i++)       Missiles[i].Initialize();
             for (int i = 0; i < MapWalls.Length; i++)   MapWalls[i].Initialize();
 
             // Inicializo el HeightMap
@@ -241,258 +224,180 @@ namespace TGC.Monogame.TP.Src.Screens
                 }
             }
 
-            
             Song = content.Load<Song>(ContentFolderMusic + "Riders On The Storm Fredwreck Remix");
             MediaPlayer.IsRepeating = true;
             Reset();
         }
 
-        public override void Update(GameTime gameTime, GraphicsDevice graphicsDevice) {
-            
-            Timer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (!isStart) {
-                //Car.Update(gameTime, graphicsDevice, View, Projection);
-                IACar.Update(gameTime);
-                Floor.Update(gameTime);
-                for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(gameTime, Car);
-                for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Update(gameTime, Car);
-                for (int i = 0; i < Missiles.Length; i++) Missiles[i].Update(gameTime);
+        public void UpdateMainMenu(GraphicsDevice graphicsDevice) {
+            Timer -= TGCGame.GetElapsedTime();
 
-                Buildings.Update(gameTime, Car);
-                Bridge.Update(gameTime, Car);
+            Car.Update(graphicsDevice, View, Projection);
+            IACar.Update();
+            Floor.Update();
+            for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(Car);
+            for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Update(Car);
 
-                for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Update(gameTime, Car);
-                for (int i = 0; i < Mounts.Length; i++) Mounts[i].Update(gameTime, Car);
-                for (int i = 0; i < Trees.Length; i++) Trees[i].Update(gameTime);
-                Camera.FollowCamera(new Vector3((float)Math.Cos(Timer) * 200f, 50f, (float)Math.Sin(Timer) * 200f));
-                //View = Camera.FollowCamera(new Vector3((float)Math.Cos(Timer) * 200f, 50f, (float)Math.Sin(Timer) * 200f)).GetView();
-                var radius = 600f+ Math.Max(0,(float)Math.Cos(Timer * 4 - MathHelper.PiOver2 * 2) *150f);
-                var b = (float)Math.Sqrt(Timer);
-                View = Matrix.CreateLookAt(
-                    //new Vector3((float)Math.Cos(Timer)* radius, 50f, (float)Math.Sin(Timer) * Timer * radius),
-                    new Vector3((float)Math.Cos(Timer) * radius, Math.Max(10 ,(float)Math.Cos(Timer * 4-MathHelper.PiOver2*2) * 100), (float)Math.Sin(Timer) * radius),
-                    new Vector3((float)Math.Cos(Timer-MathHelper.PiOver4) * radius, 25f, (float)Math.Sin(Timer - MathHelper.PiOver4) * radius),
-                    new Vector3(0.1f, 1f, 0f));
-                IACar.Position= new Vector3((float)Math.Cos(Timer - 0.1) * radius, Math.Max(2, (float)Math.Cos(Timer * 4 - MathHelper.PiOver2 * 2) * 100), (float)Math.Sin(Timer - 0.1) * radius);
-                IACar.Rotation = -Timer-MathHelper.Pi;
-            }
-            else {
-                Clock.Update(gameTime);
-                
-                // Si termina el juego de alguna forma, no hace los demás updates
-                if (Clock.NoTimeLeft())
-                {
-                    TGCGame.SwitchActiveScreen(() => TimeOutScreen.GetInstance());
-                }
+            Buildings.Update(Car);
+            Bridge.Update(Car);
 
-                if (Car.IsDead())
-                {
-                    TGCGame.SwitchActiveScreen(() => LoseScreen.GetInstance());
-                }
-
-                if (IACar.IsDead())
-                {
-                    TGCGame.SwitchActiveScreen(() => WinScreen.GetInstance());
-                }
-
-                if (TGCGame.ControllerKeyP.Update().IsKeyToPressed())
-                {
-                    TGCGame.SwitchActiveScreen(() => PauseScreen.GetInstance());
-
-                }
-
-                if (ControllerKeyG.Update().IsKeyToPressed())
-                {
-                    GodModeIsActive = !GodModeIsActive;
-                }
-
-                if (GodModeIsActive)
-                {
-                    View = Camera.MoveCameraByKeyboard(gameTime).GetView();
-                    return;
-                }
-
-                Car.Update(gameTime, graphicsDevice, View, Projection);
-                SpeedoMeter.Update(gameTime, Car.Speed);
-                IACar.Update(gameTime);
-                Floor.Update(gameTime);
-                for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(gameTime, Car);
-                for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Update(gameTime, Car);
-                for (int i = 0; i < Missiles.Length; i++) Missiles[i].Update(gameTime);
-
-                Buildings.Update(gameTime, Car);
-                Bridge.Update(gameTime, Car);
-
-                for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Update(gameTime, Car);
-                for (int i = 0; i < Mounts.Length; i++) Mounts[i].Update(gameTime, Car);
-                for (int i = 0; i < Trees.Length; i++) Trees[i].Update(gameTime);
-
-                SolveCollisions(gameTime, Car);
-
-                //MGBulletsList = Car.GetMGBulletsList();
-                //MGBullets = Car.GetMGBullets();
-                //MGBullets = new BulletObject[]{
-                //    new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-150f),10f),
-                //    new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-200f),10f),
-                //    new BulletObject(GraphicsDevice,new Vector3(-100f,20f,-250f),10f)
-                //};
-                //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Initialize();
-                //for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Update(gameTime);
-                //bullet2.Update(gameTime);
-
-
-                var keyboardState = Keyboard.GetState();
-                //TouchSpeedBoost = Car.ObjectBox.Intersects(SpeedBoost.ObjectBox);
-                if (keyboardState.IsKeyDown(Keys.LeftShift))
-                {
-                    //Car.SetSpeedBoostActive(true);
-                    Car.SetSpeedBoostTime();
-                }
-                else
-                {
-                    //Car.SetSpeedBoostActive(false);
-                }
-
-                //TouchMachineGunBoost = Car.ObjectBox.Intersects(MachineGun.ObjectBox);
-                if (keyboardState.IsKeyDown(Keys.LeftControl))
-                {
-                    //Car.SetSpeedBoostActive(true);
-                    Car.SetMachineGunTime();
-                }
-                else
-                {
-                    //Car.SetSpeedBoostActive(false);
-                }
-
-                if (keyboardState.IsKeyDown(Keys.LeftAlt))
-                {
-                    //Car.SetSpeedBoostActive(true);
-                    Car.SetMisileTime();
-                }
-                else
-                {
-                    //Car.SetSpeedBoostActive(false);
-                }
-
-                View = Camera.FollowCamera(Car.GetPosition()).GetView();
-            }
-
-
+            for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Update(Car);
+            for (int i = 0; i < Mounts.Length; i++) Mounts[i].Update(Car);
+            for (int i = 0; i < Trees.Length; i++) Trees[i].Update();
+            Camera.FollowCamera(new Vector3((float)Math.Cos(Timer) * 200f, 50f, (float)Math.Sin(Timer) * 200f));
+            //View = Camera.FollowCamera(new Vector3((float)Math.Cos(Timer) * 200f, 50f, (float)Math.Sin(Timer) * 200f)).GetView();
+            var radius = 600f+ Math.Max(0,(float)Math.Cos(Timer * 4 - MathHelper.PiOver2 * 2) *150f);
+            var b = (float)Math.Sqrt(Timer);
+            View = Matrix.CreateLookAt(
+                //new Vector3((float)Math.Cos(Timer)* radius, 50f, (float)Math.Sin(Timer) * Timer * radius),
+                new Vector3((float)Math.Cos(Timer) * radius, Math.Max(10 ,(float)Math.Cos(Timer * 4-MathHelper.PiOver2*2) * 100), (float)Math.Sin(Timer) * radius),
+                new Vector3((float)Math.Cos(Timer-MathHelper.PiOver4) * radius, 25f, (float)Math.Sin(Timer - MathHelper.PiOver4) * radius),
+                new Vector3(0.1f, 1f, 0f));
+            IACar.Position= new Vector3((float)Math.Cos(Timer - 0.1) * radius, Math.Max(2, (float)Math.Cos(Timer * 4 - MathHelper.PiOver2 * 2) * 100), (float)Math.Sin(Timer - 0.1) * radius);
+            IACar.Rotation = -Timer-MathHelper.Pi;
         }
 
+        public override void Update(GraphicsDevice graphicsDevice) {
+            Clock.Update();
+            
+            // Si termina el juego de alguna forma, no hace los demás updates
+            if (Clock.NoTimeLeft())
+            {
+                TGCGame.SwitchActiveScreen(() => TimeOutScreen.GetInstance());
+            }
 
+            if (Car.IsDead())
+            {
+                TGCGame.SwitchActiveScreen(() => LoseScreen.GetInstance());
+            }
 
-        protected void SolveCollisions(GameTime gameTime, CarObject car) {
+            if (IACar.IsDead())
+            {
+                TGCGame.SwitchActiveScreen(() => WinScreen.GetInstance());
+            }
+
+            if (TGCGame.ControllerKeyP.Update().IsKeyToPressed())
+            {
+                TGCGame.SwitchActiveScreen(() => PauseScreen.GetInstance());
+
+            }
+
+            if (ControllerKeyG.Update().IsKeyToPressed())
+            {
+                GodModeIsActive = !GodModeIsActive;
+            }
+
+            if (GodModeIsActive)
+            {
+                View = Camera.MoveCameraByKeyboard().GetView();
+                return;
+            }
+
+            Car.Update(graphicsDevice, View, Projection);
+            IACar.Update();
+            Floor.Update();
+            for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(Car);
+            for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Update(Car);
+            Buildings.Update(Car);
+            Bridge.Update(Car);
+
+            for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Update(Car);
+            for (int i = 0; i < Mounts.Length; i++) Mounts[i].Update(Car);
+            for (int i = 0; i < Trees.Length; i++) Trees[i].Update();
+
+            SolveCollisions(Car);
+
+            View = Camera.FollowCamera(Car.GetPosition()).GetView();
+        }
+
+        protected void SolveCollisions(CarObject car) {
             var collided = true;
             car.HasCrashed = false;
             if(HeightMap.GetHeight(car.Position.X, car.Position.Z) == 0)
                 Car.GroundLevel = 0;
             while(collided){
                 collided = false;
-                Buildings.SolveHorizontalCollision(gameTime, car);
-                Bridge.SolveHorizontalCollision(gameTime, car);
-                for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveHorizontalCollision(gameTime, car);
-                for (int i = 0; i < MapWalls.Length; i++)       collided = collided || MapWalls[i].SolveHorizontalCollision(gameTime, car);
-                for (int i = 0; i < Trees.Length; i++)          collided = collided || Trees[i].SolveHorizontalCollision(gameTime, car);
-                for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveVerticalCollision(gameTime, car);
-                for (int i = 0; i < MapWalls.Length; i++)       collided = collided || MapWalls[i].SolveVerticalCollision(gameTime, car);
-                Buildings.SolveVerticalCollision(gameTime, car);
-                Bridge.SolveVerticalCollision(gameTime, car);
+                Buildings.SolveHorizontalCollision(car);
+                Bridge.SolveHorizontalCollision(car);
+                for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveHorizontalCollision(car);
+                for (int i = 0; i < MapWalls.Length; i++)       collided = collided || MapWalls[i].SolveHorizontalCollision(car);
+                for (int i = 0; i < Trees.Length; i++)          collided = collided || Trees[i].SolveHorizontalCollision(car);
+                for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveVerticalCollision(car);
+                for (int i = 0; i < MapWalls.Length; i++)       collided = collided || MapWalls[i].SolveVerticalCollision(car);
+                Buildings.SolveVerticalCollision(car);
+                Bridge.SolveVerticalCollision(car);
             }
             if(car.HasCrashed)  car.Crash();
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public override void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            if (!isStart)
-            {
-                #region Pass 1
-                graphicsDevice.Clear(Color.LightBlue);
-                graphicsDevice.DepthStencilState = DepthStencilState.Default;
-                // Use the default blend and depth configuration
-                graphicsDevice.BlendState = BlendState.Opaque;
+            #region Pass 1
+            graphicsDevice.Clear(Color.LightBlue);
+            graphicsDevice.DepthStencilState = DepthStencilState.Default;
+            // Use the default blend and depth configuration
+            graphicsDevice.BlendState = BlendState.Opaque;
 
-                // Set the main render target as our render target
-                graphicsDevice.SetRenderTarget(MainRenderTarget);
-                graphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1f, 0);
+            // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
+            Car.Draw(View, Projection);
+            IACar.Draw(View, Projection);
 
-                // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
-                Car.Draw(View, Projection);
-                IACar.Draw(View, Projection);
-                Floor.Draw(View, Projection);
-                Bridge.Draw(View, Projection);
-                Buildings.Draw(View, Projection);
-                for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Draw(View, Projection);
-                for (int i = 0; i < Mounts.Length; i++) Mounts[i].Draw(View, Projection);
-                for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(View, Projection);
-                for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection);
-                for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection);
-                for (int i = 0; i < Missiles.Length; i++) Missiles[i].Draw(View, Projection);
+            Floor.Draw(View, Projection);
+            Bridge.Draw(View, Projection);
+            Buildings.Draw(View, Projection);
+            for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Draw(View, Projection);
+            for (int i = 0; i < Mounts.Length; i++) Mounts[i].Draw(View, Projection);
+            for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(View, Projection);
+            for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection);
+            for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection);
 
-                if (Car.GetMGBulletsList() != null) { Car.GetMGBulletsList().ForEach(bullet => bullet.Draw(View, Projection)); }
-                if (Car.GetMissileList() != null) { Car.GetMissileList().ForEach(missile => missile.Draw(View, Projection)); }
-                //if(MGBullets != null){
-                //    for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
-                //}
-
-                //bullet2.Draw(View, Projection);
-                #endregion
-                #region Pass 2
-
-                // Set the depth configuration as none, as we don't use depth in this pass
-                graphicsDevice.DepthStencilState = DepthStencilState.None;
-
-                // Set the render target as null, we are drawing into the screen now!
-                graphicsDevice.SetRenderTarget(null);
-                graphicsDevice.Clear(Color.Black);
-
-                // Set the technique to our blur technique
-                // Then draw a texture into a full-screen quad
-                // using our rendertarget as texture
-
-                blurEffect.CurrentTechnique = blurEffect.Techniques["Blur"];
-                blurEffect.Parameters["baseTexture"].SetValue(MainRenderTarget);
-                FullScreenQuad.Draw(blurEffect);
-
-                #endregion
-            }
-            else { 
-                #region Pass 1
-                graphicsDevice.Clear(Color.LightBlue);
-                graphicsDevice.DepthStencilState = DepthStencilState.Default;
-                // Use the default blend and depth configuration
-                graphicsDevice.BlendState = BlendState.Opaque;
-
-                // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
-                Car.Draw(View, Projection);
-                IACar.Draw(View, Projection);
-
-                Floor.Draw(View, Projection);
-                Bridge.Draw(View, Projection);
-                Buildings.Draw(View, Projection);
-                for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Draw(View, Projection);
-                for (int i = 0; i < Mounts.Length; i++) Mounts[i].Draw(View, Projection);
-                for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(View, Projection);
-                for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection);
-                for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection);
-                for (int i = 0; i < Missiles.Length; i++) Missiles[i].Draw(View, Projection);
-
-                if (Car.GetMGBulletsList() != null) { Car.GetMGBulletsList().ForEach(bullet => bullet.Draw(View, Projection)); }
-                if (Car.GetMissileList() != null) { Car.GetMissileList().ForEach(missile => missile.Draw(View, Projection)); }
-                //if(MGBullets != null){
-                //    for (int i = 0; i < MGBullets.Length; i++)   MGBullets[i].Draw(View, Projection);
-                //}
-
-                //bullet2.Draw(View, Projection);
-                Clock.Draw(View, Projection,spriteBatch, graphicsDevice);
-                SpeedoMeter.Draw(View, Projection,spriteBatch, graphicsDevice);
-                #endregion
-            }
-            
+            #endregion
         }
 
-        public void setStart(bool unBool) {
-            isStart = unBool;
+        public void DrawMainMenu(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        {
+            #region Pass 1
+            graphicsDevice.Clear(Color.LightBlue);
+            graphicsDevice.DepthStencilState = DepthStencilState.Default;
+            // Use the default blend and depth configuration
+            graphicsDevice.BlendState = BlendState.Opaque;
+
+            // Set the main render target as our render target
+            graphicsDevice.SetRenderTarget(MainRenderTarget);
+            graphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1f, 0);
+
+            // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
+            Car.Draw(View, Projection);
+            IACar.Draw(View, Projection);
+            Floor.Draw(View, Projection);
+            Bridge.Draw(View, Projection);
+            Buildings.Draw(View, Projection);
+            for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Draw(View, Projection);
+            for (int i = 0; i < Mounts.Length; i++) Mounts[i].Draw(View, Projection);
+            for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(View, Projection);
+            for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection);
+            for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection);
+                //}
+
+            #endregion
+            #region Pass 2
+
+            // Set the depth configuration as none, as we don't use depth in this pass
+            graphicsDevice.DepthStencilState = DepthStencilState.None;
+
+            // Set the render target as null, we are drawing into the screen now!
+            graphicsDevice.SetRenderTarget(null);
+            graphicsDevice.Clear(Color.Black);
+
+            // Set the technique to our blur technique
+            // Then draw a texture into a full-screen quad
+            // using our rendertarget as texture
+
+            blurEffect.CurrentTechnique = blurEffect.Techniques["Blur"];
+            blurEffect.Parameters["baseTexture"].SetValue(MainRenderTarget);
+            FullScreenQuad.Draw(blurEffect);
+            #endregion
+        }
         }
     }
 }

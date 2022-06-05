@@ -2,8 +2,10 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TGC.Monogame.TP.Src.ModelObjects;
+using TGC.Monogame.TP.Src.PrimitiveObjects;
+using TGC.MonoGame.TP;
 
-namespace TGC.Monogame.TP.Src.PrimitiveObjects
+namespace TGC.Monogame.TP.Src.PowerUps
 {
     class PowerUpObject : CubeObject <PowerUpObject>
     {
@@ -15,8 +17,6 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
         const float RespawnCooldown = 10;
 
         private static Random RandomPowerUp = new Random(); 
-
-        //private PowerUp PowerUp;
 
         public PowerUpObject(GraphicsDevice graphicsDevice, Vector3 position) : base(graphicsDevice, position, new Vector3(10f,10f,10f), Color.Yellow)
         {
@@ -33,12 +33,10 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             isAvailable = true;
         }
 
-        public void Update(GameTime gameTime, CarObject car){
+        public void Update(CarObject car){
 
             // Actualizo la matrix de mundo
-            var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
-
-            Rotation += Convert.ToSingle(elapsedTime);
+            Rotation += Convert.ToSingle(TGCGame.GetElapsedTime());
             World = ScaleMatrix * Matrix.CreateRotationY(Rotation) * TranslateMatrix;
         
             // Si el powerup está disponible
@@ -50,13 +48,22 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
                     isAvailable = false;
                     RespawnActualTime = 0;
 
-                    // RandomPowerUp.Next(2);  // Hay que usar enums del 0 al 2
-                    // car.setPowerUp(PowerUp);
-                    car.SetMachineGunTime();
+                    switch(RandomPowerUp.Next(3)){
+                        case 1:
+                            car.SetPowerUp(new MachineGunPowerUp());
+                            break;
+                        case 2:
+                            car.SetPowerUp(new MissileLauncherPowerUp());
+                            break;
+                        default:
+                            car.SetPowerUp(new SpeedBoostPowerUp());
+                            break;
+                    }
+                    car.SetPowerUp(new MissileLauncherPowerUp());
                 }
 
             } else {
-                RespawnActualTime += elapsedTime;
+                RespawnActualTime += TGCGame.GetElapsedTime();
                 isAvailable = RespawnActualTime > RespawnCooldown;
             }
         }

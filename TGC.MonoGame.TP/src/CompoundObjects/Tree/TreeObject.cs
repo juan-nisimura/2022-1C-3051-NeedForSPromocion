@@ -25,7 +25,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
             TreeTopObject.Load(content, "BasicShader", "Floor");
         }
 
-        public override void Update(GameTime gameTime){   
+        public override void Update(){   
         }
 
         public override void Draw(Matrix view, Matrix projection){
@@ -33,9 +33,9 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
             TreeTop.Draw(view, projection);
         }
 
-        public bool SolveHorizontalCollision(GameTime gameTime, CarObject car)
+        public bool SolveHorizontalCollision(CarObject car)
         {
-            return TreeTrunk.SolveHorizontalCollision(gameTime, car);
+            return TreeTrunk.SolveHorizontalCollision(car);
         }
     }
 }

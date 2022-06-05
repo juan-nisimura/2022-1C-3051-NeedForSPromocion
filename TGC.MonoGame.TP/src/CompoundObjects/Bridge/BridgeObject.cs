@@ -48,14 +48,14 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
             for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].Initialize();
         }
 
-        public override void Update(GameTime gameTime){   
+        public override void Update(){   
         }
 
-        public void Update(GameTime gameTime, CarObject car){
-            Block.Update(gameTime, car);
-            for (int i = 0; i < RAMPS_QUANTITY; i++)  Ramps[i].Update(gameTime, car);
-            for (int i = 0; i < FLOORS_QUANTITY; i++)  Floors[i].Update(gameTime, car);
-            // for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].Update(gameTime, car);
+        public void Update(CarObject car){
+            Block.Update(car);
+            for (int i = 0; i < RAMPS_QUANTITY; i++)  Ramps[i].Update(car);
+            for (int i = 0; i < FLOORS_QUANTITY; i++)  Floors[i].Update(car);
+            // for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].Update(car);
         }
         
         public static void Load(ContentManager content){
@@ -72,22 +72,22 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
             for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].Draw(view, projection);
         }
 
-        public bool SolveHorizontalCollision(GameTime gameTime, CarObject car){
+        public bool SolveHorizontalCollision(CarObject car){
             bool collided = false;
-            collided = Block.SolveHorizontalCollision(gameTime, car);
-            for (int i = 0; i < RAMPS_QUANTITY; i++)    collided = collided || Ramps[i].SolveHorizontalCollision(gameTime, car);
-            for (int i = 0; i < FLOORS_QUANTITY; i++)   collided = collided || Floors[i].SolveHorizontalCollision(gameTime, car);
-            for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].SolveHorizontalCollision(gameTime, car);
+            collided = Block.SolveHorizontalCollision(car);
+            for (int i = 0; i < RAMPS_QUANTITY; i++)    collided = collided || Ramps[i].SolveHorizontalCollision(car);
+            for (int i = 0; i < FLOORS_QUANTITY; i++)   collided = collided || Floors[i].SolveHorizontalCollision(car);
+            for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].SolveHorizontalCollision(car);
             return collided;
         }
 
-        internal bool SolveVerticalCollision(GameTime gameTime, CarObject car)
+        internal bool SolveVerticalCollision(CarObject car)
         {
             bool collided = false;
-            collided = Block.SolveVerticalCollision(gameTime, car);
-            for (int i = 0; i < RAMPS_QUANTITY; i++)    collided = collided || Ramps[i].SolveVerticalCollision(gameTime, car);
-            for (int i = 0; i < FLOORS_QUANTITY; i++)   collided = collided || Floors[i].SolveVerticalCollision(gameTime, car);
-            // for (int i = 0; i < COLUMNS_QUANTITY; i++)  collided = collided || Columns[i].SolveVerticalCollision(gameTime, car);
+            collided = Block.SolveVerticalCollision(car);
+            for (int i = 0; i < RAMPS_QUANTITY; i++)    collided = collided || Ramps[i].SolveVerticalCollision(car);
+            for (int i = 0; i < FLOORS_QUANTITY; i++)   collided = collided || Floors[i].SolveVerticalCollision(car);
+            // for (int i = 0; i < COLUMNS_QUANTITY; i++)  collided = collided || Columns[i].SolveVerticalCollision(car);
             return collided;
         }
 

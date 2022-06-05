@@ -15,7 +15,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             OrientedBoundingBox.Orientation = Matrix.CreateRotationY(rotation);
         }
 
-        public void Update(GameTime gameTime, CarObject car){
+        public void Update(CarObject car){
         
             // Chequeo si colisionó con el auto
             if(car.ObjectBox.Intersects(OrientedBoundingBox))

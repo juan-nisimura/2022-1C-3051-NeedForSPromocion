@@ -25,12 +25,12 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
             for (int i = 0; i < Ramps.Length; i++)  Ramps[i].Initialize();
         }
 
-        public override void Update(GameTime gameTime){   
+        public override void Update(){   
         }
 
-        public void Update(GameTime gameTime, CarObject car){
-            Box.Update(gameTime, car);
-            for (int i = 0; i < Ramps.Length; i++)  Ramps[i].Update(gameTime, car);
+        public void Update(CarObject car){
+            Box.Update(car);
+            for (int i = 0; i < Ramps.Length; i++)  Ramps[i].Update(car);
         }
         
         public static void Load(ContentManager content){
@@ -38,10 +38,10 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
             MountRampObject.Load(content, "RampTextureShader", "rock_01_diff_4k");
         }
 
-        public bool SolveHorizontalCollision(GameTime gameTime, CarObject car){
+        public bool SolveHorizontalCollision(CarObject car){
             bool collided = false;
-            collided = Box.SolveHorizontalCollision(gameTime, car);
-            for (int i = 0; i < Ramps.Length; i++)  collided = collided || Ramps[i].SolveHorizontalCollision(gameTime, car);
+            collided = Box.SolveHorizontalCollision(car);
+            for (int i = 0; i < Ramps.Length; i++)  collided = collided || Ramps[i].SolveHorizontalCollision(car);
             return collided;
         }
 
@@ -50,11 +50,11 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
             for (int i = 0; i < Ramps.Length; i++)  Ramps[i].Draw(view, projection);
         }
 
-        internal bool SolveVerticalCollision(GameTime gameTime, CarObject car)
+        internal bool SolveVerticalCollision(CarObject car)
         {
             bool collided = false;
-            collided = Box.SolveVerticalCollision(gameTime, car);
-            for (int i = 0; i < Ramps.Length; i++)  collided = collided || Ramps[i].SolveVerticalCollision(gameTime, car);
+            collided = Box.SolveVerticalCollision(car);
+            for (int i = 0; i < Ramps.Length; i++)  collided = collided || Ramps[i].SolveVerticalCollision(car);
             return collided;
         }
 

@@ -44,10 +44,10 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             
         }
 
-        public void Update(GameTime gameTime, CarObject car){
+        public void Update(CarObject car){
         }
 
-        public bool SolveHorizontalCollision(GameTime gameTime, CarObject car){
+        public bool SolveHorizontalCollision(CarObject car){
             
             // Chequeo si colisionó con el auto
             if(car.ObjectBox.Intersects(BoundingBox)){
@@ -112,7 +112,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
                 }
             }
         }
-        internal bool SolveVerticalCollision(GameTime gameTime, CarObject car)
+        internal bool SolveVerticalCollision(CarObject car)
         {
             if(car.ObjectBox.Intersects(BoundingBox)){
                 var posibleNewGroundLevel = HeightMap.GetHeight(car.Position.X, car.Position.Z);

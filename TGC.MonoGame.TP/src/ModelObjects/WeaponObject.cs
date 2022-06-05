@@ -17,7 +17,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             DefaultLoad(content, "CombatVehicle/Weapons", "WeaponShader");
         }
 
-        public override void Update(GameTime gameTime){
+        public override void Update(){
         }
 
         public void FollowCar(Matrix carWorld){

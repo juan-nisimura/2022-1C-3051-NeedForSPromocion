@@ -20,8 +20,6 @@ namespace TGC.Monogame.TP.Src
 
         public void Reset() {
             totalTime = 0;
-        }
-
-        
+        }        
     }
 }

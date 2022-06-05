@@ -22,7 +22,7 @@ namespace TGC.Monogame.TP.Src
 
             Font = content.Load<SpriteFont>("SpriteFonts/" + "DS-Digital/DS-Digital");
         }
-        public void Update(GameTime gameTime, float carSpeed) {
+        public void Update(float carSpeed) {
             Speed = carSpeed/750*28;
         }
 

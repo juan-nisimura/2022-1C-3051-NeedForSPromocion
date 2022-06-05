@@ -304,6 +304,8 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Update(Car);
             for (int i = 0; i < Mounts.Length; i++) Mounts[i].Update(Car);
             for (int i = 0; i < Trees.Length; i++) Trees[i].Update();
+            SpeedoMeter.Update(Car.Speed);
+
 
             SolveCollisions(Car);
 
@@ -350,6 +352,9 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(View, Projection);
             for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection);
             for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection);
+            Clock.Draw(View, Projection, spriteBatch, graphicsDevice);
+            SpeedoMeter.Draw(View, Projection, spriteBatch, graphicsDevice);
+
 
             #endregion
         }
@@ -398,6 +403,6 @@ namespace TGC.Monogame.TP.Src.Screens
             FullScreenQuad.Draw(blurEffect);
             #endregion
         }
-        }
+        
     }
 }

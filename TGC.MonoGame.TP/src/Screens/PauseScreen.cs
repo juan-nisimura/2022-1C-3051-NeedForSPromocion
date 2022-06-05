@@ -17,14 +17,14 @@ namespace TGC.Monogame.TP.Src.Screens
             
         }
 
-        public override void Update(GameTime gameTime, GraphicsDevice graphicsDevice)
+        public override void Update(GraphicsDevice graphicsDevice)
         {
             if (TGCGame.ControllerKeyP.Update().IsKeyToPressed()){
                 TGCGame.SwitchActiveScreen(() => LevelScreen.GetInstance());
             }
         }
 
-        public override void DrawText(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public override void DrawText(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
             DrawCenterTextY("Pause", 100, 3, spriteBatch, graphicsDevice);
             DrawCenterTextY("Presione P para seguir jugando", 200, 1, spriteBatch, graphicsDevice);

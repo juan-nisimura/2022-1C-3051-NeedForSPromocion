@@ -1,6 +1,8 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.MonoGame.TP;
+
 namespace TGC.Monogame.TP.Src.ModelObjects   
 {
     public class IACarObject : CarObject
@@ -9,30 +11,29 @@ namespace TGC.Monogame.TP.Src.ModelObjects
              : base(position, color)
         {
         }
-        public override void Update(GameTime gameTime)
+        public override void Update()
         {
-            var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
             if (Speed > 0){
                 Acceleration = - StopAcceleration;
-                Speed = Math.Max(Speed + Acceleration * elapsedTime, 0);
+                Speed = Math.Max(Speed + Acceleration * TGCGame.GetElapsedTime(), 0);
             }
             else {
                 Acceleration = StopAcceleration;
-                Speed = Math.Min(Speed + Acceleration * elapsedTime, 0);
+                Speed = Math.Min(Speed + Acceleration * TGCGame.GetElapsedTime(), 0);
             }
             if (TurningSpeed > 0){
                 TurningAcceleration = -MaxTurningAcceleration;
-                TurningSpeed = Math.Max(TurningSpeed + TurningAcceleration * elapsedTime, 0);
+                TurningSpeed = Math.Max(TurningSpeed + TurningAcceleration * TGCGame.GetElapsedTime(), 0);
             }else{
                 TurningAcceleration = MaxTurningAcceleration;
-                TurningSpeed = Math.Min(TurningSpeed + TurningAcceleration * elapsedTime, 0);
+                TurningSpeed = Math.Min(TurningSpeed + TurningAcceleration * TGCGame.GetElapsedTime(), 0);
             }
 
             // Calculo rotacion del auto
-            Rotation += TurningSpeed * elapsedTime;
+            Rotation += TurningSpeed * TGCGame.GetElapsedTime();
 
             // Esto calcula la posicion del auto
-            base.Update(gameTime);
+            base.Update();
             
             ObjectBox.Center = Position;
             // Hacer que funcione cuando se incline

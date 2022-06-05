@@ -21,7 +21,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
         }
         protected override void DrawPrimitive() { CylinderPrimitive.Draw(getEffect()); }
     
-        public bool SolveHorizontalCollision(GameTime gameTime, CarObject car){
+        public bool SolveHorizontalCollision(CarObject car){
             // Chequeo si colisionó con el auto
             
             if(car.ObjectBox.Intersects(BoundingCylinder)){

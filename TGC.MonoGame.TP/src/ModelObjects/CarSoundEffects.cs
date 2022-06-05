@@ -50,15 +50,13 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             StopEngineSound = content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "stop engine");
         }
 
-        public void Update(GameTime gameTime, CarObject car) {
+        public void Update(CarObject car) {
             Speed[0] = Speed[1];
             Speed[1] = MathF.Abs(car.Speed);
             //Acceleration[0] = Acceleration[1];
             //Acceleration[1] = car.Acceleration;
             //Crash[0] = Crash[1];
             // Crash[1] = car.Crash;
-
-            var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
 
             switch(EngineState){
                 case EngineState.Stopped:
@@ -70,7 +68,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                     break;
                 case EngineState.Start:
                     if(Speed[1] >= Speed[0])
-                        SoundEffectTime += elapsedTime;
+                        SoundEffectTime += TGCGame.GetElapsedTime();
                     if(SoundEffectTime >= StartEngineSound.Duration.TotalSeconds || Speed[1] > CarObject.FAST_SPEED){
                         EngineState = EngineState.RunningSlow;
                         SwitchSoundInstance(ref EngineInstance, SlowEngineSound, true);

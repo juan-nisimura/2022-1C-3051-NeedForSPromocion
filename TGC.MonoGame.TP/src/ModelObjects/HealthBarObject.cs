@@ -18,7 +18,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             RotationMatrix = Matrix.CreateRotationX(-angulo) * Matrix.CreateRotationY(MathF.PI / 4);
         }
 
-        public void Update(GameTime gameTime, CarObject car){
+        public void Update(CarObject car){
             
             // Chequeo si colisionó con el auto
             HealthPercentage = car.Health / CarObject.MAX_HEALTH;

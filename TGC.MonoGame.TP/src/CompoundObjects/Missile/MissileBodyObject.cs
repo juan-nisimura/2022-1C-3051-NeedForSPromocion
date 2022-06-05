@@ -7,24 +7,20 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
 {
     public class MissileBodyObject : CylinderObject <MissileBodyObject>
     {
-        private Vector3 forward {get;set;}
-        private float counter {get;set;}=-1f;
-        public MissileBodyObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotationX, float rotationY, Color color)
-            : base(graphicsDevice, position, size, rotationX, rotationY, color){
+        private const float MISSILE_DISTANCE_FROM_FLOOR = 10f;
 
-        }
-        public void Update(GameTime gameTime, Vector3 Position, float Rotation, float size)
+        public MissileBodyObject(GraphicsDevice graphicsDevice)
+            : base(graphicsDevice, new Vector3(0f, MissileObject.MISSILE_MODEL_SIZE/2, 0f), new Vector3(MissileObject.MISSILE_MODEL_SIZE/2, MissileObject.MISSILE_MODEL_SIZE, MissileObject.MISSILE_MODEL_SIZE/2), MathHelper.PiOver2, 0f, Color.Gray)
         {
-            forward += World.Forward * counter;
-            counter +=  2000000f;
-            var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
-            Position = new Vector3(Position.X+forward.X, Position.Y+5, Position.Z+forward.Z);
+        }
+
+        public void Update(Vector3 position, Vector3 forward, Matrix rotationMatrix)
+        {
+            position = new Vector3(position.X, position.Y + MISSILE_DISTANCE_FROM_FLOOR, position.Z);
             World = ScaleMatrix;
             World *= Matrix.CreateRotationX(MathHelper.PiOver2);
-            World *= Matrix.CreateRotationY(Rotation);
-            
-            World *= Matrix.CreateTranslation(new Vector3(Position.X, Position.Y+5, Position.Z));
+            World *= rotationMatrix;
+            World *= Matrix.CreateTranslation(position);
         }
-
     }
 }

@@ -23,7 +23,7 @@ namespace TGC.Monogame.TP.Src
             Textures.Add(typeof(T), content.Load<Texture>(ContentFolderTextures + textureDirectory));
         }
 
-        public override void Update(GameTime gameTime){   
+        public override void Update(){   
         }
 
         public override void Draw(Matrix view, Matrix projection){

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using TGC.MonoGame.TP;
 
 namespace TGC.Monogame.TP.Src
 {
@@ -11,12 +12,10 @@ namespace TGC.Monogame.TP.Src
         private static float CameraAbsoluteSpeed = 300f;
         private Vector3 Speed;
 
-        public CameraObject MoveCameraByKeyboard(GameTime gameTime)
+        public CameraObject MoveCameraByKeyboard()
         {
             // Capturo el estado del teclado
             var keyboardState = Keyboard.GetState();
-
-            var elapsedTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
 
             Speed = new Vector3(0f,0f,0f);
 
@@ -36,7 +35,7 @@ namespace TGC.Monogame.TP.Src
             }
             
             // Calculo la nueva posicion
-            Position += Speed * elapsedTime;
+            Position += Speed * TGCGame.GetElapsedTime();
 
             return this;
         }

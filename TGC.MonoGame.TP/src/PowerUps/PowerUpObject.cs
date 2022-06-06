@@ -18,7 +18,7 @@ namespace TGC.Monogame.TP.Src.PowerUps
 
         private static Random RandomPowerUp = new Random(); 
 
-        public PowerUpObject(GraphicsDevice graphicsDevice, Vector3 position) : base(graphicsDevice, position, new Vector3(10f,10f,10f), Color.Yellow)
+        public PowerUpObject(Vector3 position) : base(position, new Vector3(10f,10f,10f), Color.Yellow)
         {
             Position = position + new Vector3(0f, 10f, 0f);
             TranslateMatrix = Matrix.CreateTranslation(Position);
@@ -59,7 +59,6 @@ namespace TGC.Monogame.TP.Src.PowerUps
                             car.SetPowerUp(new SpeedBoostPowerUp());
                             break;
                     }
-                    car.SetPowerUp(new MissileLauncherPowerUp());
                 }
 
             } else {

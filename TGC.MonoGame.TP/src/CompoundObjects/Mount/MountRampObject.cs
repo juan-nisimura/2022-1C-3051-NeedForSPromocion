@@ -6,8 +6,8 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
 {
     class MountRampObject : RampObject <MountRampObject>
     {
-        public MountRampObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotation, Color color)
-            : base(graphicsDevice, position, size, rotation, color)
+        public MountRampObject(Vector3 position, Vector3 size, float rotation, Color color)
+            : base(position, size, rotation, color)
         {
         }
     }

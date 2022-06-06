@@ -61,6 +61,12 @@
 /processorParam:DebugMode=Auto
 /build:Effects/HealthBarShader.fx
 
+#begin Effects/PowerUpHUDCircleShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/PowerUpHUDCircleShader.fx
+
 #begin Effects/RampTextureShader.fx
 /importer:EffectImporter
 /processor:EffectProcessor

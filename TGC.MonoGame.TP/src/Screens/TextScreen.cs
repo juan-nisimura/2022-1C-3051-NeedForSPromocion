@@ -8,20 +8,20 @@ namespace TGC.Monogame.TP.Src.Screens
 {
     public abstract class TextScreen : Screen
     {
-        public override void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public override void Draw()
         {
-            LevelScreen.GetInstance().Draw(spriteBatch, graphicsDevice);
-            DrawText(spriteBatch, graphicsDevice);
+            LevelScreen.GetInstance().Draw();
+            DrawText();
         }
         
-        public override void Load(GraphicsDevice graphicsDevice, ContentManager content) 
+        public override void Load(ContentManager content) 
         {
             Song = content.Load<Song>(ContentFolderMusic + SongName());
             MediaPlayer.IsRepeating = true;
             Font = content.Load<SpriteFont>(ContentFolderSpriteFonts + FontName());
         }
 
-        public override void Update(GraphicsDevice graphicsDevice){
+        public override void Update(){
             if (TGCGame.ControllerKeyEnter.Update().IsKeyToPressed()){
                 LevelScreen.GetInstance().Reset();
                 TGCGame.SwitchActiveScreen(() => LevelScreen.GetInstance());
@@ -39,17 +39,17 @@ namespace TGC.Monogame.TP.Src.Screens
 
         }
 
-        public abstract void DrawText(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice);
+        public abstract void DrawText();
 
-        public void DrawCenterTextY(string msg, float Y, float escala, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public void DrawCenterTextY(string msg, float Y, float escala)
         {
-            var W = graphicsDevice.Viewport.Width;
-            var H = graphicsDevice.Viewport.Height;
+            var W = TGCGame.GetGraphicsDevice().Viewport.Width;
+            var H = TGCGame.GetGraphicsDevice().Viewport.Height;
             var size = Font.MeasureString(msg) * escala;
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null,
+            TGCGame.GetSpriteBatch().Begin(SpriteSortMode.Deferred, null, null, null, null, null,
                 Matrix.CreateScale(escala) * Matrix.CreateTranslation((W - size.X) / 2, Y, 0));
-            spriteBatch.DrawString(Font, msg, new Vector2(0, 0), Color.YellowGreen);
-            spriteBatch.End();
+            TGCGame.GetSpriteBatch().DrawString(Font, msg, new Vector2(0, 0), Color.YellowGreen);
+            TGCGame.GetSpriteBatch().End();
         }
     }
 }

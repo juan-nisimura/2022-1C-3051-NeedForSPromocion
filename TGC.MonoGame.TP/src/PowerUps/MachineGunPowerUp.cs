@@ -14,7 +14,7 @@ namespace TGC.Monogame.TP.Src.PowerUps
             return TimeLeft >= 0f;
         }
 
-        public override void TriggerEffect(GraphicsDevice graphicsDevice, CarObject car) {
+        public override void TriggerEffect(CarObject car) {
             if(CanBeTriggered()){
                 if (LastShotTime >= SHOOT_DELAY) {
                     var BulletPosicion = car.Position;

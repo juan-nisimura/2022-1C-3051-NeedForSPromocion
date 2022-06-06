@@ -6,8 +6,8 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Building
 {
     class BuildingWallObject : BoxObject <BuildingWallObject>
     {
-        public BuildingWallObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, Color color) 
-        : base(graphicsDevice, position, size, color)
+        public BuildingWallObject(Vector3 position, Vector3 size, Color color) 
+        : base(position, size, color)
         {
         }
     }

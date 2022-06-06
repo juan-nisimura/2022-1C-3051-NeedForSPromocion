@@ -12,7 +12,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
 
         private BoundingBox BoundingBox; 
         private float MaxHeight;
-        public BoxObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, Color color) : base(graphicsDevice, position, size, color)
+        public BoxObject(Vector3 position, Vector3 size, Color color) : base(position, size, color)
         {
             MaxHeight = position.Y + size.Y / 2;
             BoundingBox = new BoundingBox(position - size/2, position + size/2);

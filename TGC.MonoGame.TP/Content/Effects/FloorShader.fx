@@ -19,6 +19,9 @@ float4x4 Projection;
 
 texture Texture;
 
+float2 TextureSize;
+float MipLevelCount;
+
 sampler2D textureSampler = sampler_state
 {
 	Texture = (Texture);
@@ -60,7 +63,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	float2 coordinates = input.TextureCoordinate;
-	coordinates = coordinates * 15;
+	coordinates = coordinates * 7;
 	return tex2D(textureSampler, coordinates);
 }
 

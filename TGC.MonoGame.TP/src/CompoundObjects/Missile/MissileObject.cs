@@ -12,36 +12,40 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
         protected MissileBodyObject MissileBody { get; set; }
         protected MissileHeadObject MissileHead { get; set; }
         protected MissileTriangleObject[] MissileTriangles { get; set; }
-        private BoundingSphere BoundingSphere { get; set; }
-        private float BoundingSphereRadius { get; set; }
-        private float BoundingSphereCenter { get; set; }
+        private BoundingSphere ImpactSphere { get; set; }
+        private float ImpactSphereRadius { get; set; }
+        private BoundingSphere DetectionSphere { get; set; }
+        private float DETECTION_SPHERE_RADIUS = 100f;
         private const int TRIANGLES_QUANTITY = 8;
         private const float TRIANGLE_RELATIVE_SIZE = 0.8f;
         public const float MISSILE_MODEL_SIZE = 10f;
-        private const float MISSILE_SPEED = 500f;
+        private const float MISSILE_SPEED = 200f;
         private const float MAX_ACTIVE_TIME = 10f;
         private const float MISSILE_DAMAGE = 20f;
+        private const float TURNING_LERP = 5f;
         private Vector3 Position;
         private Vector3 Forward;
         private bool IsActive = false;
         private float ActiveTime = 0f;
         private CarObject[] Enemies;
-        public MissileObject(GraphicsDevice graphicsDevice){
-            MissileBody = new MissileBodyObject(graphicsDevice);
-            MissileHead = new MissileHeadObject(graphicsDevice);
+        public MissileObject(){
+            MissileBody = new MissileBodyObject();
+            MissileHead = new MissileHeadObject();
             MissileTriangles = new MissileTriangleObject[] {
-                new MissileTriangleObject(graphicsDevice, new Vector3(0f, 0f, 0.25f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 1f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, Color.Green),
-                new MissileTriangleObject(graphicsDevice, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, -1f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, Color.Green),
-                new MissileTriangleObject(graphicsDevice, new Vector3(0.25f, 0f, 0f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), new Vector3(1f, 0f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, Color.Green),
-                new MissileTriangleObject(graphicsDevice, new Vector3(-0.25f, 0f, 0f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), new Vector3(-1f, 0f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, Color.Green),
+                new MissileTriangleObject(new Vector3(0f, 0f, 0.25f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 1f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, Color.Green),
+                new MissileTriangleObject(new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, -1f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, Color.Green),
+                new MissileTriangleObject(new Vector3(0.25f, 0f, 0f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), new Vector3(1f, 0f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, Color.Green),
+                new MissileTriangleObject(new Vector3(-0.25f, 0f, 0f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), new Vector3(-1f, 0f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, Color.Green),
 
-                new MissileTriangleObject(graphicsDevice, new Vector3(0f, 0f, 0.25f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 1f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), Color.Green),
-                new MissileTriangleObject(graphicsDevice, new Vector3(0f, 1f, -0.25f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, -1f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), Color.Green),
-                new MissileTriangleObject(graphicsDevice, new Vector3(0.25f, 0f, 0f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(1f, 0f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), Color.Green),
-                new MissileTriangleObject(graphicsDevice, new Vector3(-0.25f, 0f, 0f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(-1f, 0f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), Color.Green)
+                new MissileTriangleObject(new Vector3(0f, 0f, 0.25f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 1f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), Color.Green),
+                new MissileTriangleObject(new Vector3(0f, 1f, -0.25f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, -1f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), Color.Green),
+                new MissileTriangleObject(new Vector3(0.25f, 0f, 0f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(1f, 0f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), Color.Green),
+                new MissileTriangleObject(new Vector3(-0.25f, 0f, 0f) * MISSILE_MODEL_SIZE, new Vector3(0f, 1f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(-1f, 0f, 0f) * MISSILE_MODEL_SIZE * TRIANGLE_RELATIVE_SIZE, new Vector3(0f, 0f, 0f), Color.Green)
             };
-            BoundingSphereRadius = MISSILE_MODEL_SIZE * 0.5f;
-            BoundingSphere = new BoundingSphere(new Vector3(0f, MISSILE_MODEL_SIZE, MISSILE_MODEL_SIZE/2), BoundingSphereRadius);
+            ImpactSphereRadius = MISSILE_MODEL_SIZE * 0.5f;
+            // ImpactSphere = new BoundingSphere(new Vector3(0f, MISSILE_MODEL_SIZE, MISSILE_MODEL_SIZE/2), ImpactSphereRadius);
+            ImpactSphere = new BoundingSphere(new Vector3(0f, 0f, 0f), ImpactSphereRadius);
+            DetectionSphere = new BoundingSphere(new Vector3(0f, 0f, 0f), DETECTION_SPHERE_RADIUS);
         }
 
         public void Initialize(CarObject[] enemies){
@@ -59,6 +63,30 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
         
         public override void Update(){
             if(IsActive){
+
+                // Chequeo si detectó el auto
+                for(int i = 0;i < TGCGame.PLAYERS_QUANTITY - 1;i++){
+                    if(Enemies[i].ObjectBox.Intersects(DetectionSphere)){
+                        // Si detectó el auto, el misil se dirige hacia él
+
+                        // Calculo el nuevo vector forward
+                        var vectorToEnemy = Vector3.Normalize(Position - Enemies[i].GetPosition());
+                        var oldForward = Forward;
+
+                        Forward.X = Lerp(Forward.X, vectorToEnemy.X, TURNING_LERP * TGCGame.GetElapsedTime());
+                        Forward.Y = Lerp(Forward.Y, vectorToEnemy.Y, TURNING_LERP * TGCGame.GetElapsedTime());
+                        Forward.Z = Lerp(Forward.Z, vectorToEnemy.Z, TURNING_LERP * TGCGame.GetElapsedTime());
+
+                        Forward = Vector3.Normalize(Forward);                        
+
+                        // Calculo la nueva matriz de rotación del misil
+                        var anguloXZ = MathF.Atan2(Forward.Z * oldForward.X - Forward.X * oldForward.Z, Forward.X * oldForward.X + Forward.Z * oldForward.Z);
+                        var anguloYZ = MathF.Atan2(Forward.Z * oldForward.Y - Forward.Y * oldForward.Z, Forward.Y * oldForward.Y + Forward.Z * oldForward.Z);
+                        RotationMatrix *= Matrix.CreateRotationY(-anguloXZ);
+                        RotationMatrix *= Matrix.CreateRotationX(anguloYZ);
+                    }
+                }
+
                 Position = Position - MISSILE_SPEED * Forward * TGCGame.GetElapsedTime();
 
                 MissileBody.Update(Position, Forward, RotationMatrix);
@@ -66,15 +94,16 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
                 for (int i = 0; i < TRIANGLES_QUANTITY; i++) MissileTriangles[i].Update(Position, Forward, RotationMatrix);
 
                 // Tiene que cambiar con la rotación?
-                BoundingSphere = new BoundingSphere(Position, BoundingSphereRadius);
+                ImpactSphere = new BoundingSphere(Position, ImpactSphereRadius);
+                DetectionSphere = new BoundingSphere(Position, DETECTION_SPHERE_RADIUS);
 
                 ActiveTime += TGCGame.GetElapsedTime();
 
                 IsActive = ActiveTime < MAX_ACTIVE_TIME;
 
-                // Chequeo si colisionó con el auto
+                // Chequeo si impactó con el auto
                 for(int i = 0;i < TGCGame.PLAYERS_QUANTITY - 1;i++){
-                    if(Enemies[i].ObjectBox.Intersects(BoundingSphere)){
+                    if(Enemies[i].ObjectBox.Intersects(ImpactSphere)){
                         // Si colisionó con el auto, el auto recibe daño de bala
                         IsActive = false;
                         Enemies[i].TakeDamage(MISSILE_DAMAGE);
@@ -88,7 +117,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
             ActiveTime = 0f;
             Position = position;
             RotationMatrix = rotationMatrix;
-            Forward = forward;
+            Forward = Vector3.Normalize(forward);
         }
 
         public override void Draw(Matrix view, Matrix projection){

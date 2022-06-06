@@ -32,7 +32,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         }
 
         public void Start() {
-            EngineInstance.Resume();
+            if(EngineState != EngineState.Stopped)
+                EngineInstance.Resume();
         }
 
         public void Stop() {

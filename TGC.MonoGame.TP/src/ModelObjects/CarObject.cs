@@ -9,6 +9,7 @@ using TGC.Monogame.TP.Src.CompoundObjects.Missile;
 using TGC.Monogame.TP.Src.PowerUps;
 using TGC.MonoGame.TP;
 using TGC.Monogame.TP.Src.CompoundObjects.Bullet;
+using TGC.Monogame.TP.Src.HUD;
 
 namespace TGC.Monogame.TP.Src.ModelObjects
 
@@ -67,7 +68,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public HealthBarObject HealthBar;
         public CarSoundEffects CarSoundEffects;
 
-        protected PowerUp PowerUp;
+        protected PowerUp PowerUp = new NullPowerUp();
         public static float MAX_HEALTH = 100;
         public float Health = MAX_HEALTH;
 
@@ -93,22 +94,22 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             ObjectBox.Orientation = Matrix.CreateRotationY(ObjectAngle);
         }
 
-        public void Initialize(GraphicsDevice graphicsDevice, CarObject[] enemies){
+        public void Initialize(CarObject[] enemies){
             base.Initialize();
             ScaleMatrix = Matrix.CreateScale(0.05f, 0.05f, 0.05f);
             Weapon.Initialize();
-            HealthBar = new HealthBarObject(graphicsDevice);
+            HealthBar = new HealthBarObject();
             HealthBar.Initialize();
             CarSoundEffects = new CarSoundEffects();
             CarSoundEffects.Initialize();
             Enemies = enemies;
             for(int i = 0; i < BULLETS_POOL_SIZE; i++){
-                BulletsPool[i] = new BulletObject(graphicsDevice);
+                BulletsPool[i] = new BulletObject();
                 BulletsPool[i].Initialize(Enemies);
             }  
 
             for(int i = 0; i < MISSILES_POOL_SIZE; i++){
-                MissilesPool[i] = new MissileObject(graphicsDevice);
+                MissilesPool[i] = new MissileObject();
                 MissilesPool[i].Initialize(Enemies);
             }
         }
@@ -139,6 +140,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             DefaultLoad(content, "RacingCarA/RacingCar", "CarShader");
             WeaponObject.Load(content);
             CarSoundEffects.Load(content);
+            PowerUpHUDCircleObject.Load(content, "PowerUpHUDCircleShader");
 
             var temporalCarObject = new CarObject(new Vector3(0f, 0f, 0f), Color.Green);
 

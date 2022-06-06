@@ -14,61 +14,61 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Building
         protected BuildingBoxObject[] Boxes { get; set; }
         protected BuildingWallObject[] Walls { get; set; }
         protected BuildingRampObject[] Ramps { get; set; }
-        public BuildingsObject(GraphicsDevice graphicsDevice){
+        public BuildingsObject(){
 
             Boxes = new BuildingBoxObject[] {
-                new BuildingBoxObject(graphicsDevice, new Vector3(555f, 20f, 555f), new Vector3(290f, 40f, 290f), Color.Brown),
-                new BuildingBoxObject(graphicsDevice, new Vector3(-555f, 20f, 555f), new Vector3(290f, 40f, 290f), Color.Brown),
-                new BuildingBoxObject(graphicsDevice, new Vector3(-555f, 20f, -555f), new Vector3(290f, 40f, 290f), Color.Brown),
-                new BuildingBoxObject(graphicsDevice, new Vector3(555f, 20f, -555f), new Vector3(290f, 40f, 290f), Color.Brown),
+                new BuildingBoxObject(new Vector3(555f, 20f, 555f), new Vector3(290f, 40f, 290f), Color.Brown),
+                new BuildingBoxObject(new Vector3(-555f, 20f, 555f), new Vector3(290f, 40f, 290f), Color.Brown),
+                new BuildingBoxObject(new Vector3(-555f, 20f, -555f), new Vector3(290f, 40f, 290f), Color.Brown),
+                new BuildingBoxObject(new Vector3(555f, 20f, -555f), new Vector3(290f, 40f, 290f), Color.Brown),
                 
-                new BuildingBoxObject(graphicsDevice, new Vector3(405f, 20f, 550f), new Vector3(10f, 40f, 100f), Color.Brown),
-                new BuildingBoxObject(graphicsDevice, new Vector3(550f, 20f, 405f), new Vector3(100f, 40f, 10f), Color.Brown),
+                new BuildingBoxObject(new Vector3(405f, 20f, 550f), new Vector3(10f, 40f, 100f), Color.Brown),
+                new BuildingBoxObject(new Vector3(550f, 20f, 405f), new Vector3(100f, 40f, 10f), Color.Brown),
 
-                new BuildingBoxObject(graphicsDevice, new Vector3(-405f, 20f, 550f), new Vector3(10f, 40f, 100f), Color.Brown),
-                new BuildingBoxObject(graphicsDevice, new Vector3(-550f, 20f, 405f), new Vector3(100f, 40f, 10f), Color.Brown),
+                new BuildingBoxObject(new Vector3(-405f, 20f, 550f), new Vector3(10f, 40f, 100f), Color.Brown),
+                new BuildingBoxObject(new Vector3(-550f, 20f, 405f), new Vector3(100f, 40f, 10f), Color.Brown),
 
-                new BuildingBoxObject(graphicsDevice, new Vector3(405f, 20f, -550f), new Vector3(10f, 40f, 100f), Color.Brown),
-                new BuildingBoxObject(graphicsDevice, new Vector3(550f, 20f, -405f), new Vector3(100f, 40f, 10f), Color.Brown),
+                new BuildingBoxObject(new Vector3(405f, 20f, -550f), new Vector3(10f, 40f, 100f), Color.Brown),
+                new BuildingBoxObject(new Vector3(550f, 20f, -405f), new Vector3(100f, 40f, 10f), Color.Brown),
 
-                new BuildingBoxObject(graphicsDevice, new Vector3(-405f, 20f, -550f), new Vector3(10f, 40f, 100f), Color.Brown),
-                new BuildingBoxObject(graphicsDevice, new Vector3(-550f, 20f, -405f), new Vector3(100f, 40f, 10f), Color.Brown),
+                new BuildingBoxObject(new Vector3(-405f, 20f, -550f), new Vector3(10f, 40f, 100f), Color.Brown),
+                new BuildingBoxObject(new Vector3(-550f, 20f, -405f), new Vector3(100f, 40f, 10f), Color.Brown),
             };
             
             Ramps = new BuildingRampObject[] {  
-                new BuildingRampObject(graphicsDevice, new Vector3(550f, 20f, 350f), new Vector3(100f, 40f, 100f), MathF.PI / 2, Color.Yellow),
-                new BuildingRampObject(graphicsDevice, new Vector3(350f, 20f, 550f), new Vector3(100f, 40f, 100f), MathF.PI, Color.Yellow),
+                new BuildingRampObject(new Vector3(550f, 20f, 350f), new Vector3(100f, 40f, 100f), MathF.PI / 2, Color.Yellow),
+                new BuildingRampObject(new Vector3(350f, 20f, 550f), new Vector3(100f, 40f, 100f), MathF.PI, Color.Yellow),
 
-                new BuildingRampObject(graphicsDevice, new Vector3(550f, 20f, -350f), new Vector3(100f, 40f, 100f), - MathF.PI / 2, Color.Yellow),
-                new BuildingRampObject(graphicsDevice, new Vector3(350f, 20f, -550f), new Vector3(100f, 40f, 100f), MathF.PI, Color.Yellow),
+                new BuildingRampObject(new Vector3(550f, 20f, -350f), new Vector3(100f, 40f, 100f), - MathF.PI / 2, Color.Yellow),
+                new BuildingRampObject(new Vector3(350f, 20f, -550f), new Vector3(100f, 40f, 100f), MathF.PI, Color.Yellow),
 
-                new BuildingRampObject(graphicsDevice, new Vector3(-550f, 20f, -350f), new Vector3(100f, 40f, 100f), - MathF.PI / 2, Color.Yellow),
-                new BuildingRampObject(graphicsDevice, new Vector3(-350f, 20f, -550f), new Vector3(100f, 40f, 100f), 0, Color.Yellow),
+                new BuildingRampObject(new Vector3(-550f, 20f, -350f), new Vector3(100f, 40f, 100f), - MathF.PI / 2, Color.Yellow),
+                new BuildingRampObject(new Vector3(-350f, 20f, -550f), new Vector3(100f, 40f, 100f), 0, Color.Yellow),
 
-                new BuildingRampObject(graphicsDevice, new Vector3(-550f, 20f, 350f), new Vector3(100f, 40f, 100f), MathF.PI / 2, Color.Yellow),
-                new BuildingRampObject(graphicsDevice, new Vector3(-350f, 20f, 550f), new Vector3(100f, 40f, 100f), 0, Color.Yellow),
+                new BuildingRampObject(new Vector3(-550f, 20f, 350f), new Vector3(100f, 40f, 100f), MathF.PI / 2, Color.Yellow),
+                new BuildingRampObject(new Vector3(-350f, 20f, 550f), new Vector3(100f, 40f, 100f), 0, Color.Yellow),
             };
 
             Walls = new BuildingWallObject[] {
-                new BuildingWallObject(graphicsDevice, new Vector3(405f, 25f, 450f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(graphicsDevice, new Vector3(455f, 25f, 405f), new Vector3(90f, 50f, 10f), Color.Gray),  
-                new BuildingWallObject(graphicsDevice, new Vector3(405f, 25f, 650f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(graphicsDevice, new Vector3(650f, 25f, 405f), new Vector3(100f, 50f, 10f), Color.Gray),
+                new BuildingWallObject(new Vector3(405f, 25f, 450f), new Vector3(10f, 50f, 100f), Color.Gray),
+                new BuildingWallObject(new Vector3(455f, 25f, 405f), new Vector3(90f, 50f, 10f), Color.Gray),  
+                new BuildingWallObject(new Vector3(405f, 25f, 650f), new Vector3(10f, 50f, 100f), Color.Gray),
+                new BuildingWallObject(new Vector3(650f, 25f, 405f), new Vector3(100f, 50f, 10f), Color.Gray),
                 
-                new BuildingWallObject(graphicsDevice, new Vector3(-405f, 25f, -450f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(graphicsDevice, new Vector3(-455f, 25f, -405f), new Vector3(90f, 50f, 10f), Color.Gray),  
-                new BuildingWallObject(graphicsDevice, new Vector3(-405f, 25f, -650f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(graphicsDevice, new Vector3(-650f, 25f, -405f), new Vector3(100f, 50f, 10f), Color.Gray),
+                new BuildingWallObject(new Vector3(-405f, 25f, -450f), new Vector3(10f, 50f, 100f), Color.Gray),
+                new BuildingWallObject(new Vector3(-455f, 25f, -405f), new Vector3(90f, 50f, 10f), Color.Gray),  
+                new BuildingWallObject(new Vector3(-405f, 25f, -650f), new Vector3(10f, 50f, 100f), Color.Gray),
+                new BuildingWallObject(new Vector3(-650f, 25f, -405f), new Vector3(100f, 50f, 10f), Color.Gray),
                 
-                new BuildingWallObject(graphicsDevice, new Vector3(-405f, 25f, 450f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(graphicsDevice, new Vector3(-455f, 25f, 405f), new Vector3(90f, 50f, 10f), Color.Gray),  
-                new BuildingWallObject(graphicsDevice, new Vector3(-405f, 25f, 650f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(graphicsDevice, new Vector3(-650f, 25f, 405f), new Vector3(100f, 50f, 10f), Color.Gray),
+                new BuildingWallObject(new Vector3(-405f, 25f, 450f), new Vector3(10f, 50f, 100f), Color.Gray),
+                new BuildingWallObject(new Vector3(-455f, 25f, 405f), new Vector3(90f, 50f, 10f), Color.Gray),  
+                new BuildingWallObject(new Vector3(-405f, 25f, 650f), new Vector3(10f, 50f, 100f), Color.Gray),
+                new BuildingWallObject(new Vector3(-650f, 25f, 405f), new Vector3(100f, 50f, 10f), Color.Gray),
                 
-                new BuildingWallObject(graphicsDevice, new Vector3(405f, 25f, -450f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(graphicsDevice, new Vector3(455f, 25f, -405f), new Vector3(90f, 50f, 10f), Color.Gray),  
-                new BuildingWallObject(graphicsDevice, new Vector3(405f, 25f, -650f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(graphicsDevice, new Vector3(650f, 25f, -405f), new Vector3(100f, 50f, 10f), Color.Gray),
+                new BuildingWallObject(new Vector3(405f, 25f, -450f), new Vector3(10f, 50f, 100f), Color.Gray),
+                new BuildingWallObject(new Vector3(455f, 25f, -405f), new Vector3(90f, 50f, 10f), Color.Gray),  
+                new BuildingWallObject(new Vector3(405f, 25f, -650f), new Vector3(10f, 50f, 100f), Color.Gray),
+                new BuildingWallObject(new Vector3(650f, 25f, -405f), new Vector3(100f, 50f, 10f), Color.Gray),
             };
         }
 

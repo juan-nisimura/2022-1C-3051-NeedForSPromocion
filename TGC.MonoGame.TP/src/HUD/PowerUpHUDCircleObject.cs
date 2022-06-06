@@ -1,28 +1,23 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.Monogame.TP.Src.PrimitiveObjects;
 
-namespace TGC.Monogame.TP.Src.ModelObjects
+namespace TGC.Monogame.TP.Src.HUD
 {
-    public class HealthBarObject : QuadObject <HealthBarObject>
+    public class PowerUpHUDCircleObject : QuadObject <PowerUpHUDCircleObject>
     {
-        private float HealthPercentage = 1;
-        public HealthBarObject()
-         : base(new Vector3(0f, 0f, 0f), new Vector3(15f, 0f, 1f), 0, Color.Green){
+        public PowerUpHUDCircleObject()
+         : base(new Vector3(0f, 0f, 0f), new Vector3(10f, 0f, 10f), 0, Color.Gray){
             var cameraUpVector = Vector3.Normalize(new Vector3(1f, 1.5f, 1f));
             var upVector = Vector3.UnitY;
-
             var angulo = MathF.Acos(Convert.ToSingle(Vector3.Dot(cameraUpVector, upVector)));
             RotationMatrix = Matrix.CreateRotationX(-angulo) * Matrix.CreateRotationY(MathF.PI / 4);
         }
 
-        public void Update(CarObject car){
-            
-            // Chequeo si colisionó con el auto
-            HealthPercentage = car.Health / CarObject.MAX_HEALTH;
-
-            TranslateMatrix = Matrix.CreateTranslation(car.Position + new Vector3(0f, 20f, 0f));
+        public void Update(PlayerCarObject car) {
+            TranslateMatrix = Matrix.CreateTranslation(car.GetPosition() + new Vector3(-100f, 50f, -20f));
             World = ScaleMatrix * RotationMatrix * TranslateMatrix;  
         }
 
@@ -31,7 +26,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             getEffect().Parameters["View"].SetValue(view);
             getEffect().Parameters["Projection"].SetValue(projection);
             getEffect().Parameters["Texture"]?.SetValue(getTexture());
-            getEffect().Parameters["HealthPercentage"]?.SetValue(HealthPercentage);
+            getEffect().Parameters["HealthPercentage"]?.SetValue(1f);
             DrawPrimitive();
         }
     }

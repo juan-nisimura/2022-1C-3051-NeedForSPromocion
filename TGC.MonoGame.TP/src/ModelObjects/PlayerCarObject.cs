@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TGC.Monogame.TP.Src.HUD;
 using TGC.Monogame.TP.Src.PowerUps;
 using TGC.MonoGame.TP;
 
@@ -9,12 +10,19 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 {
     public class PlayerCarObject : CarObject
     {
+        PowerUpHUDCircleObject PowerUpHUDCircle;
         public PlayerCarObject(Vector3 position, Color color)
              : base(position, color)
         {
+            
         }
 
-        public void Update(GraphicsDevice graphicsDevice, Matrix View, Matrix Projection){
+        public new void Initialize(CarObject[] enemies){
+            base.Initialize(enemies);
+            PowerUpHUDCircle = new PowerUpHUDCircleObject();
+        }
+
+        public void Update(Matrix View, Matrix Projection){
             // Capturo el estado del teclado
             var keyboardState = Keyboard.GetState();
 
@@ -97,11 +105,19 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             base.Update();
 
             if(keyboardState.IsKeyDown(Keys.F)){
-                PowerUp.TriggerEffect(graphicsDevice, this);
+                PowerUp.TriggerEffect(this);
             }
         
             ObjectBox.Center = Position;
             ObjectBox.Orientation = RotationMatrix;
+            
+            PowerUpHUDCircle.Update(this);
+        }
+
+        public new void Draw(Matrix view, Matrix projection)
+        {
+            base.Draw(view, projection);
+            PowerUpHUDCircle.Draw(view, projection);
         }
     }
 }

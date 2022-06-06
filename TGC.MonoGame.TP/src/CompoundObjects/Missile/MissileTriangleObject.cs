@@ -7,10 +7,10 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
 {
     public class MissileTriangleObject : TriangleObject <MissileTriangleObject>
     {
-        private const float MISSILE_TRIANGLE_FORWARD_DISTANCE = 100f;
+        private const float MISSILE_TRIANGLE_FORWARD_DISTANCE = 5f;
         private const float MISSILE_DISTANCE_FROM_FLOOR = 10f;
-        public MissileTriangleObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 vertex1, Vector3 vertex2, Vector3 vertex3, Color color)
-            : base(graphicsDevice, position, vertex1, vertex2, vertex3, color){
+        public MissileTriangleObject(Vector3 position, Vector3 vertex1, Vector3 vertex2, Vector3 vertex3, Color color)
+            : base(position, vertex1, vertex2, vertex3, color){
         }
 
         public void Update(Vector3 position, Vector3 forward, Matrix rotationMatrix)

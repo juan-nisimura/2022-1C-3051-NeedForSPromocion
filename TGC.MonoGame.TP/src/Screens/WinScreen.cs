@@ -12,15 +12,15 @@ namespace TGC.Monogame.TP.Src.Screens
         protected static Screen Instance { get; set; } = new WinScreen();
         public static Screen GetInstance() { return Instance; }
         
-        public override void Initialize(GraphicsDevice graphicsDevice)
+        public override void Initialize()
         {
             
         }
 
-        public override void DrawText(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public override void DrawText()
         {
-            DrawCenterTextY("You Win", 100, 3, spriteBatch, graphicsDevice);
-            DrawCenterTextY("Presione ENTER para volver a jugar", 200, 1, spriteBatch, graphicsDevice);
+            DrawCenterTextY("You Win", 100, 3);
+            DrawCenterTextY("Presione ENTER para volver a jugar", 200, 1);
         }
     }
 }

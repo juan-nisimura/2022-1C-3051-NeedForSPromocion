@@ -6,8 +6,8 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
 {
     class BridgeFloorObject : BoxObject <BridgeFloorObject>
     {
-        public BridgeFloorObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, Color color) 
-        : base(graphicsDevice, position, size, color)
+        public BridgeFloorObject(Vector3 position, Vector3 size, Color color) 
+        : base(position, size, color)
         {
         }
     }

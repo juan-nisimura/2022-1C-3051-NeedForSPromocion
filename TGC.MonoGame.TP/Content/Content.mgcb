@@ -330,6 +330,13 @@
 /processorParam:TextureFormat=Compressed
 /build:SpriteFonts/DS-Digital/DS-Digital.spritefont
 
+#begin SpriteFonts/DS-Digital/DS-Digital.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:SpriteFonts/DS-Digital/DS-Digital.spritefont
+
 #begin Textures/asphalt/textures/asphalt_02_diff_4k.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -402,6 +409,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/ezgif-1-edba6bc46a.png;Textures/speedo_needle.png
 
+#begin Textures/ezgif-1-edba6bc46a.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/ezgif-1-edba6bc46a.png
+
 #begin Textures/Floor.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -462,10 +481,34 @@
 /processorParam:TextureFormat=Color
 /build:Textures/speedo_tex.png
 
+#begin Textures/speedo_tex.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/speedo_tex.png
+
 #begin Textures/speedoneedle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,255,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/speedoneedle.png
+
+#begin Textures/speedoneedle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True

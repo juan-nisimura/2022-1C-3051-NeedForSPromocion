@@ -28,18 +28,18 @@ namespace TGC.Monogame.TP.Src
         public void Reset() {
             totalTime = 0;
         }
-        public void Draw(Matrix view, Matrix projection, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public void Draw(Matrix view, Matrix projection)
         {
             var msg = "TIEMPO RESTANTE " + (END_GAME_TOTAL_TIME - totalTime).ToString("0.00");
-            var W = graphicsDevice.Viewport.Width;
-            var H = graphicsDevice.Viewport.Height;
+            var W = TGCGame.GetGraphicsDevice().Viewport.Width;
+            var H = TGCGame.GetGraphicsDevice().Viewport.Height;
             var escala = 1;
             var size = Font.MeasureString(msg) * escala;
             var Y = 50f;
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null,
+            TGCGame.GetSpriteBatch().Begin(SpriteSortMode.Deferred, null, null, null, null, null,
                 Matrix.CreateScale(escala) * Matrix.CreateTranslation((W - size.X) / 2, Y, 0));
-            spriteBatch.DrawString(Font, msg, new Vector2(0, 0), Color.Red);
-            spriteBatch.End();
+            TGCGame.GetSpriteBatch().DrawString(Font, msg, new Vector2(0, 0), Color.Red);
+            TGCGame.GetSpriteBatch().End();
         }
     }
 }

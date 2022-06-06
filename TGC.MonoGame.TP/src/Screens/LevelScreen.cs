@@ -355,8 +355,8 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(View, Projection);
             for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection);
             for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection);
-            Clock.Draw(View, Projection, spriteBatch, graphicsDevice);
-            SpeedoMeter.Draw(View, Projection, spriteBatch, graphicsDevice);
+            Clock.Draw(View, Projection);
+            SpeedoMeter.Draw(View, Projection);
 
 
             #endregion

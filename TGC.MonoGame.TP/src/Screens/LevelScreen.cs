@@ -49,6 +49,8 @@ namespace TGC.Monogame.TP.Src.Screens
         private TreeObject[] Trees { get; set; }
         private FloorObject Floor { get; set; }
         public Clock Clock = new Clock();
+        private SpeedoMeter SpeedoMeter = new SpeedoMeter();
+        private Boolean isStart { get; set; } = false;
         private float Timer { get; set; }
 
         //blur
@@ -125,7 +127,9 @@ namespace TGC.Monogame.TP.Src.Screens
             FloorObject.Load(content, "FloorShader", "brown_mud_leaves_01_diff_4k");
             MountObject.Load(content);
             PowerUpObject.Load(content, "BasicShader", "Floor");
-
+            Clock.Load(content);
+            SpeedoMeter.Load(content);
+            
             blurEffect = content.Load<Effect>("Effects/" + "GaussianBlur");
             // Create a full screen quad to post-process
             FullScreenQuad = new FullScreenQuad(TGCGame.GetGraphicsDevice());
@@ -302,6 +306,8 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Update(Car);
             for (int i = 0; i < Mounts.Length; i++) Mounts[i].Update(Car);
             for (int i = 0; i < Trees.Length; i++) Trees[i].Update();
+            SpeedoMeter.Update(Car.Speed);
+
 
             View = Camera.FollowCamera(Car.GetPosition()).GetView();
 
@@ -349,6 +355,9 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(View, Projection);
             for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection);
             for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection);
+            Clock.Draw(View, Projection, spriteBatch, graphicsDevice);
+            SpeedoMeter.Draw(View, Projection, spriteBatch, graphicsDevice);
+
 
             #endregion
         }
@@ -376,6 +385,7 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(View, Projection);
             for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection);
             for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection);
+                //}
 
             #endregion
             #region Pass 2
@@ -394,8 +404,8 @@ namespace TGC.Monogame.TP.Src.Screens
             blurEffect.CurrentTechnique = blurEffect.Techniques["Blur"];
             blurEffect.Parameters["baseTexture"].SetValue(MainRenderTarget);
             FullScreenQuad.Draw(blurEffect);
-
             #endregion
         }
+        
     }
 }

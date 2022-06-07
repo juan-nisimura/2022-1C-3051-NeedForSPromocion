@@ -10,6 +10,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 {
     public class PlayerCarObject : CarObject
     {
+        private KeyController ControllerKeyF = new KeyController(Keys.F);
         PowerUpHUDCircleObject PowerUpHUDCircle;
         public PlayerCarObject(Vector3 position, Color color)
              : base(position, color)
@@ -103,10 +104,10 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             
             // Esto calcula la posición del auto
             base.Update();
-
-            if(keyboardState.IsKeyDown(Keys.F)){
-                PowerUp.TriggerEffect(this);
-            }
+            
+            if(ControllerKeyF.Update().IsKeyToPressed())    PowerUp.TriggerEffect(this);
+            else if(ControllerKeyF.IsKeyToNotPressed())     PowerUp.StopTriggerEffect(this);
+            PowerUp.Update(this);
         
             ObjectBox.Center = Position;
             ObjectBox.Orientation = RotationMatrix;

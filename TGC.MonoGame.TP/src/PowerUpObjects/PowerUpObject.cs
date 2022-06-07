@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using TGC.Monogame.TP.Src.HUD;
 using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels;
@@ -19,26 +20,22 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects
         const float RespawnCooldown = 10;
         private static Random RandomPowerUp = new Random();
         private PowerUp PowerUp;
-        private PowerUpModel PowerUpModel;
 
         public PowerUpObject(Vector3 position) : base(position, new Vector3(10f,10f,10f), Color.Yellow)
         {
             Position = position + new Vector3(0f, 10f, 0f);
             TranslateMatrix = Matrix.CreateTranslation(Position);
             BoundingSphere = new BoundingSphere(Position, 8f);
-            //PowerUpModel = new MissilePowerUpModel(Position);
         }
         public new void Initialize(){
             base.Initialize();
             Rotation = 0;
-            PowerUpModel = new MissilePowerUpModel(Vector3.Zero);
-            PowerUpModel.Initialize();
         }
 
         public void Reset() {
             isAvailable = true;
         }
-
+        
         public void Update(CarObject car){
 
             // Actualizo la matrix de mundo
@@ -58,15 +55,15 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects
                     switch(RandomPowerUp.Next(3)){
                         case 1:
                             car.SetPowerUp(new MachineGunPowerUp());
-                            PowerUpHUDCircleObject.SetPowerUpModel(new NullPowerUpModel());
+                            PowerUpHUDCircleObject.SetPowerUpModel(BulletPowerUpModel.GetModel());
                             break;
                         case 2:
                             car.SetPowerUp(new MissileLauncherPowerUp());
-                            PowerUpHUDCircleObject.SetPowerUpModel(PowerUpModel);
+                            PowerUpHUDCircleObject.SetPowerUpModel(MissilePowerUpModel.GetModel());
                             break;
                         default:
                             car.SetPowerUp(new SpeedBoostPowerUp());
-                            PowerUpHUDCircleObject.SetPowerUpModel(new NullPowerUpModel());
+                            PowerUpHUDCircleObject.SetPowerUpModel(SpeedBoostPowerUpModel.GetModel());
                             break;
                     }
                 }

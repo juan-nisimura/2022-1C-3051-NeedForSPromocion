@@ -22,8 +22,8 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet
         private static SoundEffect[] BulletShootSounds;
 
         public BulletObject(int bullet_number){
-            BulletBody = new BulletBodyObject();
-            BulletHead = new BulletHeadObject();
+            BulletBody = new BulletBodyObject(BULLET_MODEL_SIZE);
+            BulletHead = new BulletHeadObject(BULLET_MODEL_SIZE);
 
             ImpactSphereRadius = BULLET_MODEL_SIZE * 0.5f;
             ImpactSphere = new BoundingSphere(new Vector3(0f, 0f, 0f), ImpactSphereRadius);

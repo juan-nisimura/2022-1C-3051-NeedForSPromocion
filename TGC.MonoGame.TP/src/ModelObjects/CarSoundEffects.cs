@@ -10,7 +10,7 @@ using System;
 namespace TGC.Monogame.TP.Src.ModelObjects 
 {
     public enum EngineState {
-        Start, RunningFast, RunningSlow, Stopped//, Stopping
+        Start, RunningFast, RunningSlow, Stopped, Crashed
     }
  
     public class CarSoundEffects
@@ -18,14 +18,16 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         private EngineState EngineState = EngineState.Stopped;
         private float[] Speed = new float[2]{ 0f, 0f };
         //private float[] Acceleration = new float[2]{ 0f, 0f };
-        //private bool[] Crash = new bool[2]{ false, false };
+        private bool[] Crash = new bool[2]{ false, false };
         private float SoundEffectTime = 0f;
 
         private static SoundEffect FastEngineSound;
         private static SoundEffect SlowEngineSound;
         private static SoundEffect StartEngineSound;
         private static SoundEffect StopEngineSound;
+        private static SoundEffect CrashSound;
         private SoundEffectInstance EngineInstance;
+        private const float CAR_SPEED_CRASH = 200f;
 
         public void Initialize() {
             EngineInstance = StartEngineSound.CreateInstance();
@@ -49,15 +51,18 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             SlowEngineSound = content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "slow engine");
             StartEngineSound = content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "start engine 2");
             StopEngineSound = content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "stop engine");
+            CrashSound = content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "car collision");
         }
 
         public void Update(CarObject car) {
             Speed[0] = Speed[1];
             Speed[1] = MathF.Abs(car.Speed);
-            //Acceleration[0] = Acceleration[1];
-            //Acceleration[1] = car.Acceleration;
-            //Crash[0] = Crash[1];
-            // Crash[1] = car.Crash;
+            Crash[0] = Crash[1];
+            Crash[1] = car.HasCrashed;
+
+            if(Crash[1] && !Crash[0] && Speed[1] > CAR_SPEED_CRASH){
+                CrashSound.CreateInstance().Play();
+            }
 
             switch(EngineState){
                 case EngineState.Stopped:
@@ -65,7 +70,6 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                         EngineState = EngineState.Start;
                         SwitchSoundInstance(ref EngineInstance, StartEngineSound);
                     }
-                        
                     break;
                 case EngineState.Start:
                     if(Speed[1] >= Speed[0])
@@ -90,10 +94,6 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                         SwitchSoundInstance(ref EngineInstance, SlowEngineSound, true);
                     }
                     break;
-                    /*
-                case EngineState.Stopping:
-                    if()
-                    break;*/
             }
         }
 

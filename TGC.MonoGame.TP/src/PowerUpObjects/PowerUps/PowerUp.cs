@@ -12,9 +12,15 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUps
 
         }
 
-        public void UpdateHUD(){
-            if(!CanBeTriggered())    
+        public abstract void Update(CarObject car);
+
+        public abstract void StopTriggerEffect(CarObject car);
+
+        public void UpdateCarPowerUp(CarObject car){
+            if(!CanBeTriggered()){
+                car.SetPowerUp(new NullPowerUp());
                 PowerUpHUDCircleObject.SetPowerUpModel(new NullPowerUpModel());
+            }
         }
     }
 }

@@ -13,7 +13,8 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels
         private const int TRIANGLES_QUANTITY = 8;
         private const float TRIANGLE_RELATIVE_SIZE = 0.8f;
         public const float MISSILE_MODEL_SIZE = 1f;
-
+        public static PowerUpModel PowerUpModel = new MissilePowerUpModel(Vector3.Zero);
+        public static new PowerUpModel GetModel() { return PowerUpModel; }
         public MissilePowerUpModel(Vector3 position){
             MissileBody = new MissileBodyObject(MISSILE_MODEL_SIZE);
             MissileHead = new MissileHeadObject(MISSILE_MODEL_SIZE);
@@ -30,9 +31,6 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels
             };
             RotationMatrix = Matrix.CreateRotationX(-MathF.PI / 15);
             Position = position;
-        }
-
-        public override void Initialize(){
             MissileBody.Initialize();
             MissileHead.Initialize();
             for (int i = 0; i < TRIANGLES_QUANTITY; i++)   MissileTriangles[i].Initialize();

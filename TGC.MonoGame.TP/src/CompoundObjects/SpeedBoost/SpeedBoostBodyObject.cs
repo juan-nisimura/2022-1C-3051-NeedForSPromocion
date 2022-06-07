@@ -3,12 +3,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TGC.Monogame.TP.Src.PrimitiveObjects;
 
-namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet
+namespace TGC.Monogame.TP.Src.CompoundObjects.SpeedBoost
 {
-    public class BulletBodyObject : CylinderObject <BulletBodyObject>
+    public class SpeedBoostBodyObject : CylinderObject <SpeedBoostBodyObject>
     {
-        public BulletBodyObject(float modelSize)
-            : base(new Vector3(0f, 0f, 0f), new Vector3(modelSize/2, modelSize, modelSize/2), MathHelper.PiOver2, 0f, Color.Gold){
+        public SpeedBoostBodyObject(float modelSize)
+            : base(new Vector3(0f, 0f, 0f), new Vector3(modelSize/1.5f, modelSize, modelSize/1.5f), MathHelper.PiOver2, 0f, Color.Red){
         }
         public void Update(Vector3 position, Vector3 forward, Matrix rotationMatrix){
             position = new Vector3(position.X, position.Y, position.Z);

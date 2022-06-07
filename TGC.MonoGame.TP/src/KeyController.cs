@@ -45,6 +45,10 @@ namespace TGC.Monogame.TP.Src
             return KeyState == KeyStates.ToPressed;
         }
 
+        public bool IsKeyToNotPressed(){
+            return KeyState == KeyStates.ToNotPressed;
+        }
+
 
     }
 }

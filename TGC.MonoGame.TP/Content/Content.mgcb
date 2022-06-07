@@ -364,6 +364,18 @@
 /processorParam:Quality=Best
 /build:Sounds/bullet/bullet_shoot_4.wav
 
+#begin Sounds/car collision.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/car collision.mp3
+
+#begin Sounds/car horn.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/car horn.mp3
+
 #begin Sounds/explosion_bomb.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor

@@ -48,7 +48,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
         protected int NextBulletIndex = 0;
         protected int NextMissileIndex = 0;
-        protected CarObject[] Enemies;
+        public CarObject[] Enemies;
 
         //colisions
         // The World Matrix for the Chair Oriented Bounding Box
@@ -227,7 +227,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
         public void Crash()
         {
-            Speed = 0;
+            Acceleration = 0;
+            Speed = -Speed/5;
         }
 
         public void SetSpeedBoostTime(){

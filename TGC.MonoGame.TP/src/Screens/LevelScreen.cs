@@ -18,6 +18,8 @@ using TGC.MonoGame.TP;
 using TGC.Monogame.TP.Src.PowerUpObjects;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
 using TGC.Monogame.TP.Src.HUD;
+using TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels;
+using TGC.Monogame.TP.Src.PowerUpObjects.PowerUps;
 
 namespace TGC.Monogame.TP.Src.Screens 
 {
@@ -127,6 +129,8 @@ namespace TGC.Monogame.TP.Src.Screens
             FloorObject.Load(content, "FloorShader", "brown_mud_leaves_01_diff_4k");
             MountObject.Load(content);
             PowerUpObject.Load(content, "BasicShader", "Floor");
+            NullPowerUp.Load(content);
+            SpeedBoostPowerUpModel.Load(content);
             Clock.Load(content);
             SpeedoMeter.Load(content);
             
@@ -321,6 +325,7 @@ namespace TGC.Monogame.TP.Src.Screens
                 Car.GroundLevel = 0;
             while(collided){
                 collided = false;
+                //car.Enemies.SolveHorizontalCollision(car);
                 Buildings.SolveHorizontalCollision(car);
                 Bridge.SolveHorizontalCollision(car);
                 for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveHorizontalCollision(car);
@@ -414,8 +419,6 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(View, Projection);
             for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection);
             for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection);
-                //}
-
 
             #endregion
             #region Pass 2

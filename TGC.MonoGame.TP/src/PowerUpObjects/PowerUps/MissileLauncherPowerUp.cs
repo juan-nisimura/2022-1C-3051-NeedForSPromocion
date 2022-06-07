@@ -18,8 +18,10 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUps
                 var MissileRotation = car.Rotation;
                 car.ShootMissile();
                 HasBeenTriggered = true;
-                UpdateHUD();
+                UpdateCarPowerUp(car);
             } 
         }
+        public override void Update(CarObject car) { }
+        public override void StopTriggerEffect(CarObject car) { }
     }
 }

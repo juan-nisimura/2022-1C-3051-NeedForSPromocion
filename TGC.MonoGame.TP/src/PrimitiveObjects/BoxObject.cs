@@ -46,7 +46,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
                 // Si colisionó con el auto, el auto es empujado
                 
                 // Si el auto roza la parte de arriba del bloque, no es empujado
-                if(car.ObjectBox.Center.Y + 7f > MaxHeight)
+                if(car.ObjectBox.Center.Y + 7f + MathF.Abs(Vector3.Normalize(car.GetWorld().Forward).Y * 5f) > MaxHeight)
                     return false;
 
                 // Get the cylinder center at the same Y-level as the box
@@ -94,7 +94,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
         {
             if(car.ObjectBox.Intersects(BoundingBox)){
                 var posibleNewGroundLevel = HeightMap.GetHeight(car.Position.X, car.Position.Z);
-                if(posibleNewGroundLevel - car.GroundLevel < 6f){
+                if(posibleNewGroundLevel - car.GroundLevel < 15f){
                     car.GroundLevel = posibleNewGroundLevel;
                 }
                     

@@ -73,7 +73,7 @@ namespace TGC.Monogame.TP.Src.Screens
             var size = Font.MeasureString(msg) * escala;
             TGCGame.GetSpriteBatch().Begin(SpriteSortMode.Deferred, null, null, null, null, null,
                 Matrix.CreateScale(escala) * Matrix.CreateTranslation((W - size.X) / 2, Y, 0));
-            TGCGame.GetSpriteBatch().DrawString(Font, msg, new Vector2(0, 0), Color.YellowGreen);
+            TGCGame.GetSpriteBatch().DrawString(Font, msg, new Vector2(0, 0), Color.White);
             TGCGame.GetSpriteBatch().End();
         }
     }

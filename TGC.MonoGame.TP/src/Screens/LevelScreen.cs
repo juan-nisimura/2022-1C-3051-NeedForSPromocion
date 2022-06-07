@@ -325,16 +325,17 @@ namespace TGC.Monogame.TP.Src.Screens
                 Car.GroundLevel = 0;
             while(collided){
                 collided = false;
+                for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveVerticalCollision(car);
+                for (int i = 0; i < MapWalls.Length; i++)       collided = collided || MapWalls[i].SolveVerticalCollision(car);
+                Buildings.SolveVerticalCollision(car);
+                Bridge.SolveVerticalCollision(car);
+
                 //car.Enemies.SolveHorizontalCollision(car);
                 Buildings.SolveHorizontalCollision(car);
                 Bridge.SolveHorizontalCollision(car);
                 for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveHorizontalCollision(car);
                 for (int i = 0; i < MapWalls.Length; i++)       collided = collided || MapWalls[i].SolveHorizontalCollision(car);
                 for (int i = 0; i < Trees.Length; i++)          collided = collided || Trees[i].SolveHorizontalCollision(car);
-                for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveVerticalCollision(car);
-                for (int i = 0; i < MapWalls.Length; i++)       collided = collided || MapWalls[i].SolveVerticalCollision(car);
-                Buildings.SolveVerticalCollision(car);
-                Bridge.SolveVerticalCollision(car);
             }
             if(car.HasCrashed)  car.Crash();
             SolveBulletsCollisions(Car);

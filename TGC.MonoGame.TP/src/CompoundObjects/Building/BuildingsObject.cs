@@ -2,6 +2,8 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
 using TGC.Monogame.TP.Src.ModelObjects;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Building
@@ -85,6 +87,18 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Building
             for (int i = 0; i < BOXES_QUANTITY; i++)  Boxes[i].Update(car);
             for (int i = 0; i < RAMPS_QUANTITY; i++)  Ramps[i].Update(car);
             for (int i = 0; i < WALLS_QUANTITY; i++)  Walls[i].Update(car);
+        }
+
+        public void SolveBulletCollision(BulletObject bullet){
+            for (int i = 0; i < BOXES_QUANTITY; i++)  Boxes[i].SolveBulletCollision(bullet);
+            for (int i = 0; i < RAMPS_QUANTITY; i++)  Ramps[i].SolveBulletCollision(bullet);
+            for (int i = 0; i < WALLS_QUANTITY; i++)  Walls[i].SolveBulletCollision(bullet);
+        }
+
+        public void SolveMissileCollision(MissileObject missile){
+            for (int i = 0; i < BOXES_QUANTITY; i++)  Boxes[i].SolveMissileCollision(missile);
+            for (int i = 0; i < RAMPS_QUANTITY; i++)  Ramps[i].SolveMissileCollision(missile);
+            for (int i = 0; i < WALLS_QUANTITY; i++)  Walls[i].SolveMissileCollision(missile);
         }
         
         public static void Load(ContentManager content){

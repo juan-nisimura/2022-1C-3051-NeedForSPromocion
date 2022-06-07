@@ -5,11 +5,12 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using TGC.MonoGame.Samples.Collisions;
 using TGC.Monogame.TP.Src.PrimitiveObjects;
-using TGC.Monogame.TP.Src.CompoundObjects.Missile;
-using TGC.Monogame.TP.Src.PowerUps;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
 using TGC.MonoGame.TP;
-using TGC.Monogame.TP.Src.CompoundObjects.Bullet;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
 using TGC.Monogame.TP.Src.HUD;
+using TGC.Monogame.TP.Src.PowerUpObjects.PowerUps;
+using Microsoft.Xna.Framework.Audio;
 
 namespace TGC.Monogame.TP.Src.ModelObjects
 
@@ -39,8 +40,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
         protected float SpeedBoostTime {get; set;}=0;
 
-        protected const int BULLETS_POOL_SIZE = 20;
-        protected const int MISSILES_POOL_SIZE = 2;
+        public const int BULLETS_POOL_SIZE = 20;
+        public const int MISSILES_POOL_SIZE = 2;
 
         public BulletObject[] BulletsPool = new BulletObject[BULLETS_POOL_SIZE];
         public MissileObject[] MissilesPool = new MissileObject[MISSILES_POOL_SIZE];
@@ -104,7 +105,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             CarSoundEffects.Initialize();
             Enemies = enemies;
             for(int i = 0; i < BULLETS_POOL_SIZE; i++){
-                BulletsPool[i] = new BulletObject();
+                BulletsPool[i] = new BulletObject(i);
                 BulletsPool[i].Initialize(Enemies);
             }  
 
@@ -169,6 +170,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             Position = new Vector3(x, y, z);
 
             OnTheGround = Position.Y - GroundLevel < 0.5f;
+            if(OnTheGround)     Position = new Vector3(x, GroundLevel, z);
 
             // Calculo el nuevo ángulo de las ruedas
             WheelAngle += Speed * TGCGame.GetElapsedTime() / 125f;
@@ -196,6 +198,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
             for(int i = 0; i < BULLETS_POOL_SIZE; i++)  BulletsPool[i].Update();
             for(int i = 0; i < MISSILES_POOL_SIZE; i++) MissilesPool[i].Update();
+
+            Console.WriteLine("{0}", Position.Y);
         }
 
         public new void Draw(Matrix view, Matrix projection)

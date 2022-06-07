@@ -1,6 +1,8 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
 using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.MonoGame.Samples.Collisions;
 using TGC.MonoGame.TP;
@@ -22,6 +24,16 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
         }
         protected override void DrawPrimitive() { CylinderPrimitive.Draw(getEffect()); }
     
+        public void SolveBulletCollision(BulletObject bullet){
+            if(BoundingCylinder.Intersects(bullet.ImpactSphere))
+                bullet.HitObstacle();
+        }
+
+        public void SolveMissileCollision(MissileObject missile){
+            if(BoundingCylinder.Intersects(missile.ImpactSphere))
+                missile.HitObstacle();
+        }
+
         public bool SolveHorizontalCollision(CarObject car){
             // Chequeo si colisionó con el auto
             

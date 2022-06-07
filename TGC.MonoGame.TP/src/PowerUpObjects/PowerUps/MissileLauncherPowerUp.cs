@@ -1,8 +1,8 @@
 using Microsoft.Xna.Framework.Graphics;
-using TGC.Monogame.TP.Src.CompoundObjects.Missile;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
 using TGC.Monogame.TP.Src.ModelObjects;
 
-namespace TGC.Monogame.TP.Src.PowerUps
+namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUps
 {
     public class MissileLauncherPowerUp : PowerUp
     {

@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using TGC.Monogame.TP.Src.ModelObjects;
 using System;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
 {
@@ -36,6 +39,14 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
         public bool SolveHorizontalCollision(CarObject car)
         {
             return TreeTrunk.SolveHorizontalCollision(car);
+        }
+
+        public void SolveBulletCollision(BulletObject bullet){
+            TreeTrunk.SolveBulletCollision(bullet);
+        }
+
+        public void SolveMissileCollision(MissileObject missile){
+            TreeTrunk.SolveMissileCollision(missile);
         }
     }
 }

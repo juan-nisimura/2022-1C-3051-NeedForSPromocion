@@ -17,7 +17,7 @@ namespace TGC.Monogame.TP.Src.HUD
         }
 
         public void Update(PlayerCarObject car) {
-            TranslateMatrix = Matrix.CreateTranslation(car.GetPosition() + new Vector3(-100f, 50f, -20f));
+            TranslateMatrix = Matrix.CreateTranslation(car.GetPosition() + new Vector3(100f, 50f, 20f));
             World = ScaleMatrix * RotationMatrix * TranslateMatrix;  
         }
 

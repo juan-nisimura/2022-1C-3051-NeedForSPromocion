@@ -286,11 +286,101 @@
 /processorParam:Quality=Best
 /build:Music/Riders On The Storm Fredwreck Remix.mp3
 
+#begin Sounds/bullet/bullet_hit_ground_1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/bullet/bullet_hit_ground_1.wav
+
+#begin Sounds/bullet/bullet_hit_ground_2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/bullet/bullet_hit_ground_2.wav
+
+#begin Sounds/bullet/bullet_hit_ground_3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/bullet/bullet_hit_ground_3.wav
+
+#begin Sounds/bullet/bullet_hit_ground_4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/bullet/bullet_hit_ground_4.wav
+
+#begin Sounds/bullet/bullet_hit_ground_5.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/bullet/bullet_hit_ground_5.wav
+
+#begin Sounds/bullet/bullet_hit_metal_1.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/bullet/bullet_hit_metal_1.mp3
+
+#begin Sounds/bullet/bullet_hit_metal_2.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/bullet/bullet_hit_metal_2.mp3
+
+#begin Sounds/bullet/bullet_hit_metal_3.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/bullet/bullet_hit_metal_3.mp3
+
+#begin Sounds/bullet/bullet_hit_metal_4.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/bullet/bullet_hit_metal_4.mp3
+
+#begin Sounds/bullet/bullet_shoot_1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/bullet/bullet_shoot_1.wav
+
+#begin Sounds/bullet/bullet_shoot_2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/bullet/bullet_shoot_2.wav
+
+#begin Sounds/bullet/bullet_shoot_3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/bullet/bullet_shoot_3.wav
+
+#begin Sounds/bullet/bullet_shoot_4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/bullet/bullet_shoot_4.wav
+
+#begin Sounds/explosion_bomb.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/explosion_bomb.mp3
+
 #begin Sounds/fast engine.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sounds/fast engine.mp3
+
+#begin Sounds/missile launch.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/missile launch.mp3
 
 #begin Sounds/slow engine.mp3
 /importer:Mp3Importer
@@ -322,13 +412,6 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:SpriteFonts/CascadiaCode/CascadiaCodePL.spritefont
-
-#begin SpriteFonts/DS-Digital/DS-Digital.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:SpriteFonts/DS-Digital/DS-Digital.spritefont
 
 #begin SpriteFonts/DS-Digital/DS-Digital.spritefont
 /importer:FontDescriptionImporter
@@ -396,18 +479,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/brown_mud_leaves_01_diff_4k.jpg
-
-#begin Textures/ezgif-1-edba6bc46a.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,255,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/ezgif-1-edba6bc46a.png;Textures/speedo_needle.png
 
 #begin Textures/ezgif-1-edba6bc46a.png
 /importer:TextureImporter
@@ -480,30 +551,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/speedo_tex.png
-
-#begin Textures/speedo_tex.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/speedo_tex.png
-
-#begin Textures/speedoneedle.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,255,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/speedoneedle.png
 
 #begin Textures/speedoneedle.png
 /importer:TextureImporter

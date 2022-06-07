@@ -2,6 +2,8 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
 using TGC.Monogame.TP.Src.ModelObjects;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Mount 
@@ -36,6 +38,16 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
         public static void Load(ContentManager content){
             MountBoxObject.Load(content, "BoxTextureShader", "rock_01_diff_4k");
             MountRampObject.Load(content, "RampTextureShader", "rock_01_diff_4k");
+        }
+
+        public void SolveBulletCollision(BulletObject bullet){                
+            Box.SolveBulletCollision(bullet);
+            for (int i = 0; i < Ramps.Length; i++)  Ramps[i].SolveBulletCollision(bullet);
+        }
+
+        public void SolveMissileCollision(MissileObject missile){                
+            Box.SolveMissileCollision(missile);
+            for (int i = 0; i < Ramps.Length; i++)  Ramps[i].SolveMissileCollision(missile);
         }
 
         public bool SolveHorizontalCollision(CarObject car){

@@ -2,6 +2,8 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
 using TGC.Monogame.TP.Src.ModelObjects;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
@@ -72,12 +74,26 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
             for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].Draw(view, projection);
         }
 
+        public void SolveBulletCollision(BulletObject bullet){
+            Block.SolveBulletCollision(bullet);
+            for (int i = 0; i < RAMPS_QUANTITY; i++)    Ramps[i].SolveBulletCollision(bullet);
+            for (int i = 0; i < FLOORS_QUANTITY; i++)   Floors[i].SolveBulletCollision(bullet);
+            for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].SolveBulletCollision(bullet);
+        }
+
+        public void SolveMissileCollision(MissileObject missile){
+            Block.SolveMissileCollision(missile);
+            for (int i = 0; i < RAMPS_QUANTITY; i++)    Ramps[i].SolveMissileCollision(missile);
+            for (int i = 0; i < FLOORS_QUANTITY; i++)   Floors[i].SolveMissileCollision(missile);
+            for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].SolveMissileCollision(missile);
+        }
+
         public bool SolveHorizontalCollision(CarObject car){
             bool collided = false;
             collided = Block.SolveHorizontalCollision(car);
             for (int i = 0; i < RAMPS_QUANTITY; i++)    collided = collided || Ramps[i].SolveHorizontalCollision(car);
             for (int i = 0; i < FLOORS_QUANTITY; i++)   collided = collided || Floors[i].SolveHorizontalCollision(car);
-            for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].SolveHorizontalCollision(car);
+            for (int i = 0; i < COLUMNS_QUANTITY; i++)  collided = collided || Columns[i].SolveHorizontalCollision(car);
             return collided;
         }
 

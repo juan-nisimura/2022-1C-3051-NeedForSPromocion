@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.Monogame.TP.Src.HUD;
-using TGC.Monogame.TP.Src.PowerUps;
+using TGC.Monogame.TP.Src.PowerUpObjects.PowerUps;
 using TGC.MonoGame.TP;
 
 namespace TGC.Monogame.TP.Src.ModelObjects

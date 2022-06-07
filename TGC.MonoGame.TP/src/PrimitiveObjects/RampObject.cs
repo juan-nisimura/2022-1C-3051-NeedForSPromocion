@@ -6,6 +6,8 @@ using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.MonoGame.Samples.Collisions;
 using System;
 using TGC.MonoGame.TP;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
@@ -46,6 +48,16 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
         }
 
         public void Update(CarObject car){
+        }
+
+        public void SolveBulletCollision(BulletObject bullet){
+            if(BoundingBox.Intersects(bullet.ImpactSphere) && bullet.ImpactSphere.Intersects(Plane) == PlaneIntersectionType.Back)
+                bullet.HitObstacle();
+        }
+
+        public void SolveMissileCollision(MissileObject missile){
+            if(BoundingBox.Intersects(missile.ImpactSphere) && missile.ImpactSphere.Intersects(Plane) == PlaneIntersectionType.Back)
+                missile.HitObstacle();
         }
 
         public bool SolveHorizontalCollision(CarObject car){

@@ -1,6 +1,8 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
 using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.MonoGame.Samples.Collisions;
 using TGC.MonoGame.TP.Src.Geometries;
@@ -26,6 +28,15 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             if(intersects != null) {  
                 HeightMap.SetHeightIfGreater(x, z, HeightMap.Ray.Position.Y - intersects.GetValueOrDefault());
             }
+        }
+
+        public void SolveBulletCollision(BulletObject bullet){
+            if(bullet.ImpactSphere.Intersects(BoundingBox))
+                bullet.HitObstacle();
+        }
+        public void SolveMissileCollision(MissileObject missile){
+            if(missile.ImpactSphere.Intersects(BoundingBox))
+                missile.HitObstacle();
         }
 
         public bool SolveHorizontalCollision(CarObject car){

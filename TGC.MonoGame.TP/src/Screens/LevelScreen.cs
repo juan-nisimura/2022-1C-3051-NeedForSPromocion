@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using TGC.Monogame.TP.Src.PrimitiveObjects;
 using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.Monogame.TP.Src.CompoundObjects.Tree;
-using TGC.Monogame.TP.Src.CompoundObjects.Missile;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
 using TGC.Monogame.TP.Src.CompoundObjects.Bridge;
 using TGC.MonoGame.TP.Src.Geometries;
 using TGC.Monogame.TP.Src.CompoundObjects.Map;
@@ -15,8 +15,8 @@ using TGC.Monogame.TP.Src.CompoundObjects.Building;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Content;
 using TGC.MonoGame.TP;
-using TGC.Monogame.TP.Src.PowerUps;
-using TGC.Monogame.TP.Src.CompoundObjects.Bullet;
+using TGC.Monogame.TP.Src.PowerUpObjects;
+using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
 using TGC.Monogame.TP.Src.HUD;
 
 namespace TGC.Monogame.TP.Src.Screens 
@@ -332,6 +332,34 @@ namespace TGC.Monogame.TP.Src.Screens
                 Bridge.SolveVerticalCollision(car);
             }
             if(car.HasCrashed)  car.Crash();
+            SolveBulletsCollisions(Car);
+            SolveMissilesCollisions(Car);
+        }
+
+        protected void SolveBulletsCollisions(CarObject car) {
+            for(int b = 0; b < CarObject.BULLETS_POOL_SIZE; b++) {
+                if(car.BulletsPool[b].IsActive){
+                    Floor.SolveBulletCollision(car.BulletsPool[b]);
+                    Buildings.SolveBulletCollision(car.BulletsPool[b]);
+                    Bridge.SolveBulletCollision(car.BulletsPool[b]);
+                    for (int i = 0; i < Mounts.Length; i++)     Mounts[i].SolveBulletCollision(car.BulletsPool[b]);
+                    for (int i = 0; i < MapWalls.Length; i++)   MapWalls[i].SolveBulletCollision(car.BulletsPool[b]);
+                    for (int i = 0; i < Trees.Length; i++)      Trees[i].SolveBulletCollision(car.BulletsPool[b]);
+                }
+            }
+        }
+
+        protected void SolveMissilesCollisions(CarObject car) {
+            for(int m = 0; m < CarObject.MISSILES_POOL_SIZE; m++) {
+                if(car.MissilesPool[m].IsActive){
+                    Floor.SolveMissileCollision(car.MissilesPool[m]);
+                    Buildings.SolveMissileCollision(car.MissilesPool[m]);
+                    Bridge.SolveMissileCollision(car.MissilesPool[m]);
+                    for (int i = 0; i < Mounts.Length; i++)     Mounts[i].SolveMissileCollision(car.MissilesPool[m]);
+                    for (int i = 0; i < MapWalls.Length; i++)   MapWalls[i].SolveMissileCollision(car.MissilesPool[m]);
+                    for (int i = 0; i < Trees.Length; i++)      Trees[i].SolveMissileCollision(car.MissilesPool[m]);
+                }
+            }
         }
 
         public override void Draw()

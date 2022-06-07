@@ -543,11 +543,7 @@
 #begin Textures/speedoneedle.png
 /importer:TextureImporter
 /processor:TextureProcessor
-<<<<<<< HEAD
-/processorParam:ColorKeyColor=255,0,255,255
-=======
 /processorParam:ColorKeyColor=255,255,255,255
->>>>>>> d179169a5ab5f351ea5bf3f059794a33b5b225fc
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True

@@ -6,7 +6,9 @@ namespace TGC.Monogame.TP.Src.PowerUps
     public abstract class PowerUp
     {
         public abstract bool CanBeTriggered();
+        public abstract void TriggerEffect(CarObject car);
+        public void Draw(){
 
-        public abstract void TriggerEffect(GraphicsDevice graphicsDevice, CarObject car);
+        }
     }
 }

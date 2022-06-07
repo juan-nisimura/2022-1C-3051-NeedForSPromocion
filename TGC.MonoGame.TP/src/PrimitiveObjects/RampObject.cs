@@ -5,6 +5,7 @@ using TGC.MonoGame.TP.Src.Geometries;
 using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.MonoGame.Samples.Collisions;
 using System;
+using TGC.MonoGame.TP;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
@@ -18,8 +19,8 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
         protected BoundingBox BoundingBox;
         protected Plane Plane;
 
-        public RampObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotation, Color color){
-            RampPrimitive = new RampPrimitive(graphicsDevice);
+        public RampObject(Vector3 position, Vector3 size, float rotation, Color color){
+            RampPrimitive = new RampPrimitive(TGCGame.GetGraphicsDevice());
             ScaleMatrix = Matrix.CreateScale(size);
             TranslateMatrix = Matrix.CreateTranslation(position);
             RotationMatrix = Matrix.CreateRotationY(rotation);

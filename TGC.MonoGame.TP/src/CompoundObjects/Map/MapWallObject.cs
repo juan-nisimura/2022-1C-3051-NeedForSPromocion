@@ -7,8 +7,8 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Map
     class MapWallObject : BoxObject <MapWallObject>
     {
 
-        public MapWallObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, Color color) 
-        : base(graphicsDevice, position, size, color)
+        public MapWallObject(Vector3 position, Vector3 size, Color color) 
+        : base(position, size, color)
         {
         }
     }

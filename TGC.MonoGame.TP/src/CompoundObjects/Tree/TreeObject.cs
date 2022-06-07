@@ -10,9 +10,9 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
     {
         protected TreeTrunkObject TreeTrunk { get; set; }
         protected TreeTopObject TreeTop { get; set; }
-        public TreeObject(GraphicsDevice graphicsDevice, Vector3 position, float size){
-            TreeTrunk = new TreeTrunkObject(graphicsDevice, position + new Vector3(0f, size/2, 0f), new Vector3(size/2, size, size/2), 0, Color.Brown);
-            TreeTop = new TreeTopObject(graphicsDevice, position + new Vector3(0f, size * 5/3, 0f), size * 5 / 3, Color.ForestGreen);
+        public TreeObject(Vector3 position, float size){
+            TreeTrunk = new TreeTrunkObject(position + new Vector3(0f, size/2, 0f), new Vector3(size/2, size, size/2), 0, Color.Brown);
+            TreeTop = new TreeTopObject(position + new Vector3(0f, size * 5/3, 0f), size * 5 / 3, Color.ForestGreen);
         }
 
         public new void Initialize(){

@@ -11,7 +11,7 @@ namespace TGC.Monogame.TP.Src.PowerUps
             return !HasBeenTriggered;
         }
 
-        public override void TriggerEffect(GraphicsDevice graphicsDevice, CarObject car) {
+        public override void TriggerEffect(CarObject car) {
             if(CanBeTriggered())
             {
                 var MissilePosicion = car.Position;

@@ -7,8 +7,8 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
     class TreeTopObject : SphereObject <TreeTopObject>
     {
         private float Radius;
-        public TreeTopObject(GraphicsDevice graphicsDevice, Vector3 position, float radius, Color color) :
-            base(graphicsDevice, position, Vector3.One * radius, color){
+        public TreeTopObject(Vector3 position, float radius, Color color) :
+            base(position, Vector3.One * radius, color){
                 Radius = radius;
         }
 

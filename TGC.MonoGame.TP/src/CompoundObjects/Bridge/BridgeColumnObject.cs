@@ -6,8 +6,8 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
 {
     class BridgeColumnObject : CylinderObject <BridgeColumnObject>
     {
-        public BridgeColumnObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotation, Color color)
-            : base(graphicsDevice, position, size, 0, rotation, color){
+        public BridgeColumnObject(Vector3 position, Vector3 size, float rotation, Color color)
+            : base(position, size, 0, rotation, color){
         }
     }
 }

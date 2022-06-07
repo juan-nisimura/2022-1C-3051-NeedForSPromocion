@@ -12,26 +12,26 @@ namespace TGC.Monogame.TP.Src.Screens
         protected static Screen Instance { get; set; } = new MainMenuScreen();
         public static Screen GetInstance() { return Instance; }
 
-        public override void Initialize(GraphicsDevice graphicsDevice)
+        public override void Initialize()
         {
         
         }
 
-        public override void Update(GraphicsDevice graphicsDevice) {
-            LevelScreen.GetLevelScreenInstance().UpdateMainMenu(graphicsDevice);
-            base.Update(graphicsDevice);
+        public override void Update() {
+            LevelScreen.GetLevelScreenInstance().UpdateMainMenu();
+            base.Update();
         }
 
-        public override void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public override void Draw()
         {
-            LevelScreen.GetLevelScreenInstance().DrawMainMenu(spriteBatch, graphicsDevice);
-            DrawText(spriteBatch, graphicsDevice);
+            LevelScreen.GetLevelScreenInstance().DrawMainMenu();
+            DrawText();
         }
         
-        public override void DrawText(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public override void DrawText()
         {
-            DrawCenterTextY("Need For Spromocion", 100, 2.5f, spriteBatch, graphicsDevice);
-            DrawCenterTextY("Presione ENTER para jugar", 200, 1, spriteBatch, graphicsDevice);
+            DrawCenterTextY("Need For Spromocion", 100, 2.5f);
+            DrawCenterTextY("Presione ENTER para jugar", 200, 1);
         }
     }
 }

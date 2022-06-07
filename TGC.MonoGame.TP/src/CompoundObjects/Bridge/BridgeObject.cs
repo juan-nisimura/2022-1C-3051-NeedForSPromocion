@@ -15,29 +15,29 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
         protected BridgeColumnObject[] Columns { get; set; }
         protected BridgeRampObject[] Ramps { get; set; }
         protected BridgeFloorObject[] Floors { get; set; }
-        public BridgeObject(GraphicsDevice graphicsDevice){
+        public BridgeObject(){
 
             Ramps = new BridgeRampObject[] { 
-                new BridgeRampObject(graphicsDevice, new Vector3(370f, 15f, -90f), new Vector3(100f, 30f, 80f), MathF.PI / 2, Color.Yellow),
-                new BridgeRampObject(graphicsDevice, new Vector3(-370f, 15f, 90f), new Vector3(100f, 30f, 80f), - MathF.PI / 2, Color.Yellow),
+                new BridgeRampObject(new Vector3(370f, 15f, -90f), new Vector3(100f, 30f, 80f), MathF.PI / 2, Color.Yellow),
+                new BridgeRampObject(new Vector3(-370f, 15f, 90f), new Vector3(100f, 30f, 80f), - MathF.PI / 2, Color.Yellow),
             };
 
             Floors = new BridgeFloorObject[] {
-                new BridgeFloorObject(graphicsDevice, new Vector3(235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown),
-                new BridgeFloorObject(graphicsDevice, new Vector3(-235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown),
+                new BridgeFloorObject(new Vector3(235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown),
+                new BridgeFloorObject(new Vector3(-235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown),
             };
 
-            Block = new BridgeBlockObject(graphicsDevice, new Vector3(0f, 15f, 0f), new Vector3(120f, 30f, 80f), Color.Gray);
+            Block = new BridgeBlockObject(new Vector3(0f, 15f, 0f), new Vector3(120f, 30f, 80f), Color.Gray);
 
             Columns = new BridgeColumnObject[]{
-                new BridgeColumnObject(graphicsDevice, new Vector3(150f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-                new BridgeColumnObject(graphicsDevice, new Vector3(150f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-                new BridgeColumnObject(graphicsDevice, new Vector3(300f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-                new BridgeColumnObject(graphicsDevice, new Vector3(300f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-                new BridgeColumnObject(graphicsDevice, new Vector3(-150f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-                new BridgeColumnObject(graphicsDevice, new Vector3(-150f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-                new BridgeColumnObject(graphicsDevice, new Vector3(-300f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
-                new BridgeColumnObject(graphicsDevice, new Vector3(-300f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new BridgeColumnObject(new Vector3(150f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new BridgeColumnObject(new Vector3(150f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new BridgeColumnObject(new Vector3(300f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new BridgeColumnObject(new Vector3(300f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new BridgeColumnObject(new Vector3(-150f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new BridgeColumnObject(new Vector3(-150f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new BridgeColumnObject(new Vector3(-300f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
+                new BridgeColumnObject(new Vector3(-300f, 30f, 45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
             };
         }
 

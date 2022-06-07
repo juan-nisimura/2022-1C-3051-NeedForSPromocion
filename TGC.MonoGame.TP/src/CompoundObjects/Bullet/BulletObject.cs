@@ -14,21 +14,18 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bullet
         private BoundingSphere BoundingSphere { get; set; }
         private float BoundingSphereRadius { get; set; }
         private float BoundingSphereCenter { get; set; }
-        private const float BULLET_SPEED = 500f;
+        private const float BULLET_SPEED = 10000f;
         private const float MAX_ACTIVE_TIME = 10f;
-        public const float BULLET_MODEL_SIZE = 10f;
+        public const float BULLET_MODEL_SIZE = 3f;
         public const float BULLET_DAMAGE = 1f;
         private Vector3 Position;
         private Vector3 Forward;
         private bool IsActive = false;
         private float ActiveTime = 0f;
         private CarObject[] Enemies;
-        public BulletObject(GraphicsDevice graphicsDevice){
-            // BulletBody = new BulletBodyObject(graphicsDevice, new Vector3(0f, BULLET_MODEL_SIZE/2, 0f), new Vector3(BULLET_MODEL_SIZE/2, BULLET_MODEL_SIZE, BULLET_MODEL_SIZE/2), MathHelper.PiOver2, 0f, Color.Black);
-            // BulletHead = new BulletHeadObject(graphicsDevice, new Vector3(0f, BULLET_MODEL_SIZE, BULLET_MODEL_SIZE/2), new Vector3(0.5f, 1f, 0.5f) * BULLET_MODEL_SIZE, 0f, Color.Red);
-            BulletBody = new BulletBodyObject(graphicsDevice);
-            BulletHead = new BulletHeadObject(graphicsDevice);
-
+        public BulletObject(){
+            BulletBody = new BulletBodyObject();
+            BulletHead = new BulletHeadObject();
 
             BoundingSphereRadius = BULLET_MODEL_SIZE * 0.5f;
             BoundingSphere = new BoundingSphere(new Vector3(0f, BULLET_MODEL_SIZE, BULLET_MODEL_SIZE/2), BoundingSphereRadius);

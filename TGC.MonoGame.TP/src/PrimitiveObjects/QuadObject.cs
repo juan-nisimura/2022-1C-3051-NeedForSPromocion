@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.MonoGame.TP;
 using TGC.MonoGame.TP.Src.Geometries;
 using TGC.MonoGame.TP.Src.Geometries.Textures;
 
@@ -9,8 +10,8 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
     {
         protected QuadPrimitive QuadPrimitive;
 
-        public QuadObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotation, Color color){
-            QuadPrimitive = new QuadPrimitive(graphicsDevice);
+        public QuadObject(Vector3 position, Vector3 size, float rotation, Color color){
+            QuadPrimitive = new QuadPrimitive(TGCGame.GetGraphicsDevice());
             ScaleMatrix = Matrix.CreateScale(size);
             TranslateMatrix = Matrix.CreateTranslation(position);
             RotationMatrix = Matrix.CreateRotationY(rotation);

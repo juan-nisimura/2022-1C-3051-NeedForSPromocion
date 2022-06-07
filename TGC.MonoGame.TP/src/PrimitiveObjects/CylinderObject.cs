@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.MonoGame.Samples.Collisions;
+using TGC.MonoGame.TP;
 using TGC.MonoGame.TP.Src.Geometries;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
@@ -11,8 +12,8 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
     {
         protected BoundingCylinder BoundingCylinder;
         protected CylinderPrimitive CylinderPrimitive { get; }
-        public CylinderObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotationX, float rotationY, Color color){
-            CylinderPrimitive = new CylinderPrimitive(graphicsDevice);
+        public CylinderObject(Vector3 position, Vector3 size, float rotationX, float rotationY, Color color){
+            CylinderPrimitive = new CylinderPrimitive(TGCGame.GetGraphicsDevice());
             ScaleMatrix = Matrix.CreateScale(size);
             TranslateMatrix = Matrix.CreateTranslation(position);
             RotationMatrix = Matrix.CreateRotationY(rotationY);

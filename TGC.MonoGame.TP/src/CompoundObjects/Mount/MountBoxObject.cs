@@ -7,8 +7,8 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
     class MountBoxObject : BoxObject <MountBoxObject>
     {
 
-        public MountBoxObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, Color color) 
-        : base(graphicsDevice, position, size, color)
+        public MountBoxObject(Vector3 position, Vector3 size, Color color) 
+        : base(position, size, color)
         {
         }
     }

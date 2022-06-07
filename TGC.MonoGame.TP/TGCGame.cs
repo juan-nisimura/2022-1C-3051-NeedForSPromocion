@@ -25,8 +25,8 @@ namespace TGC.MonoGame.TP
         public const int PLAYERS_QUANTITY = 2;
 
         private GraphicsDeviceManager Graphics { get; }
-        
-        private SpriteBatch SpriteBatch { get; set; }
+        private static SpriteBatch SpriteBatch { get; set; }
+        private static GraphicsDevice StaticGraphicsDevice;
 
         /// <summary>
         ///     Constructor del juego.
@@ -55,17 +55,18 @@ namespace TGC.MonoGame.TP
         /// </summary>
         protected override void Initialize()
         {
+            StaticGraphicsDevice = GraphicsDevice;
             // La logica de inicializacion que no depende del contenido se recomienda poner en este metodo.
 
             ControllerKeyP = new KeyController(Keys.P);
             ControllerKeyEnter = new KeyController(Keys.Enter);
 
-            MainMenuScreen.GetInstance().Initialize(GraphicsDevice);
-            LevelScreen.GetInstance().Initialize(GraphicsDevice);
-            TimeOutScreen.GetInstance().Initialize(GraphicsDevice);
-            WinScreen.GetInstance().Initialize(GraphicsDevice);
-            LoseScreen.GetInstance().Initialize(GraphicsDevice);
-            PauseScreen.GetInstance().Initialize(GraphicsDevice);
+            MainMenuScreen.GetInstance().Initialize();
+            LevelScreen.GetInstance().Initialize();
+            TimeOutScreen.GetInstance().Initialize();
+            WinScreen.GetInstance().Initialize();
+            LoseScreen.GetInstance().Initialize();
+            PauseScreen.GetInstance().Initialize();
 
             base.Initialize();
         }
@@ -82,12 +83,12 @@ namespace TGC.MonoGame.TP
 
             base.LoadContent();
 
-            MainMenuScreen.GetInstance().Load(GraphicsDevice, Content);
-            LevelScreen.GetInstance().Load(GraphicsDevice, Content);
-            TimeOutScreen.GetInstance().Load(GraphicsDevice, Content);
-            WinScreen.GetInstance().Load(GraphicsDevice, Content);
-            LoseScreen.GetInstance().Load(GraphicsDevice, Content);
-            PauseScreen.GetInstance().Load(GraphicsDevice, Content);
+            MainMenuScreen.GetInstance().Load(Content);
+            LevelScreen.GetInstance().Load(Content);
+            TimeOutScreen.GetInstance().Load(Content);
+            WinScreen.GetInstance().Load(Content);
+            LoseScreen.GetInstance().Load(Content);
+            PauseScreen.GetInstance().Load(Content);
             
             ActiveScreen.Start();
         }
@@ -108,7 +109,7 @@ namespace TGC.MonoGame.TP
                 //Salgo del juego.
                 Exit();
 
-            ActiveScreen.Update(GraphicsDevice);
+            ActiveScreen.Update();
 
             base.Update(gameTime);
         }
@@ -121,7 +122,7 @@ namespace TGC.MonoGame.TP
         {
             // Aca deberiamos poner toda la logica de renderizado del juego.
 
-            ActiveScreen.Draw(SpriteBatch, GraphicsDevice);
+            ActiveScreen.Draw();
             base.Draw(gameTime);
         }
 
@@ -146,5 +147,12 @@ namespace TGC.MonoGame.TP
         public static float GetElapsedTime() {
             return ElapsedTime;
         }
+        public static GraphicsDevice GetGraphicsDevice() {
+            return StaticGraphicsDevice;
+        }
+        public static SpriteBatch GetSpriteBatch() {
+            return SpriteBatch;
+        }
+        
     }
 }

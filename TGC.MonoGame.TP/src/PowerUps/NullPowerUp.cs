@@ -9,7 +9,7 @@ namespace TGC.Monogame.TP.Src.PowerUps
             return false;
         }
 
-        public override void TriggerEffect(GraphicsDevice graphicsDevice, CarObject car) {
+        public override void TriggerEffect(CarObject car) {
 
         }
     }

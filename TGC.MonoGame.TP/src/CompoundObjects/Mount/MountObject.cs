@@ -10,13 +10,13 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
     {
         protected MountBoxObject Box { get; set; }
         protected MountRampObject[] Ramps { get; set; }
-        public MountObject(GraphicsDevice graphicsDevice, Vector3 position, Vector3 size, float rotation, Color color){
-            Box = new MountBoxObject(graphicsDevice, position, size, color);
+        public MountObject(Vector3 position, Vector3 size, float rotation, Color color){
+            Box = new MountBoxObject(position, size, color);
             Ramps = new MountRampObject[] {
-                new MountRampObject(graphicsDevice, position + new Vector3(size.X * 6 / 10, 0f, 0f), new Vector3(size.X/5,size.Y,size.Z), rotation, color),
-                new MountRampObject(graphicsDevice, position + new Vector3(-size.X * 6 / 10, 0f, 0f), new Vector3(size.X/5,size.Y,size.Z), rotation + MathF.PI, color),
-                new MountRampObject(graphicsDevice, position + new Vector3(0f, 0f, size.Z * 6 / 10), new Vector3(size.X/5,size.Y,size.Z), rotation - MathF.PI/2, color),
-                new MountRampObject(graphicsDevice, position + new Vector3(0f, 0f, -size.Z * 6 / 10), new Vector3(size.X/5,size.Y,size.Z), rotation + MathF.PI/2, color)
+                new MountRampObject(position + new Vector3(size.X * 6 / 10, 0f, 0f), new Vector3(size.X/5,size.Y,size.Z), rotation, color),
+                new MountRampObject(position + new Vector3(-size.X * 6 / 10, 0f, 0f), new Vector3(size.X/5,size.Y,size.Z), rotation + MathF.PI, color),
+                new MountRampObject(position + new Vector3(0f, 0f, size.Z * 6 / 10), new Vector3(size.X/5,size.Y,size.Z), rotation - MathF.PI/2, color),
+                new MountRampObject(position + new Vector3(0f, 0f, -size.Z * 6 / 10), new Vector3(size.X/5,size.Y,size.Z), rotation + MathF.PI/2, color)
             };
         }
 

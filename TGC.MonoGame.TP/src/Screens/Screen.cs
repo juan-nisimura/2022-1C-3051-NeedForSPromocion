@@ -20,10 +20,10 @@ namespace TGC.Monogame.TP.Src.Screens
         protected SpriteFont Font { get; set; }
         protected abstract String SongName();
         protected abstract String FontName();
-        public abstract void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice);
-        public abstract void Update(GraphicsDevice graphicsDevice);
-        public abstract void Initialize(GraphicsDevice graphicsDevice);
-        public abstract void Load(GraphicsDevice graphicsDevice, ContentManager content);
+        public abstract void Draw();
+        public abstract void Update();
+        public abstract void Initialize();
+        public abstract void Load(ContentManager content);
 
         public abstract void Start();
 

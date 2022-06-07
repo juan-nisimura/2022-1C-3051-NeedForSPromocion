@@ -9,8 +9,8 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Missile
     {
         private const float MISSILE_DISTANCE_FROM_FLOOR = 10f;
 
-        public MissileBodyObject(GraphicsDevice graphicsDevice)
-            : base(graphicsDevice, new Vector3(0f, MissileObject.MISSILE_MODEL_SIZE/2, 0f), new Vector3(MissileObject.MISSILE_MODEL_SIZE/2, MissileObject.MISSILE_MODEL_SIZE, MissileObject.MISSILE_MODEL_SIZE/2), MathHelper.PiOver2, 0f, Color.Gray)
+        public MissileBodyObject()
+            : base(new Vector3(0f, MissileObject.MISSILE_MODEL_SIZE/2, 0f), new Vector3(MissileObject.MISSILE_MODEL_SIZE/2, MissileObject.MISSILE_MODEL_SIZE, MissileObject.MISSILE_MODEL_SIZE/2), MathHelper.PiOver2, 0f, Color.Gray)
         {
         }
 

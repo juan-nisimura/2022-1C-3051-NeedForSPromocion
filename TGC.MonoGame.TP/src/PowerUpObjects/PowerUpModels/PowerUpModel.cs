@@ -7,7 +7,8 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels
 {
     public abstract class PowerUpModel
     {
-        protected const float ROTATION_SPEED = 5f;
+        protected const float ROTATION_SPEED = 1f;
+        public Vector3 Position;
         protected Matrix RotationMatrix;
 
         public abstract void Initialize();

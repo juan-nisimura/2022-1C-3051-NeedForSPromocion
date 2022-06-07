@@ -1,8 +1,6 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using TGC.MonoGame.TP;
-using System;
 using TGC.Monogame.TP.Src.ModelObjects;
 using Microsoft.Xna.Framework.Audio;
 
@@ -22,6 +20,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet
         private static SoundEffect[] GroundBulletSounds;
         private static SoundEffect[] MetalBulletSounds;
         private static SoundEffect[] BulletShootSounds;
+
         public BulletObject(int bullet_number){
             BulletBody = new BulletBodyObject();
             BulletHead = new BulletHeadObject();
@@ -62,6 +61,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet
                 content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "bullet/bullet_shoot_4"),
             };
         }
+
         public override void Update(){
             if(IsActive){
                 Position = Position - BULLET_SPEED * Forward * TGCGame.GetElapsedTime();

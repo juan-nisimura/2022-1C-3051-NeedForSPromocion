@@ -38,5 +38,9 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles
             ShootSound.CreateInstance().Play();
             ImpactSphere = new BoundingSphere(Position, ImpactSphereRadius);
         }
+
+        public void SetTranslateMatrix(Matrix translateMatrix){
+            this.TranslateMatrix = translateMatrix;
+        }
     }
 }

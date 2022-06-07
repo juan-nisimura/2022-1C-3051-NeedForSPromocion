@@ -54,30 +54,15 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	float2 coordinates = input.TextureCoordinate;
 
-    /*
-	float esLaSegundaMitad = floor(coordinates.x + 0.5);	// no = 0, si = 1
-
-	// Espejo las coordenadas en x si es la segunda mitad
-	coordinates = float2(coordinates.x * (1 - esLaSegundaMitad) + (1 - coordinates.x) * esLaSegundaMitad, coordinates.y);
-
-	coordinates = coordinates * 8;
-
-	float2 cell = floor(coordinates);
-	coordinates = frac(coordinates);
-
-	float cuadradoPar = (cell.x + cell.y) % 2;	// par = 0, impar = 1
-
-	float verde = (floor(coordinates.x + coordinates.y) + cuadradoPar) % 2;
-
-    return float4(0.1, verde * 0.9, 0.1, 1);
-    */
 	float2 distanciaAlCentro = 2 * abs(coordinates - 0.5);
 
 	float radio = pow(distanciaAlCentro.x, 2)  + pow(distanciaAlCentro.y, 2);
 
-	float alpha = floor(radio);
+	float color = floor(radio + 0.2) * 0.3 * (1 - floor(radio));
 
-    return float4(1 - radio, 1 - radio, 1 - radio, 0);
+	float alpha = 1 - floor(radio);
+
+    return float4(color, color, color, alpha);
 }
 
 technique BasicColorDrawing

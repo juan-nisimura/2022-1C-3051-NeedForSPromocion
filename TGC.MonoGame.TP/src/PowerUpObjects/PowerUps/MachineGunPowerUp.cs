@@ -24,6 +24,7 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUps
                 }
                 LastShotTime += TGCGame.GetElapsedTime();
                 TimeLeft -= TGCGame.GetElapsedTime();
+                UpdateHUD();
             }
         }
     }

@@ -198,8 +198,6 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
             for(int i = 0; i < BULLETS_POOL_SIZE; i++)  BulletsPool[i].Update();
             for(int i = 0; i < MISSILES_POOL_SIZE; i++) MissilesPool[i].Update();
-
-            Console.WriteLine("{0}", Position.Y);
         }
 
         public new void Draw(Matrix view, Matrix projection)

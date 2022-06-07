@@ -374,7 +374,6 @@ namespace TGC.Monogame.TP.Src.Screens
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
             Car.Draw(View, Projection);
             IACar.Draw(View, Projection);
-
             Floor.Draw(View, Projection);
             Bridge.Draw(View, Projection);
             Buildings.Draw(View, Projection);
@@ -385,6 +384,8 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection);
             Clock.Draw(View, Projection);
             SpeedoMeter.Draw(View, Projection);
+
+            Car.DrawHUD(View, Projection);
 
 
             #endregion
@@ -414,6 +415,7 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection);
             for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection);
                 //}
+
 
             #endregion
             #region Pass 2

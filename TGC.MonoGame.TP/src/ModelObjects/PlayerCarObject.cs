@@ -117,6 +117,10 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public new void Draw(Matrix view, Matrix projection)
         {
             base.Draw(view, projection);
+        }
+
+        public void DrawHUD(Matrix view, Matrix projection)
+        {
             PowerUpHUDCircle.Draw(view, projection);
         }
     }

@@ -16,6 +16,7 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUps
             if(CanBeTriggered()){
                 car.SetSpeedBoostTime();
                 HasBeenTriggered = true;
+                UpdateHUD();
             }
         }
     }

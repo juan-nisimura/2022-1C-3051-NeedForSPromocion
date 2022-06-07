@@ -8,8 +8,6 @@ namespace TGC.Monogame.TP.Src
 {
     public class SpeedoMeter
     {
-        private float END_GAME_TOTAL_TIME = 10f;
-        private float totalTime = 0;
         private SpriteFont Font;
         private Texture2D Texture;
         private Texture2D Needle;
@@ -19,19 +17,10 @@ namespace TGC.Monogame.TP.Src
         {
             Texture = content.Load<Texture2D>("Textures/" + "speedo_tex");
             Needle = content.Load<Texture2D>("Textures/" + "speedoneedle");
-
             Font = content.Load<SpriteFont>("SpriteFonts/" + "DS-Digital/DS-Digital");
         }
         public void Update(float carSpeed) {
             Speed = carSpeed/750*28;
-        }
-
-        public bool NoTimeLeft() {
-            return totalTime >= END_GAME_TOTAL_TIME;
-        }
-
-        public void Reset() {
-            totalTime = 0;
         }
         public void Draw(Matrix view, Matrix projection)
         {

@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using TGC.Monogame.TP.Src.HUD;
 using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUps;
@@ -18,8 +19,7 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects
         const float RespawnCooldown = 10;
         private static Random RandomPowerUp = new Random();
         private PowerUp PowerUp;
-        // private PowerUpModel PowerUpModel;
-        // private Matrix TranslateMatrix;
+        private PowerUpModel PowerUpModel;
 
         public PowerUpObject(Vector3 position) : base(position, new Vector3(10f,10f,10f), Color.Yellow)
         {
@@ -31,6 +31,8 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects
         public new void Initialize(){
             base.Initialize();
             Rotation = 0;
+            PowerUpModel = new MissilePowerUpModel(Vector3.Zero);
+            PowerUpModel.Initialize();
         }
 
         public void Reset() {
@@ -56,12 +58,15 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects
                     switch(RandomPowerUp.Next(3)){
                         case 1:
                             car.SetPowerUp(new MachineGunPowerUp());
+                            PowerUpHUDCircleObject.SetPowerUpModel(new NullPowerUpModel());
                             break;
                         case 2:
                             car.SetPowerUp(new MissileLauncherPowerUp());
+                            PowerUpHUDCircleObject.SetPowerUpModel(PowerUpModel);
                             break;
                         default:
                             car.SetPowerUp(new SpeedBoostPowerUp());
+                            PowerUpHUDCircleObject.SetPowerUpModel(new NullPowerUpModel());
                             break;
                     }
                 }

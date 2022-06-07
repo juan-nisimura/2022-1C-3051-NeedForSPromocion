@@ -18,6 +18,7 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUps
                 var MissileRotation = car.Rotation;
                 car.ShootMissile();
                 HasBeenTriggered = true;
+                UpdateHUD();
             } 
         }
     }

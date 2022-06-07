@@ -7,8 +7,8 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile
 {
     public class MissileBodyObject : CylinderObject <MissileBodyObject>
     {
-        public MissileBodyObject()
-            : base(new Vector3(0f, 0f, 0f), new Vector3(MissileObject.MISSILE_MODEL_SIZE/2, MissileObject.MISSILE_MODEL_SIZE, MissileObject.MISSILE_MODEL_SIZE/2), MathHelper.PiOver2, 0f, Color.Gray)
+        public MissileBodyObject(float modelSize)
+            : base(new Vector3(0f, 0f, 0f), new Vector3(modelSize/2, modelSize, modelSize/2), MathHelper.PiOver2, 0f, Color.Gray)
         {
         }
 

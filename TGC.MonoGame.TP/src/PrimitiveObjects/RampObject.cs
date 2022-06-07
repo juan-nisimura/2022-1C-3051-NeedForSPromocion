@@ -88,7 +88,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
                 
                 // La penetración es la diferencia entre la distancia al centro del auto y la longitud del vector normal
                 // Utilizo 0.1 como mínimo para evitar loops infinitos
-                var penetration = MathF.Max(distanciaAlCentroDelAuto - normalVectorLength, 0.1f);
+                var penetration = MathF.Max(distanciaAlCentroDelAuto - normalVectorLength, 0.2f);
 
                 // Empuja el centro del auto fuera del Box
                 car.ObjectBox.Center += (normalVectorNormalized * penetration);
@@ -116,7 +116,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
         {
             if(car.ObjectBox.Intersects(BoundingBox)){
                 var posibleNewGroundLevel = HeightMap.GetHeight(car.Position.X, car.Position.Z);
-                //if(posibleNewGroundLevel - car.GroundLevel < 2.5f)
+                if(posibleNewGroundLevel - car.GroundLevel < 2.5f)
                     car.GroundLevel = posibleNewGroundLevel;
                 //else
                     //car.GroundLevel = 0;

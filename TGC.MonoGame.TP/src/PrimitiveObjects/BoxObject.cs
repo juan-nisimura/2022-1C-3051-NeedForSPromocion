@@ -83,12 +83,12 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
         {
             if(car.ObjectBox.Intersects(BoundingBox)){
                 var posibleNewGroundLevel = HeightMap.GetHeight(car.Position.X, car.Position.Z);
-                if(posibleNewGroundLevel - car.GroundLevel < 1f){
+                if(posibleNewGroundLevel - car.GroundLevel < 10f){
                     car.GroundLevel = posibleNewGroundLevel;
                 }
                     
-                else
-                    car.GroundLevel = 0;
+                //else
+                    //car.GroundLevel = 0;
             }
             
             return false;

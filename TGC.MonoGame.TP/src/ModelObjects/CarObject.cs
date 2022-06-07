@@ -73,6 +73,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public static float MAX_HEALTH = 100;
         public float Health = MAX_HEALTH;
 
+        protected static SoundEffect SpeedBoostSound;
+
         public CarObject(Vector3 position, Color color){
             InitialPosition = position;
             Position = position;
@@ -147,6 +149,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
             ANGULO_AL_VERTICE = MathF.Atan(temporalCarObject.Size.X / temporalCarObject.Size.Z);
             HIPOTENUSA_AL_VERTICE = MathF.Sqrt(MathF.Pow(temporalCarObject.Size.X / 2, 2) + MathF.Pow(temporalCarObject.Size.Z / 2, 2));
+        
+            SpeedBoostSound = content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "boost engine");
         }
 
         public bool IsDead() {
@@ -232,6 +236,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         }
 
         public void SetSpeedBoostTime(){
+            if(SpeedBoostTime <= 0f)
+                SpeedBoostSound.CreateInstance().Play();
             SpeedBoostTime = 2f;
         }
 

@@ -286,6 +286,12 @@
 /processorParam:Quality=Best
 /build:Music/Riders On The Storm Fredwreck Remix.mp3
 
+#begin Sounds/boost engine.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/boost engine.wav
+
 #begin Sounds/bullet/bullet_hit_ground_1.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

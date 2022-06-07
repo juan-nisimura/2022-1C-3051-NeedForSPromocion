@@ -480,18 +480,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/brown_mud_leaves_01_diff_4k.jpg
 
-#begin Textures/ezgif-1-edba6bc46a.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/ezgif-1-edba6bc46a.png
-
 #begin Textures/Floor.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -555,7 +543,11 @@
 #begin Textures/speedoneedle.png
 /importer:TextureImporter
 /processor:TextureProcessor
+<<<<<<< HEAD
 /processorParam:ColorKeyColor=255,0,255,255
+=======
+/processorParam:ColorKeyColor=255,255,255,255
+>>>>>>> d179169a5ab5f351ea5bf3f059794a33b5b225fc
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True

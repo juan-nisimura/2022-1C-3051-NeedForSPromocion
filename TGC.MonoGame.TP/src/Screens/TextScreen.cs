@@ -10,8 +10,33 @@ namespace TGC.Monogame.TP.Src.Screens
     {
         public override void Draw()
         {
+            #region Pass 1
+
+            // Set the main render target as our render target
+            TGCGame.GetGraphicsDevice().SetRenderTarget(LevelScreen.GetLevelScreenInstance().MainRenderTarget);
+            TGCGame.GetGraphicsDevice().Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1f, 0);
             LevelScreen.GetInstance().Draw();
+
+            #endregion
+            #region Pass 2
+
+            // Set the depth configuration as none, as we don't use depth in this pass
+            TGCGame.GetGraphicsDevice().DepthStencilState = DepthStencilState.None;
+
+            // Set the render target as null, we are drawing into the screen now!
+            TGCGame.GetGraphicsDevice().SetRenderTarget(null);
+            TGCGame.GetGraphicsDevice().Clear(Color.Black);
+
+            // Set the technique to our blur technique
+            // Then draw a texture into a full-screen quad
+            // using our rendertarget as texture
+
+            LevelScreen.GetLevelScreenInstance().blurEffect.CurrentTechnique = LevelScreen.GetLevelScreenInstance().blurEffect.Techniques["Blur"];
+            LevelScreen.GetLevelScreenInstance().blurEffect.Parameters["baseTexture"].SetValue(LevelScreen.GetLevelScreenInstance().MainRenderTarget);
+            LevelScreen.GetLevelScreenInstance().FullScreenQuad.Draw(LevelScreen.GetLevelScreenInstance().blurEffect);
+            
             DrawText();
+            #endregion
         }
         
         public override void Load(ContentManager content) 

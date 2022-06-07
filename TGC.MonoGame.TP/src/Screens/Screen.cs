@@ -10,7 +10,7 @@ namespace TGC.Monogame.TP.Src.Screens
 {
     public abstract class Screen
     {
-        protected FullScreenQuad FullScreenQuad;
+        public FullScreenQuad FullScreenQuad;
         protected RenderTarget2D MenuRenderTarget;
         protected RenderTarget2D SceneRenderTarget;
         

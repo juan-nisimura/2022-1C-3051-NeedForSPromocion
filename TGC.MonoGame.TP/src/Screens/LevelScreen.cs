@@ -58,8 +58,8 @@ namespace TGC.Monogame.TP.Src.Screens
         //blur
         private FullScreenQuad FullScreenQuadBlur;
         private RenderTarget2D HorizontalRenderTarget;
-        private RenderTarget2D MainRenderTarget;
-        private Effect blurEffect { get; set; }
+        public RenderTarget2D MainRenderTarget;
+        public Effect blurEffect { get; set; }
         public override void Initialize() {
 
             // Configuramos nuestras matrices de la escena.

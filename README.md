@@ -47,6 +47,8 @@ dotnet run --project TGC.MonoGame.TP
    * <kbd>S</kbd>: Acelerar en reversa.
    * <kbd>A</kbd>, <kbd>D</kbd>: Doblar.
    * <kbd>Espacio</kbd>: Saltar.
+   * <kbd>F</kbd>: Activar Power Up.
+   * <kbd>P</kbd>: Pausar / Despausar.
 
 ## Integrantes
 Happel, Javier  |  Nisimura, Juan  

@@ -316,6 +316,7 @@ namespace TGC.Monogame.TP.Src.Screens
             View = Camera.FollowCamera(Car.GetPosition()).GetView();
 
             SolveCollisions(Car);
+            // SolveCollisions(IACar);
         }
 
         protected void SolveCollisions(CarObject car) {
@@ -329,8 +330,6 @@ namespace TGC.Monogame.TP.Src.Screens
                 for (int i = 0; i < MapWalls.Length; i++)       collided = collided || MapWalls[i].SolveVerticalCollision(car);
                 Buildings.SolveVerticalCollision(car);
                 Bridge.SolveVerticalCollision(car);
-
-                //car.Enemies.SolveHorizontalCollision(car);
                 Buildings.SolveHorizontalCollision(car);
                 Bridge.SolveHorizontalCollision(car);
                 for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveHorizontalCollision(car);
@@ -338,6 +337,7 @@ namespace TGC.Monogame.TP.Src.Screens
                 for (int i = 0; i < Trees.Length; i++)          collided = collided || Trees[i].SolveHorizontalCollision(car);
             }
             if(car.HasCrashed)  car.Crash();
+            for (int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)  collided = collided || car.Enemies[i].SolveHorizontalCollision(car);
             SolveBulletsCollisions(Car);
             SolveMissilesCollisions(Car);
         }

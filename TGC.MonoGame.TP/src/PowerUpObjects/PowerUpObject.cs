@@ -19,7 +19,6 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects
         private float RespawnActualTime;
         const float RespawnCooldown = 10;
         private static Random RandomPowerUp = new Random();
-        private PowerUp PowerUp;
 
         public PowerUpObject(Vector3 position) : base(position, new Vector3(10f,10f,10f), Color.Yellow)
         {

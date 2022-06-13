@@ -65,7 +65,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public float GroundLevel = 0;
         public bool OnTheGround = true;
         public Vector3 Size;
-
+        protected Vector3 ForceSpeedDirection = Vector3.Zero;
+        protected float ForceSpeedModule = 0f;
         public HealthBarObject HealthBar;
         public CarSoundEffects CarSoundEffects;
 
@@ -129,6 +130,13 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             TurningAcceleration = 0;
             WheelAngle = 0;
             SpeedBoostTime = 0;
+            ForceSpeedDirection = Vector3.Zero;
+            ForceSpeedModule = 0;
+            PowerUp = new NullPowerUp();
+            for(int i = 0; i < BULLETS_POOL_SIZE; i++)
+                BulletsPool[i].IsActive = false;
+            for(int i = 0; i < MISSILES_POOL_SIZE; i++)
+                MissilesPool[i].IsActive = false;
         }
 
         public void Stop(){
@@ -166,9 +174,12 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
             RotationMatrix = Matrix.CreateRotationY(Rotation);
 
+            ForceSpeedModule = MathF.Max(ForceSpeedModule - 100f * TGCGame.GetElapsedTime(), 0f);
+            var forceSpeed = ForceSpeedModule * ForceSpeedDirection;
+
             // Calculo la nueva posicion
-            var x = Position.X - Speed * World.Forward.X * TGCGame.GetElapsedTime();
-            var z = Position.Z - Speed * World.Forward.Z * TGCGame.GetElapsedTime();
+            var x = Position.X + (- Speed * World.Forward.X + forceSpeed.X) * TGCGame.GetElapsedTime();
+            var z = Position.Z + (- Speed * World.Forward.Z + forceSpeed.Z) * TGCGame.GetElapsedTime();
             var y = Math.Max(Position.Y - Speed * World.Forward.Y * TGCGame.GetElapsedTime() + VerticalSpeed * TGCGame.GetElapsedTime(), GroundLevel);
 
             Position = new Vector3(x, y, z);
@@ -232,7 +243,161 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public void Crash()
         {
             Acceleration = 0;
+            var crashDamage = MathF.Floor(MathF.Abs(Speed / 2000));
+            TakeDamage(crashDamage);
+            if(crashDamage > 0)
+                CarSoundEffects.PlayCrashSound();
             Speed = -Speed/5;
+        }
+
+        public void ApplyForce(Vector3 force, float forceModule) { 
+            this.ForceSpeedDirection = force;
+            this.ForceSpeedModule = forceModule;
+            //Console.WriteLine("{0}",ForceSpeedDirection);
+        }
+
+        public bool SolveHorizontalCollision(CarObject enemyCar){            
+            // Chequeo si colisionó con el auto
+            if(this.ObjectBox.Intersects(enemyCar.ObjectBox)){
+
+                // SOLUCION RARA
+                var thisNormalizedForward = Vector3.Normalize(new Vector3(this.World.Forward.X, 0, this.World.Forward.Z));
+                var thisNormalizedSideward = new Vector3(thisNormalizedForward.Z, 0, -thisNormalizedForward.X);
+                var enemyNormalizedForward = Vector3.Normalize(new Vector3(enemyCar.World.Forward.X, 0, enemyCar.World.Forward.Z));
+                var forwardOBBExtents = new Vector3(Size.X, 10f, 0.1f);
+                var sidewardOBBExtents = new Vector3(0.1f, 10f, Size.Z);
+
+                var totalForce = Vector3.Zero;
+
+                if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position - thisNormalizedForward * Size.Z, forwardOBBExtents))){
+                    //enemyCar.ApplyForce(-thisNormalizedForward, 85f);
+                    totalForce += -thisNormalizedForward;
+                    Console.WriteLine("DELANTE");
+                }
+                if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position + thisNormalizedForward * Size.Z, forwardOBBExtents))){
+                    //enemyCar.ApplyForce(thisNormalizedForward, 85f);
+                    totalForce += thisNormalizedForward;
+                    Console.WriteLine("ATRAS");
+                }
+                if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position - thisNormalizedSideward * Size.X, sidewardOBBExtents))){
+                    //enemyCar.ApplyForce(-thisNormalizedSideward, 65f);
+                    totalForce += -thisNormalizedSideward;
+                    Console.WriteLine("IZQUIERDA");
+                }
+                if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position + thisNormalizedSideward * Size.X, sidewardOBBExtents))){
+                    //enemyCar.ApplyForce(thisNormalizedSideward, 65f);
+                    totalForce += thisNormalizedSideward;
+                    Console.WriteLine("DERECHA");
+                } 
+
+                enemyCar.ApplyForce(Vector3.Normalize(totalForce), 60f);
+                this.ApplyForce(-Vector3.Normalize(totalForce), 60f);
+
+                var distance = this.Position - enemyCar.Position;
+                var damageVector = Vector3.Dot(this.Speed * thisNormalizedForward, distance) / MathF.Pow(distance.Length(), 2) * distance ;
+                damageVector += Vector3.Dot(enemyCar.Speed * enemyNormalizedForward, distance) / MathF.Pow(distance.Length(), 2) * distance ;
+                var damage = MathF.Floor(MathF.Abs(damageVector.Length() / 3000f));
+
+                enemyCar.TakeDamage(damage);
+                this.TakeDamage(damage);
+                
+                enemyCar.Speed = enemyCar.Speed / 1.5f;
+                this.Speed = this.Speed / 1.5f;
+
+                return false;
+                /*
+                var thisNormalizedForward = Vector3.Normalize(new Vector3(this.RotationMatrix.Forward.X, 0, this.RotationMatrix.Forward.Z));
+                var thisNormalizedSideward = new Vector3(thisNormalizedForward.Z, 0, -thisNormalizedForward.X);
+                Console.WriteLine(thisNormalizedForward);
+                enemyCar.ApplyForce(-thisNormalizedForward, 85f);
+                this.ApplyForce(thisNormalizedForward, 85f);
+                enemyCar.Speed = enemyCar.Speed / 1.5f;
+                this.Speed = this.Speed / 1.5f;
+                enemyCar.TakeDamage(MathF.Floor(MathF.Abs(this.Speed / 1500f)));
+                this.TakeDamage(MathF.Floor(MathF.Abs(enemyCar.Speed / 1500f)));
+*/
+
+                // Si dos autos chocan, están las siguientes alternativas:
+                // 1. El primero choca de frente o marcha atrás al segundo
+                // 2. El segundo choca de frente o marcha atrás al primero
+                // 3. Ambos chocan de costado
+                // 4. Ambos chocan de frente
+
+                // var enemyNormalizedForward = Vector3.Normalize(new Vector3(enemyCar.World.Forward.X, 0, enemyCar.World.Forward.Z));
+
+                // CASO 1: Choco al otro auto por detrás
+                //enemyCar.ObjectBox.Intersects(new Ray(this.Position, thisNormalizedForward), out var optionalForwardDistancia);
+                /* enemyCar.ObjectBox.Intersects(new Ray(this.Position, - thisNormalizedForward), out var optionalBackwardDistancia);
+                this.ObjectBox.Intersects(new Ray(enemyCar.Position, thisNormalizedForward), out var optionalEnemyForwardDistancia);
+                this.ObjectBox.Intersects(new Ray(enemyCar.Position, - thisNormalizedForward), out var optionalEnemyBackwardDistancia);                
+                */
+
+
+
+
+                /*
+                if(optionalForwardDistancia.HasValue && optionalEnemyBackwardDistancia.HasValue){
+                    var longitudCatetoAdyacente = optionalForwardDistancia.GetValueOrDefault(0);
+                    
+                    // Calculo el punto de impacto en el auto enemigo:
+                    var catetoAdyacente = thisNormalizedForward * longitudCatetoAdyacente;
+                    var angulo = MathF.Acos(Convert.ToSingle(Vector3.Dot(thisNormalizedForward, enemyNormalizedForward)));
+                    var hipotenusa = enemyNormalizedForward * longitudCatetoAdyacente / MathF.Cos(angulo);
+                    var puntoDeImpacto = this.Position + thisNormalizedForward * Size.X + catetoAdyacente - hipotenusa;
+                    
+                    // Calculo la penetracion
+                    var penetracion = HIPOTENUSA_AL_VERTICE - Vector3.Distance(puntoDeImpacto, this.Position); 
+
+                    // Empuja el centro del auto fuera del Box
+                    enemyCar.ObjectBox.Center += (- thisNormalizedForward * penetracion);
+                    enemyCar.Position = enemyCar.ObjectBox.Center;
+                    enemyCar.HasCrashed = true;
+
+                    return true;
+                }*/
+
+                /*
+                enemyCar.ObjectBox.Intersects(new Ray(this.Position, -thisNormalizedForward), out optionalDistancia);
+                if(optionalDistancia.HasValue){
+                    var longitudCatetoAdyacente = optionalDistancia.GetValueOrDefault(0);
+                    
+                    // Calculo el punto de impacto:
+                    var catetoAdyacente = - thisNormalizedForward * longitudCatetoAdyacente;
+                    var angulo = MathF.Acos(Convert.ToSingle(Vector3.Dot(- thisNormalizedForward, enemyNormalizedForward)));
+                    var hipotenusa = enemyNormalizedForward * longitudCatetoAdyacente / MathF.Cos(angulo);
+                    var puntoDeImpacto = this.Position - thisNormalizedForward * Size.X + catetoAdyacente - hipotenusa;
+
+                    // Calculo la penetracion
+                    var penetracion = HIPOTENUSA_AL_VERTICE - Vector3.Distance(puntoDeImpacto, this.Position); 
+
+                    // Empuja el centro del auto fuera del Box
+                    enemyCar.ObjectBox.Center += (thisNormalizedForward * penetracion);
+                    enemyCar.Position = enemyCar.ObjectBox.Center;
+                    enemyCar.HasCrashed = true;
+
+                    return true;
+                }
+
+                // CASO 2
+                this.ObjectBox.Intersects(new Ray(enemyCar.Position, enemyNormalizedForward), out optionalDistancia);
+                if(optionalDistancia.HasValue){
+                    // Dejo el calculo al otro auto:
+                    return false;
+                }
+
+                this.ObjectBox.Intersects(new Ray(enemyCar.Position, -enemyNormalizedForward), out optionalDistancia);
+                if(optionalDistancia.HasValue){
+                    // Dejo el calculo al otro auto:
+                    return false;
+                }
+
+                // CASO 3
+
+                return true;
+                */
+            } 
+                
+            return false;
         }
 
         public void SetSpeedBoostTime(){

@@ -61,6 +61,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
                 var normalVectorNormalized = Vector3.Normalize(normalVector);
 
                 var forward = car.ObjectBox.Orientation.Forward;
+                //forward = new Vector3(forward.Z, 0f, - forward.X);
                 forward = new Vector3(forward.X, 0f, forward.Z);
                 
                 var angulo = MathF.Acos(Convert.ToSingle(Vector3.Dot(Vector3.Normalize(forward), normalVectorNormalized)));
@@ -77,6 +78,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
                 car.ObjectBox.Center += (normalVectorNormalized * penetration);
                 car.Position = car.ObjectBox.Center;
                 car.HasCrashed = true;
+                Console.Write(car.Position);
 
                 return true;
             } 

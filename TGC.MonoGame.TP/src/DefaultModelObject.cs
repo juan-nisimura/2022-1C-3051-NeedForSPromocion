@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using TGC.Monogame.TP.Src.MyContentManagers;
 
 namespace TGC.Monogame.TP.Src   
 {
@@ -12,16 +13,16 @@ namespace TGC.Monogame.TP.Src
 
         protected static Dictionary<Type, Model> Models = new Dictionary<Type, Model>();
 
-        public static void DefaultLoad(ContentManager content, string modelDirectory, string shaderDirectory){
+        public static void DefaultLoad(string modelDirectory, string shaderDirectory){
 
             // Cargo el modelo
-            Models.Add(typeof(T), content.Load<Model>(ContentFolder3D + modelDirectory));
+            Models.Add(typeof(T), MyContentManager.Models.Load(modelDirectory));
 
             // Cargo la textura
             Textures.Add(typeof(T), ((BasicEffect) getModel().Meshes.FirstOrDefault()?.MeshParts.FirstOrDefault()?.Effect)?.Texture);
 
             // Cargo efecto
-            Effects.Add(typeof(T), content.Load<Effect>(ContentFolderEffects + shaderDirectory));
+            Effects.Add(typeof(T), MyContentManager.Effects.Load(shaderDirectory));
 
             // Asigno el efecto que cargue a cada parte del mesh.
             foreach (var mesh in getModel().Meshes)

@@ -7,12 +7,6 @@ namespace TGC.Monogame.TP.Src
 {
     public abstract class DefaultObject <T>
     {
-        public const string ContentFolder3D = "Models/";
-        public const string ContentFolderEffects = "Effects/";
-        public const string ContentFolderMusic = "Music/";
-        public const string ContentFolderSounds = "Sounds/";
-        public const string ContentFolderSpriteFonts = "SpriteFonts/";
-        public const string ContentFolderTextures = "Textures/";
         public const float GRAVITY = 400f;
         protected static Dictionary<Type, Effect> Effects = new Dictionary<Type, Effect>(); 
         protected static Dictionary<Type, Texture> Textures = new Dictionary<Type, Texture>();

@@ -60,11 +60,11 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
             // for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].Update(car);
         }
         
-        public static void Load(ContentManager content){
-            BridgeColumnObject.Load(content, "TreeTrunkShader", "bark brown/textures/bark_brown_01_diff_4k");
-            BridgeRampObject.Load(content, "RampTextureShader", "weathered_brown_planks_diff_4k");
-            BridgeBlockObject.Load(content, "BoxTextureShader", "rock_01_diff_4k");
-            BridgeFloorObject.Load(content, "BridgeFloorTextureShader", "weathered_brown_planks_diff_4k");
+        public static void Load(){
+            BridgeColumnObject.Load("TreeTrunkShader", "bark brown/textures/bark_brown_01_diff_4k");
+            BridgeRampObject.Load("RampTextureShader", "weathered_brown_planks_diff_4k");
+            BridgeBlockObject.Load("BoxTextureShader", "rock_01_diff_4k");
+            BridgeFloorObject.Load("BridgeFloorTextureShader", "weathered_brown_planks_diff_4k");
         }
 
         public override void Draw(Matrix view, Matrix projection){

@@ -4,6 +4,7 @@ using TGC.MonoGame.TP;
 using TGC.Monogame.TP.Src.ModelObjects;
 using System;
 using Microsoft.Xna.Framework.Audio;
+using TGC.Monogame.TP.Src.MyContentManagers;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile
 {
@@ -52,12 +53,12 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile
             for (int i = 0; i < TRIANGLES_QUANTITY; i++)   MissileTriangles[i].Initialize();
         }
         
-        public static void Load(ContentManager content){
-            MissileBodyObject.Load(content, "BasicShader");
-            MissileHeadObject.Load(content, "BasicShader");
-            MissileTriangleObject.Load(content, "BasicShader");
-            ExplosionSound = content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "explosion_bomb");
-            LaunchSound = content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "missile launch");
+        public static void Load(){
+            MissileBodyObject.Load("BasicShader");
+            MissileHeadObject.Load("BasicShader");
+            MissileTriangleObject.Load("BasicShader");
+            ExplosionSound = MyContentManager.SoundEffects.Load("explosion_bomb");
+            LaunchSound = MyContentManager.SoundEffects.Load("missile launch");
         }
         
         public override void Update(){

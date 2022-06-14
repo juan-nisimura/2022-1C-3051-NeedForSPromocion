@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Audio;
 using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.MonoGame.TP;
 using System;
+using TGC.Monogame.TP.Src.MyContentManagers;
 
 namespace TGC.Monogame.TP.Src.ModelObjects 
 {
@@ -46,12 +47,12 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             
         }
 
-        public static void Load(ContentManager content) {
-            FastEngineSound = content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "fast engine");
-            SlowEngineSound = content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "slow engine");
-            StartEngineSound = content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "start engine 2");
-            StopEngineSound = content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "stop engine");
-            CrashSound = content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "car collision");
+        public static void Load() {
+            FastEngineSound = MyContentManager.SoundEffects.Load("fast engine");
+            SlowEngineSound = MyContentManager.SoundEffects.Load("slow engine");
+            StartEngineSound = MyContentManager.SoundEffects.Load("start engine 2");
+            StopEngineSound = MyContentManager.SoundEffects.Load("stop engine");
+            CrashSound = MyContentManager.SoundEffects.Load("car collision");
         }
 
         public void PlayCrashSound(){

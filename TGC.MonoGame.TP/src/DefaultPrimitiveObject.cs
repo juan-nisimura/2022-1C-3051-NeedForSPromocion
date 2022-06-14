@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using TGC.Monogame.TP.Src.MyContentManagers;
 
 namespace TGC.Monogame.TP.Src   
 {
@@ -10,17 +11,17 @@ namespace TGC.Monogame.TP.Src
             base.Initialize();
             World *= ScaleMatrix * RotationMatrix * TranslateMatrix;
         }
-        public static void Load(ContentManager content, string shaderDirectory){
+        public static void Load(string shaderDirectory){
             // Cargo efecto
-            Effects.Add(typeof(T), content.Load<Effect>(ContentFolderEffects + shaderDirectory));
+            Effects.Add(typeof(T), MyContentManager.Effects.Load(shaderDirectory));
         }
 
-        public static void Load(ContentManager content, string shaderDirectory, string textureDirectory){
+        public static void Load(string shaderDirectory, string textureDirectory){
             // Cargo efecto
-            Load(content, shaderDirectory);
+            Load(shaderDirectory);
             
             // Cargo la textura
-            Textures.Add(typeof(T), content.Load<Texture>(ContentFolderTextures + textureDirectory));
+            Textures.Add(typeof(T), MyContentManager.Textures.Load(textureDirectory));
         }
 
         public override void Update(){   

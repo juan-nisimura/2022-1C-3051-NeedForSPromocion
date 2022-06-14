@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using TGC.MonoGame.TP;
+using TGC.Monogame.TP.Src.MyContentManagers;
 
 namespace TGC.Monogame.TP.Src.Screens 
 {
@@ -39,11 +40,11 @@ namespace TGC.Monogame.TP.Src.Screens
             #endregion
         }
         
-        public override void Load(ContentManager content) 
+        public override void Load() 
         {
-            Song = content.Load<Song>(ContentFolderMusic + SongName());
+            Song = MyContentManager.Songs.Load(SongName());
             MediaPlayer.IsRepeating = true;
-            Font = content.Load<SpriteFont>(ContentFolderSpriteFonts + FontName());
+            Font = MyContentManager.SpriteFonts.Load(FontName());
         }
 
         public override void Update(){

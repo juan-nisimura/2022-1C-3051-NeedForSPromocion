@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using TGC.MonoGame.TP;
 using TGC.Monogame.TP.Src.ModelObjects;
 using Microsoft.Xna.Framework.Audio;
+using TGC.Monogame.TP.Src.MyContentManagers;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet
 {
@@ -39,26 +40,26 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet
             BulletHead.Initialize();
         }
         
-        public static void Load(ContentManager content){
-            BulletBodyObject.Load(content, "BasicShader");
-            BulletHeadObject.Load(content, "BasicShader");
+        public static void Load(){
+            BulletBodyObject.Load("BasicShader");
+            BulletHeadObject.Load("BasicShader");
             GroundBulletSounds = new SoundEffect[GROUND_BULLET_SOUNDS_QUANTITY] {
-                content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "bullet/bullet_hit_ground_1"),
-                content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "bullet/bullet_hit_ground_4"),
-                content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "bullet/bullet_hit_ground_3"),
-                content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "bullet/bullet_hit_ground_5"),
-                content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "bullet/bullet_hit_ground_2"),
+                MyContentManager.SoundEffects.Load("bullet/bullet_hit_ground_1"),
+                MyContentManager.SoundEffects.Load("bullet/bullet_hit_ground_4"),
+                MyContentManager.SoundEffects.Load("bullet/bullet_hit_ground_3"),
+                MyContentManager.SoundEffects.Load("bullet/bullet_hit_ground_5"),
+                MyContentManager.SoundEffects.Load("bullet/bullet_hit_ground_2"),
             };
             MetalBulletSounds = new SoundEffect[METAL_BULLET_SOUNDS_QUANTITY] {
-                content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "bullet/bullet_hit_metal_1"),
-                content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "bullet/bullet_hit_metal_4"),
-                content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "bullet/bullet_hit_metal_2"),
-                content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "bullet/bullet_hit_metal_3"),
+                MyContentManager.SoundEffects.Load("bullet/bullet_hit_metal_1"),
+                MyContentManager.SoundEffects.Load("bullet/bullet_hit_metal_4"),
+                MyContentManager.SoundEffects.Load("bullet/bullet_hit_metal_2"),
+                MyContentManager.SoundEffects.Load("bullet/bullet_hit_metal_3"),
             };
             BulletShootSounds = new SoundEffect[BULLET_SHOOT_SOUNDS_QUANTITY] {
-                content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "bullet/bullet_shoot_2"),
-                content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "bullet/bullet_shoot_3"),
-                content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "bullet/bullet_shoot_4"),
+                MyContentManager.SoundEffects.Load("bullet/bullet_shoot_2"),
+                MyContentManager.SoundEffects.Load("bullet/bullet_shoot_3"),
+                MyContentManager.SoundEffects.Load("bullet/bullet_shoot_4"),
             };
         }
 

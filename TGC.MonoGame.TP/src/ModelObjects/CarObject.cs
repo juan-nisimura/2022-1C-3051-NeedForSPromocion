@@ -11,6 +11,8 @@ using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
 using TGC.Monogame.TP.Src.HUD;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUps;
 using Microsoft.Xna.Framework.Audio;
+using TGC.Monogame.TP.Src.MyContentManagers;
+using TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels;
 
 namespace TGC.Monogame.TP.Src.ModelObjects
 
@@ -133,6 +135,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             ForceSpeedDirection = Vector3.Zero;
             ForceSpeedModule = 0;
             PowerUp = new NullPowerUp();
+            PowerUpHUDCircleObject.SetPowerUpModel(new NullPowerUpModel());
             for(int i = 0; i < BULLETS_POOL_SIZE; i++)
                 BulletsPool[i].IsActive = false;
             for(int i = 0; i < MISSILES_POOL_SIZE; i++)
@@ -147,18 +150,18 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             CarSoundEffects.Start();
         }
 
-        public static void Load(ContentManager content){
-            DefaultLoad(content, "RacingCarA/RacingCar", "CarShader");
-            WeaponObject.Load(content);
-            CarSoundEffects.Load(content);
-            PowerUpHUDCircleObject.Load(content, "PowerUpHUDCircleShader");
+        public static void Load(){
+            DefaultLoad("RacingCarA/RacingCar", "CarShader");
+            WeaponObject.Load();
+            CarSoundEffects.Load();
+            PowerUpHUDCircleObject.Load("PowerUpHUDCircleShader");
 
             var temporalCarObject = new CarObject(new Vector3(0f, 0f, 0f), Color.Green);
 
             ANGULO_AL_VERTICE = MathF.Atan(temporalCarObject.Size.X / temporalCarObject.Size.Z);
             HIPOTENUSA_AL_VERTICE = MathF.Sqrt(MathF.Pow(temporalCarObject.Size.X / 2, 2) + MathF.Pow(temporalCarObject.Size.Z / 2, 2));
         
-            SpeedBoostSound = content.Load<SoundEffect>(TGCGame.ContentFolderSounds + "boost engine");
+            SpeedBoostSound = MyContentManager.SoundEffects.Load("boost engine");
         }
 
         public bool IsDead() {

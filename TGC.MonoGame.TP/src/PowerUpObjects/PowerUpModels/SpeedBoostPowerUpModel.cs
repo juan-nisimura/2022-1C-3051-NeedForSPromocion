@@ -23,9 +23,9 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels
             SpeedBoostHead.Initialize();
         }
 
-        public static void Load(ContentManager content){
-            SpeedBoostBodyObject.Load(content, "BasicShader");
-            SpeedBoostHeadObject.Load(content, "BasicShader");
+        public static void Load(){
+            SpeedBoostBodyObject.Load("BasicShader");
+            SpeedBoostHeadObject.Load("BasicShader");
         }
         
         public override void Update(){

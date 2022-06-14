@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.Monogame.TP.Src;
+using TGC.Monogame.TP.Src.MyContentManagers;
 using TGC.Monogame.TP.Src.Screens;
 
 namespace TGC.MonoGame.TP
@@ -14,13 +15,6 @@ namespace TGC.MonoGame.TP
     /// </summary>
     public class TGCGame : Game
     {
-        public const string ContentFolder3D = "Models/";
-        public const string ContentFolderEffects = "Effects/";
-        public const string ContentFolderMusic = "Music/";
-        public const string ContentFolderSounds = "Sounds/";
-        public const string ContentFolderSpriteFonts = "SpriteFonts/";
-        public const string ContentFolderTextures = "Textures/";
-
         public static float ElapsedTime;
         public const int PLAYERS_QUANTITY = 2;
 
@@ -83,12 +77,14 @@ namespace TGC.MonoGame.TP
 
             base.LoadContent();
 
-            MainMenuScreen.GetInstance().Load(Content);
-            LevelScreen.GetInstance().Load(Content);
-            TimeOutScreen.GetInstance().Load(Content);
-            WinScreen.GetInstance().Load(Content);
-            LoseScreen.GetInstance().Load(Content);
-            PauseScreen.GetInstance().Load(Content);
+            MyContentManager.SetContentManager(Content);
+
+            MainMenuScreen.GetInstance().Load();
+            LevelScreen.GetInstance().Load();
+            TimeOutScreen.GetInstance().Load();
+            WinScreen.GetInstance().Load();
+            LoseScreen.GetInstance().Load();
+            PauseScreen.GetInstance().Load();
             
             ActiveScreen.Start();
         }

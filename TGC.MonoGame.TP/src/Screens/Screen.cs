@@ -23,7 +23,7 @@ namespace TGC.Monogame.TP.Src.Screens
         public abstract void Draw();
         public abstract void Update();
         public abstract void Initialize();
-        public abstract void Load(ContentManager content);
+        public abstract void Load();
 
         public abstract void Start();
 

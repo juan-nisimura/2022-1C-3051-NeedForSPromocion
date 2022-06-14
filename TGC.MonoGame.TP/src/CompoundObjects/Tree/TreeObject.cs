@@ -22,10 +22,10 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
             TreeTrunk.Initialize();
             TreeTop.Initialize();
         }
-        public static void Load(ContentManager content){
-            TreeTrunkObject.Load(content, "TreeTrunkShader", "bark brown/textures/bark_brown_01_diff_4k");
+        public static void Load(){
+            TreeTrunkObject.Load("TreeTrunkShader", "bark brown/textures/bark_brown_01_diff_4k");
             //TreeTopObject.Load(content, "TreeTopShader", "forest leaves/textures/forest_leaves_03_diff_4k");
-            TreeTopObject.Load(content, "BasicShader", "Floor");
+            TreeTopObject.Load("BasicShader", "Floor");
         }
 
         public override void Update(){   

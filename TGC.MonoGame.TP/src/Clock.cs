@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using TGC.MonoGame.TP;
 using Microsoft.Xna.Framework.Content;
+using TGC.Monogame.TP.Src.MyContentManagers;
 
 namespace TGC.Monogame.TP.Src   
 {
@@ -13,10 +14,11 @@ namespace TGC.Monogame.TP.Src
         private float totalTime = GAME_TOTAL_TIME;
         private SpriteFont Font;
 
-        public void Load(ContentManager content)
+        public void Load()
         {
-            Font = content.Load<SpriteFont>("SpriteFonts/" + "DS-Digital/DS-Digital");
+            Font = MyContentManager.SpriteFonts.Load("DS-Digital/DS-Digital");
         }
+
         public void Update() {
             totalTime -= TGCGame.GetElapsedTime();
         }

@@ -101,10 +101,10 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Building
             for (int i = 0; i < WALLS_QUANTITY; i++)  Walls[i].SolveMissileCollision(missile);
         }
         
-        public static void Load(ContentManager content){
-            BuildingBoxObject.Load(content, "BoxTextureShader", "brick_moss_001_diff_4k");
-            BuildingWallObject.Load(content, "BoxTextureShader", "large_red_bricks_diff_4k");
-            BuildingRampObject.Load(content, "RampTextureShader", "brick_moss_001_diff_4k");
+        public static void Load(){
+            BuildingBoxObject.Load("BoxTextureShader", "brick_moss_001_diff_4k");
+            BuildingWallObject.Load("BoxTextureShader", "large_red_bricks_diff_4k");
+            BuildingRampObject.Load("RampTextureShader", "brick_moss_001_diff_4k");
         }
 
         public override void Draw(Matrix view, Matrix projection){

@@ -20,6 +20,7 @@ using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
 using TGC.Monogame.TP.Src.HUD;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUps;
+using TGC.Monogame.TP.Src.MyContentManagers;
 
 namespace TGC.Monogame.TP.Src.Screens 
 {
@@ -109,32 +110,32 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < PowerUps.Length; i++)   PowerUps[i].Reset();
         }
 
-        public override void Load(ContentManager content) {
+        public override void Load() {
 
-            Song = content.Load<Song>(ContentFolderMusic + SongName());
+            Song = MyContentManager.Songs.Load(SongName());
             MediaPlayer.IsRepeating = true;
 
             // Cargo los efectos, modelos y texturas
-            CarObject.Load(content);
+            CarObject.Load();
 
-            TreeObject.Load(content);
-            BoostPadObject.Load(content, "BoostPadShader");
-            HealthBarObject.Load(content, "HealthBarShader");
+            TreeObject.Load();
+            BoostPadObject.Load("BoostPadShader");
+            HealthBarObject.Load("HealthBarShader");
 
-            MapWallObject.Load(content, "BoxTextureShader", "large_red_bricks_diff_4k");
-            BridgeObject.Load(content);
-            BuildingsObject.Load(content);
-            MissileObject.Load(content);
-            BulletObject.Load(content);
-            FloorObject.Load(content, "FloorShader", "brown_mud_leaves_01_diff_4k");
-            MountObject.Load(content);
-            PowerUpObject.Load(content, "BasicShader", "Floor");
-            NullPowerUp.Load(content);
-            SpeedBoostPowerUpModel.Load(content);
-            Clock.Load(content);
-            SpeedoMeter.Load(content);
+            MapWallObject.Load("BoxTextureShader", "large_red_bricks_diff_4k");
+            BridgeObject.Load();
+            BuildingsObject.Load();
+            MissileObject.Load();
+            BulletObject.Load();
+            FloorObject.Load("FloorShader", "brown_mud_leaves_01_diff_4k");
+            MountObject.Load();
+            PowerUpObject.Load("BasicShader", "Floor");
+            NullPowerUp.Load();
+            SpeedBoostPowerUpModel.Load();
+            Clock.Load();
+            SpeedoMeter.Load();
             
-            blurEffect = content.Load<Effect>("Effects/" + "GaussianBlur");
+            blurEffect = MyContentManager.Effects.Load("GaussianBlur");
             // Create a full screen quad to post-process
             FullScreenQuad = new FullScreenQuad(TGCGame.GetGraphicsDevice());
 
@@ -230,7 +231,7 @@ namespace TGC.Monogame.TP.Src.Screens
                 }
             }
 
-            Song = content.Load<Song>(ContentFolderMusic + "Riders On The Storm Fredwreck Remix");
+            Song = MyContentManager.Songs.Load("Riders On The Storm Fredwreck Remix");
             MediaPlayer.IsRepeating = true;
             Reset();
         }

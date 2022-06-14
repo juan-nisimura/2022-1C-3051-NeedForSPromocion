@@ -13,8 +13,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             RotationMatrix = Matrix.CreateRotationY(MathF.PI/2);
             TranslateMatrix = Matrix.CreateTranslation(0f, 10f, 0f);
         }
-        public static void Load(ContentManager content){
-            DefaultLoad(content, "CombatVehicle/Weapons", "WeaponShader");
+        public static void Load(){
+            DefaultLoad("CombatVehicle/Weapons", "WeaponShader");
         }
 
         public override void Update(){

@@ -35,9 +35,9 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
             for (int i = 0; i < Ramps.Length; i++)  Ramps[i].Update(car);
         }
         
-        public static void Load(ContentManager content){
-            MountBoxObject.Load(content, "BoxTextureShader", "rock_01_diff_4k");
-            MountRampObject.Load(content, "RampTextureShader", "rock_01_diff_4k");
+        public static void Load(){
+            MountBoxObject.Load("BoxTextureShader", "rock_01_diff_4k");
+            MountRampObject.Load("RampTextureShader", "rock_01_diff_4k");
         }
 
         public void SolveBulletCollision(BulletObject bullet){                

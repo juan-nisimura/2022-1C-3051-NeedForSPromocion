@@ -114,7 +114,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             return false;
         }
 
-        protected override void DrawPrimitive() { RampPrimitive.Draw(getEffect()); }
+        protected override void DrawPrimitive(Effect effect) { RampPrimitive.Draw(effect); }
 
         public void UpdateHeightMap(int x, int z) {
             if(HeightMap.Ray.Intersects(BoundingBox) != null){

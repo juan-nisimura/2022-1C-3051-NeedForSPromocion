@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using TGC.Monogame.TP.Src.MyContentManagers;
+using System;
 
 namespace TGC.Monogame.TP.Src   
 {
@@ -33,9 +34,18 @@ namespace TGC.Monogame.TP.Src
             Effects[typeof(T)].Parameters["Projection"].SetValue(projection);
             Effects[typeof(T)].Parameters["DiffuseColor"]?.SetValue(DiffuseColor);
             Effects[typeof(T)].Parameters["Texture"]?.SetValue(getTexture());
-            DrawPrimitive();
+            DrawPrimitive(Effects[typeof(T)]);
+        }
+
+        public void Draw(Matrix view, Matrix projection, Effect effect) {
+            effect.Parameters["World"].SetValue(World);
+            effect.Parameters["View"].SetValue(view);
+            effect.Parameters["Projection"].SetValue(projection);
+            effect.Parameters["DiffuseColor"]?.SetValue(DiffuseColor);
+            effect.Parameters["Texture"]?.SetValue(getTexture());
+            DrawPrimitive(effect);       
         }
     
-        protected abstract void DrawPrimitive();
+        protected abstract void DrawPrimitive(Effect effect);
     }
 }

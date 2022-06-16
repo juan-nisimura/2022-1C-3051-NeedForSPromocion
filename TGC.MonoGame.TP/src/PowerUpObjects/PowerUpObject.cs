@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using TGC.Monogame.TP.Src.HUD;
 using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels;
@@ -17,6 +18,8 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects
         private BoundingSphere BoundingSphere;
         private Boolean isAvailable = true;
         private float RespawnActualTime;
+        private float Time;
+        //private Matrix BouncingTranslation = Matrix.Identity;
         const float RespawnCooldown = 10;
         private static Random RandomPowerUp = new Random();
 
@@ -29,20 +32,21 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects
         public new void Initialize(){
             base.Initialize();
             Rotation = 0;
+            Time = 0;
         }
 
         public void Reset() {
             isAvailable = true;
+            Time = 0;
         }
         
         public void Update(CarObject car){
-
-            // Actualizo la matrix de mundo
-            Rotation += Convert.ToSingle(TGCGame.GetElapsedTime());
-            World = ScaleMatrix * Matrix.CreateRotationY(Rotation) * TranslateMatrix;
         
+            var BouncingTranslation = Matrix.CreateTranslation(0f, MathF.Abs(30 * MathF.Cos(Time * 5)) / (1 + MathF.Pow(Time * 3, 2)), 0f);
+            
             // Si el powerup está disponible
             if(isAvailable){
+                Time += TGCGame.GetElapsedTime();
                 //PowerUpModel.Update();
 
                 // Chequeo si colisionó con el auto
@@ -50,6 +54,7 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects
                     // Si colisionó con el auto, el auto obtiene un powerup
                     isAvailable = false;
                     RespawnActualTime = 0;
+                    Time = 0;
 
                     switch(RandomPowerUp.Next(3)){
                         case 1:
@@ -71,6 +76,10 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects
                 RespawnActualTime += TGCGame.GetElapsedTime();
                 isAvailable = RespawnActualTime > RespawnCooldown;
             }
+
+            // Actualizo la matrix de mundo
+            Rotation += Convert.ToSingle(TGCGame.GetElapsedTime());
+            World = ScaleMatrix * Matrix.CreateRotationY(Rotation) * TranslateMatrix * BouncingTranslation;
         }
 /*
         public void Draw(Matrix view, Matrix projection) {
@@ -78,9 +87,9 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects
                 PowerUpModel.Draw(view, projection);
         }
 */
-        protected override void DrawPrimitive() {
+        protected override void DrawPrimitive(Effect effect) {
             if(isAvailable)   
-                BoxPrimitive.Draw(getEffect());
+                BoxPrimitive.Draw(effect);
         }
     }
 }

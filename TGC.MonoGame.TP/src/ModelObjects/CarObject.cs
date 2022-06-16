@@ -256,7 +256,6 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public void ApplyForce(Vector3 force, float forceModule) { 
             this.ForceSpeedDirection = force;
             this.ForceSpeedModule = forceModule;
-            //Console.WriteLine("{0}",ForceSpeedDirection);
         }
 
         public bool SolveHorizontalCollision(CarObject enemyCar){            
@@ -275,22 +274,18 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                 if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position - thisNormalizedForward * Size.Z, forwardOBBExtents))){
                     //enemyCar.ApplyForce(-thisNormalizedForward, 85f);
                     totalForce += -thisNormalizedForward;
-                    Console.WriteLine("DELANTE");
                 }
                 if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position + thisNormalizedForward * Size.Z, forwardOBBExtents))){
                     //enemyCar.ApplyForce(thisNormalizedForward, 85f);
                     totalForce += thisNormalizedForward;
-                    Console.WriteLine("ATRAS");
                 }
                 if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position - thisNormalizedSideward * Size.X, sidewardOBBExtents))){
                     //enemyCar.ApplyForce(-thisNormalizedSideward, 65f);
                     totalForce += -thisNormalizedSideward;
-                    Console.WriteLine("IZQUIERDA");
                 }
                 if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position + thisNormalizedSideward * Size.X, sidewardOBBExtents))){
                     //enemyCar.ApplyForce(thisNormalizedSideward, 65f);
                     totalForce += thisNormalizedSideward;
-                    Console.WriteLine("DERECHA");
                 } 
 
                 enemyCar.ApplyForce(Vector3.Normalize(totalForce), 60f);

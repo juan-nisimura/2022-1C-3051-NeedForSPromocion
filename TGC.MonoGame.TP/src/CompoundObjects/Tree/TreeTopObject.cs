@@ -13,9 +13,9 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
                 Radius = radius;
         }
 
-        protected override void DrawPrimitive() { 
-            getEffect().Parameters["Radius"]?.SetValue(Radius);
-            SpherePrimitive.Draw(getEffect());
+        protected override void DrawPrimitive(Effect effect) { 
+            effect.Parameters["Radius"]?.SetValue(Radius);
+            SpherePrimitive.Draw(effect);
         }
     }
 }

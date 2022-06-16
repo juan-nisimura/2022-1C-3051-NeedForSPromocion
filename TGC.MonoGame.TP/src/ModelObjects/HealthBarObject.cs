@@ -32,7 +32,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             getEffect().Parameters["Projection"].SetValue(projection);
             getEffect().Parameters["Texture"]?.SetValue(getTexture());
             getEffect().Parameters["HealthPercentage"]?.SetValue(HealthPercentage);
-            DrawPrimitive();
+            DrawPrimitive(getEffect());
         }
     }
 }

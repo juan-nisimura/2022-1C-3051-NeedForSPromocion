@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
+using TGC.Monogame.TP.Src.MyContentManagers;
 using TGC.MonoGame.TP;
 
 namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels
@@ -14,7 +15,10 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels
         private const float TRIANGLE_RELATIVE_SIZE = 0.8f;
         public const float MISSILE_MODEL_SIZE = 1f;
         public static PowerUpModel PowerUpModel = new MissilePowerUpModel(Vector3.Zero);
-        public static new PowerUpModel GetModel() { return PowerUpModel; }
+        public static new PowerUpModel GetModel() { 
+            PowerUpModel.SetTime(0);
+            return PowerUpModel; 
+        }
         public MissilePowerUpModel(Vector3 position){
             MissileBody = new MissileBodyObject(MISSILE_MODEL_SIZE);
             MissileHead = new MissileHeadObject(MISSILE_MODEL_SIZE);
@@ -43,12 +47,17 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels
             MissileBody.Update(Position, forward, RotationMatrix);
             MissileHead.Update(Position, forward, RotationMatrix);
             for (int i = 0; i < TRIANGLES_QUANTITY; i++) MissileTriangles[i].Update(Position, forward, RotationMatrix);
+            Time += TGCGame.GetElapsedTime();
         }
 
-        public override void Draw(Matrix view, Matrix projection){
-            MissileBody.Draw(view, projection);
-            MissileHead.Draw(view, projection);
-            for (int i = 0; i < TRIANGLES_QUANTITY; i++)   MissileTriangles[i].Draw(view, projection);
+        public override void Draw(Matrix view, Matrix projection)
+        {
+            var effect = MyContentManager.Effects.Get("PowerUpModelShader");
+            effect.Parameters["Time"]?.SetValue(Time);
+            effect.Parameters["Center"]?.SetValue(Position);
+            MissileBody.Draw(view, projection, effect);
+            MissileHead.Draw(view, projection, effect);
+            for (int i = 0; i < TRIANGLES_QUANTITY; i++)   MissileTriangles[i].Draw(view, projection, effect);
         }
     }
 }

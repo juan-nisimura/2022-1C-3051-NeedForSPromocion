@@ -88,7 +88,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             return false;
         }
 
-        protected override void DrawPrimitive() { BoxPrimitive.Draw(getEffect()); }
+        protected override void DrawPrimitive(Effect effect) { BoxPrimitive.Draw(effect); }
 
         internal bool SolveVerticalCollision(CarObject car)
         {

@@ -131,6 +131,7 @@ namespace TGC.Monogame.TP.Src.Screens
             MountObject.Load();
             PowerUpObject.Load("BasicShader", "Floor");
             NullPowerUp.Load();
+            PowerUpModel.Load();
             SpeedBoostPowerUpModel.Load();
             Clock.Load();
             SpeedoMeter.Load();

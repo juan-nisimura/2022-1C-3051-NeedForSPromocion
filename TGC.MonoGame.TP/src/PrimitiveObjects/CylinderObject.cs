@@ -22,7 +22,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             DiffuseColor = color.ToVector3();
             BoundingCylinder = new BoundingCylinder(position, size.X / 2, size.Y/2);
         }
-        protected override void DrawPrimitive() { CylinderPrimitive.Draw(getEffect()); }
+        protected override void DrawPrimitive(Effect effect) { CylinderPrimitive.Draw(effect); }
     
         public void SolveBulletCollision(BulletObject bullet){
             if(BoundingCylinder.Intersects(bullet.ImpactSphere))
@@ -78,7 +78,6 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
                 car.ObjectBox.Center += (normalVectorNormalized * penetration);
                 car.Position = car.ObjectBox.Center;
                 car.HasCrashed = true;
-                Console.Write(car.Position);
 
                 return true;
             } 

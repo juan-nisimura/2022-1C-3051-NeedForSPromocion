@@ -45,7 +45,7 @@ namespace TGC.Monogame.TP.Src.HUD
             getEffect().Parameters["View"].SetValue(view);
             getEffect().Parameters["Projection"].SetValue(projection);
             getEffect().Parameters["Texture"]?.SetValue(getTexture());
-            DrawPrimitive();
+            DrawPrimitive(getEffect());
             TGCGame.GetGraphicsDevice().DepthStencilState = DepthStencilState.Default;
             TGCGame.GetGraphicsDevice().BlendState = BlendState.Opaque;
             PowerUpModel.Draw(view, projection);

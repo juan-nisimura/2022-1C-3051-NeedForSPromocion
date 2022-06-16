@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace TGC.Monogame.TP.Src.MyContentManagers
 {
-    public class MyContentDictionary <T> 
+    public class MyContentDictionary <T>
     {       
         private string ContentFolder;
         private ContentManager Content;

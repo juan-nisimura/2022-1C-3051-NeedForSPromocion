@@ -16,6 +16,6 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             DiffuseColor = color.ToVector3();
         }
 
-        protected override void DrawPrimitive() { TrianglePrimitive.Draw(getEffect()); }
+        protected override void DrawPrimitive(Effect effect) { TrianglePrimitive.Draw(effect); }
     }
 }

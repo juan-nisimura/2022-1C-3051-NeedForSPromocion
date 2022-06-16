@@ -18,6 +18,6 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             DiffuseColor = color.ToVector3();
         }
 
-        protected override void DrawPrimitive() { QuadPrimitive.Draw(getEffect()); }
+        protected override void DrawPrimitive(Effect effect) { QuadPrimitive.Draw(effect); }
     }
 }

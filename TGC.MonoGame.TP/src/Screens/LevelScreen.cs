@@ -152,12 +152,6 @@ namespace TGC.Monogame.TP.Src.Screens
 
             blurEffect.Parameters["screenSize"]
                 .SetValue(new Vector2(TGCGame.GetGraphicsDevice().Viewport.Width, TGCGame.GetGraphicsDevice().Viewport.Height));
-
-            Car = new PlayerCarObject(new Vector3(-100f,0,-100f), Color.Blue);
-            IACar = new IACarObject(new Vector3(-100f,0,-50f), Color.Red);
-
-            Car.Initialize(new CarObject[] { IACar });
-            IACar.Initialize(new CarObject[] { Car });
             
             Mounts = new MountObject[]{
                 new MountObject(new Vector3(235f,2.5f,-400f),new Vector3(60f,5f,60f),0,Color.White),
@@ -220,6 +214,12 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < BoostPads.Length; i++)      BoostPads[i].Initialize();
             for (int i = 0; i < MapWalls.Length; i++)   MapWalls[i].Initialize();
 
+            Car = new PlayerCarObject(new Vector3(-100f,0,-100f), Color.Blue);
+            IACar = new IACarObject(new Vector3(-100f,0,-50f), Color.Red, PowerUps);
+
+            Car.Initialize(new CarObject[] { IACar });
+            IACar.Initialize(new CarObject[] { Car });
+
             // Inicializo el HeightMap
             for(int x =-710; x <= 710; x++) {
                 for(int z = -710; z <= 710; z++) {
@@ -243,14 +243,9 @@ namespace TGC.Monogame.TP.Src.Screens
             Car.Update(View, Projection);
             IACar.Update();
             Floor.Update();
-            for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(Car);
+            for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(new CarObject[] {Car, IACar});
             for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Update(Car);
 
-            Buildings.Update(Car);
-            Bridge.Update(Car);
-
-            for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Update(Car);
-            for (int i = 0; i < Mounts.Length; i++) Mounts[i].Update(Car);
             for (int i = 0; i < Trees.Length; i++) Trees[i].Update();
             Camera.FollowCamera(new Vector3((float)Math.Cos(Timer) * 200f, 50f, (float)Math.Sin(Timer) * 200f));
             //View = Camera.FollowCamera(new Vector3((float)Math.Cos(Timer) * 200f, 50f, (float)Math.Sin(Timer) * 200f)).GetView();
@@ -303,29 +298,24 @@ namespace TGC.Monogame.TP.Src.Screens
 
             Car.Update(View, Projection);
             IACar.Update();
-            Floor.Update();
-            for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(Car);
+            
+            for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(new CarObject[] { Car, IACar });
             for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Update(Car);
-            Buildings.Update(Car);
-            Bridge.Update(Car);
+            for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Update(IACar);
 
-            for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Update(Car);
-            for (int i = 0; i < Mounts.Length; i++) Mounts[i].Update(Car);
-            for (int i = 0; i < Trees.Length; i++) Trees[i].Update();
             SpeedoMeter.Update(Car.Speed);
-
 
             View = Camera.FollowCamera(Car.GetPosition()).GetView();
 
             SolveCollisions(Car);
-            // SolveCollisions(IACar);
+            SolveCollisions(IACar);
         }
 
         protected void SolveCollisions(CarObject car) {
             var collided = true;
             car.HasCrashed = false;
             if(HeightMap.GetHeight(car.Position.X, car.Position.Z) == 0)
-                Car.GroundLevel = 0;
+                car.GroundLevel = 0;
             while(collided){
                 collided = false;
                 for (int i = 0; i < Mounts.Length; i++)         collided = collided || Mounts[i].SolveVerticalCollision(car);
@@ -340,8 +330,8 @@ namespace TGC.Monogame.TP.Src.Screens
             }
             if(car.HasCrashed)  car.Crash();
             for (int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)  collided = collided || car.Enemies[i].SolveHorizontalCollision(car);
-            SolveBulletsCollisions(Car);
-            SolveMissilesCollisions(Car);
+            SolveBulletsCollisions(car);
+            SolveMissilesCollisions(car);
         }
 
         protected void SolveBulletsCollisions(CarObject car) {

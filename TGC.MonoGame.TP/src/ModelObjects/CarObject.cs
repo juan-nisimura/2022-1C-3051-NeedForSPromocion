@@ -17,7 +17,7 @@ using TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels;
 namespace TGC.Monogame.TP.Src.ModelObjects
 
 {
-    public class CarObject : DefaultModelObject <CarObject>
+    public abstract class CarObject : DefaultModelObject <CarObject>
     {
         public static float  FAST_SPEED = 2000f;
         protected static float MaxSpeed { get; set; } = 3000f;
@@ -156,7 +156,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             CarSoundEffects.Load();
             PowerUpHUDCircleObject.Load("PowerUpHUDCircleShader");
 
-            var temporalCarObject = new CarObject(new Vector3(0f, 0f, 0f), Color.Green);
+            var temporalCarObject = new PlayerCarObject(new Vector3(0f, 0f, 0f), Color.Green);
 
             ANGULO_AL_VERTICE = MathF.Atan(temporalCarObject.Size.X / temporalCarObject.Size.Z);
             HIPOTENUSA_AL_VERTICE = MathF.Sqrt(MathF.Pow(temporalCarObject.Size.X / 2, 2) + MathF.Pow(temporalCarObject.Size.Z / 2, 2));
@@ -179,6 +179,9 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
             ForceSpeedModule = MathF.Max(ForceSpeedModule - 100f * TGCGame.GetElapsedTime(), 0f);
             var forceSpeed = ForceSpeedModule * ForceSpeedDirection;
+
+            Console.WriteLine("DATOS");
+            Console.WriteLine(ForceSpeedDirection);
 
             // Calculo la nueva posicion
             var x = Position.X + (- Speed * World.Forward.X + forceSpeed.X) * TGCGame.GetElapsedTime();
@@ -271,22 +274,20 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
                 var totalForce = Vector3.Zero;
 
-                if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position - thisNormalizedForward * Size.Z, forwardOBBExtents))){
-                    //enemyCar.ApplyForce(-thisNormalizedForward, 85f);
+                if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position - thisNormalizedForward * Size.Z / 2, forwardOBBExtents))){
                     totalForce += -thisNormalizedForward;
                 }
-                if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position + thisNormalizedForward * Size.Z, forwardOBBExtents))){
-                    //enemyCar.ApplyForce(thisNormalizedForward, 85f);
+                if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position + thisNormalizedForward * Size.Z / 2, forwardOBBExtents))){
                     totalForce += thisNormalizedForward;
                 }
-                if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position - thisNormalizedSideward * Size.X, sidewardOBBExtents))){
-                    //enemyCar.ApplyForce(-thisNormalizedSideward, 65f);
+                if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position - thisNormalizedSideward * Size.X / 2, sidewardOBBExtents))){
                     totalForce += -thisNormalizedSideward;
                 }
-                if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position + thisNormalizedSideward * Size.X, sidewardOBBExtents))){
-                    //enemyCar.ApplyForce(thisNormalizedSideward, 65f);
+                if(enemyCar.ObjectBox.Intersects(new OrientedBoundingBox(this.Position + thisNormalizedSideward * Size.X / 2, sidewardOBBExtents))){
                     totalForce += thisNormalizedSideward;
-                } 
+                }
+                if(totalForce.Equals(Vector3.Zero))
+                    return false;
 
                 enemyCar.ApplyForce(Vector3.Normalize(totalForce), 60f);
                 this.ApplyForce(-Vector3.Normalize(totalForce), 60f);
@@ -302,7 +303,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                 enemyCar.Speed = enemyCar.Speed / 1.5f;
                 this.Speed = this.Speed / 1.5f;
 
-                return false;
+                return true;
                 /*
                 var thisNormalizedForward = Vector3.Normalize(new Vector3(this.RotationMatrix.Forward.X, 0, this.RotationMatrix.Forward.Z));
                 var thisNormalizedSideward = new Vector3(thisNormalizedForward.Z, 0, -thisNormalizedForward.X);
@@ -407,6 +408,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public void SetPowerUp(PowerUp powerUp) {
             this.PowerUp = powerUp;
         }
+
+        public abstract void SetPowerUpHUDModel(PowerUpModel powerUpModel);
         
         public void ShootBullet() {
             BulletsPool[GetNextBulletIndex()].Activate(Position, World.Forward, RotationMatrix);

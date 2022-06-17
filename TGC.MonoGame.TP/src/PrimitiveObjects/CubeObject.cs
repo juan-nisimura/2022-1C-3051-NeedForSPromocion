@@ -5,7 +5,7 @@ using TGC.MonoGame.TP.Src.Geometries.Textures;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
-    class CubeObject <T> : DefaultPrimitiveObject <T>
+    public class CubeObject <T> : DefaultPrimitiveObject <T>
     {
         protected BoxPrimitive BoxPrimitive { get; }
         public CubeObject(Vector3 position, Vector3 size, Color color){

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.Monogame.TP.Src.HUD;
+using TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUps;
 using TGC.MonoGame.TP;
 
@@ -21,6 +22,10 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public new void Initialize(CarObject[] enemies){
             base.Initialize(enemies);
             PowerUpHUDCircle = new PowerUpHUDCircleObject();
+        }
+        public override void SetPowerUpHUDModel(PowerUpModel powerUpModel){
+            powerUpModel.SetTime(0);
+            PowerUpHUDCircleObject.SetPowerUpModel(powerUpModel);
         }
 
         public void Update(Matrix View, Matrix Projection){

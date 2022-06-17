@@ -20,7 +20,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             BoundingBox = new BoundingBox(position - size/2, position + size/2);
         }
 
-        public void Update(CarObject car){
+        public override void Update(){
         }
 
         public void UpdateHeightMap(int x, int z) {

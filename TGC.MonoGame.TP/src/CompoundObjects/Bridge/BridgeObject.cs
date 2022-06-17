@@ -52,13 +52,6 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
 
         public override void Update(){   
         }
-
-        public void Update(CarObject car){
-            Block.Update(car);
-            for (int i = 0; i < RAMPS_QUANTITY; i++)  Ramps[i].Update(car);
-            for (int i = 0; i < FLOORS_QUANTITY; i++)  Floors[i].Update(car);
-            // for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].Update(car);
-        }
         
         public static void Load(){
             BridgeColumnObject.Load("TreeTrunkShader", "bark brown/textures/bark_brown_01_diff_4k");

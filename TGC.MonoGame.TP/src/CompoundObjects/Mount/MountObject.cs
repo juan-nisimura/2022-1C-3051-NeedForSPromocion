@@ -29,11 +29,6 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
 
         public override void Update(){   
         }
-
-        public void Update(CarObject car){
-            Box.Update(car);
-            for (int i = 0; i < Ramps.Length; i++)  Ramps[i].Update(car);
-        }
         
         public static void Load(){
             MountBoxObject.Load("BoxTextureShader", "rock_01_diff_4k");

@@ -47,7 +47,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             
         }
 
-        public void Update(CarObject car){
+        public override void Update(){
         }
 
         public void SolveBulletCollision(BulletObject bullet){

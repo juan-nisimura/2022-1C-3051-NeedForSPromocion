@@ -1,6 +1,5 @@
 using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using TGC.Monogame.TP.Src.HUD;
 using TGC.Monogame.TP.Src.ModelObjects;
@@ -11,12 +10,12 @@ using TGC.MonoGame.TP;
 
 namespace TGC.Monogame.TP.Src.PowerUpObjects
 {
-    class PowerUpObject : CubeObject <PowerUpObject>
+    public class PowerUpObject : CubeObject <PowerUpObject>
     {
         private float Rotation;
         private Vector3 Position;
         private BoundingSphere BoundingSphere;
-        private Boolean isAvailable = true;
+        public Boolean IsAvailable = true;
         private float RespawnActualTime;
         private float Time;
         //private Matrix BouncingTranslation = Matrix.Identity;
@@ -35,60 +34,64 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects
             Time = 0;
         }
 
+        public Vector3 GetPosition(){
+            return Position;
+        }
+
         public void Reset() {
-            isAvailable = true;
+            IsAvailable = true;
             Time = 0;
         }
         
-        public void Update(CarObject car){
+        public void Update(CarObject[] cars){
         
             var BouncingTranslation = Matrix.CreateTranslation(0f, MathF.Abs(30 * MathF.Cos(Time * 5)) / (1 + MathF.Pow(Time * 3, 2)), 0f);
             
             // Si el powerup está disponible
-            if(isAvailable){
+            if(IsAvailable){
                 Time += TGCGame.GetElapsedTime();
-                //PowerUpModel.Update();
+                
+                for(int i= 0; i < TGCGame.PLAYERS_QUANTITY; i++){
+                    // Chequeo si colisionó con el auto
+                    if(cars[i].ObjectBox.Intersects(BoundingSphere)){
+                        // Si colisionó con el auto, el auto obtiene un powerup
+                        IsAvailable = false;
+                        RespawnActualTime = 0;
+                        Time = 0;
 
-                // Chequeo si colisionó con el auto
-                if(car.ObjectBox.Intersects(BoundingSphere)){
-                    // Si colisionó con el auto, el auto obtiene un powerup
-                    isAvailable = false;
-                    RespawnActualTime = 0;
-                    Time = 0;
+                        switch(RandomPowerUp.Next(3)){
+                            case 1:
+                                cars[i].SetPowerUp(new MachineGunPowerUp());
+                                cars[i].SetPowerUpHUDModel(BulletPowerUpModel.GetModel());
+                                //PowerUpHUDCircleObject.SetPowerUpModel(BulletPowerUpModel.GetModel());
+                                break;
+                            case 2:
+                                cars[i].SetPowerUp(new MissileLauncherPowerUp());
+                                cars[i].SetPowerUpHUDModel(MissilePowerUpModel.GetModel());
+                                //PowerUpHUDCircleObject.SetPowerUpModel(MissilePowerUpModel.GetModel());
+                                break;
+                            default:
+                                cars[i].SetPowerUp(new SpeedBoostPowerUp());
+                                cars[i].SetPowerUpHUDModel(SpeedBoostPowerUpModel.GetModel());
+                                //PowerUpHUDCircleObject.SetPowerUpModel(SpeedBoostPowerUpModel.GetModel());
+                                break;
+                        }
 
-                    switch(RandomPowerUp.Next(3)){
-                        case 1:
-                            car.SetPowerUp(new MachineGunPowerUp());
-                            PowerUpHUDCircleObject.SetPowerUpModel(BulletPowerUpModel.GetModel());
-                            break;
-                        case 2:
-                            car.SetPowerUp(new MissileLauncherPowerUp());
-                            PowerUpHUDCircleObject.SetPowerUpModel(MissilePowerUpModel.GetModel());
-                            break;
-                        default:
-                            car.SetPowerUp(new SpeedBoostPowerUp());
-                            PowerUpHUDCircleObject.SetPowerUpModel(SpeedBoostPowerUpModel.GetModel());
-                            break;
+                        break;
                     }
                 }
-
             } else {
                 RespawnActualTime += TGCGame.GetElapsedTime();
-                isAvailable = RespawnActualTime > RespawnCooldown;
+                IsAvailable = RespawnActualTime > RespawnCooldown;
             }
 
             // Actualizo la matrix de mundo
             Rotation += Convert.ToSingle(TGCGame.GetElapsedTime());
             World = ScaleMatrix * Matrix.CreateRotationY(Rotation) * TranslateMatrix * BouncingTranslation;
         }
-/*
-        public void Draw(Matrix view, Matrix projection) {
-            if(isAvailable) 
-                PowerUpModel.Draw(view, projection);
-        }
-*/
+
         protected override void DrawPrimitive(Effect effect) {
-            if(isAvailable)   
+            if(IsAvailable)   
                 BoxPrimitive.Draw(effect);
         }
     }

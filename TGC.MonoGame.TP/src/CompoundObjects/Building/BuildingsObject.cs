@@ -83,12 +83,6 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Building
         public override void Update(){
         }
 
-        public void Update(CarObject car){
-            for (int i = 0; i < BOXES_QUANTITY; i++)  Boxes[i].Update(car);
-            for (int i = 0; i < RAMPS_QUANTITY; i++)  Ramps[i].Update(car);
-            for (int i = 0; i < WALLS_QUANTITY; i++)  Walls[i].Update(car);
-        }
-
         public void SolveBulletCollision(BulletObject bullet){
             for (int i = 0; i < BOXES_QUANTITY; i++)  Boxes[i].SolveBulletCollision(bullet);
             for (int i = 0; i < RAMPS_QUANTITY; i++)  Ramps[i].SolveBulletCollision(bullet);

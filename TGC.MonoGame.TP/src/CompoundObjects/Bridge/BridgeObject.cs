@@ -100,12 +100,13 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
             return collided;
         }
 
-        internal void UpdateHeightMap(int x, int z)
+        internal void UpdateHeightMap(int x, int z, int level)
         {
-            Block.UpdateHeightMap(x, z);
-            for (int i = 0; i < RAMPS_QUANTITY; i++)    Ramps[i].UpdateHeightMap(x, z);
-            for (int i = 0; i < FLOORS_QUANTITY; i++)   Floors[i].UpdateHeightMap(x, z);
-            // for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].UpdateHeightMap(x, z);
+            Block.UpdateHeightMap(x, z, level);
+            if(level == 1)
+                for (int i = 0; i < FLOORS_QUANTITY; i++)   Floors[i].UpdateHeightMap(x, z, level);
+            for (int i = 0; i < RAMPS_QUANTITY; i++)    Ramps[i].UpdateHeightMap(x, z, level);
+            for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].UpdateHeightMap(x, z, level);
         }
     }
 }

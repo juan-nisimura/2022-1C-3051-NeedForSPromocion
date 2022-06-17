@@ -112,6 +112,7 @@ namespace TGC.Monogame.TP.Src.Screens
 
         public override void Load() {
 
+            Font = MyContentManager.SpriteFonts.Load("CascadiaCode/CascadiaCodePL");
             Song = MyContentManager.Songs.Load(SongName());
             MediaPlayer.IsRepeating = true;
 
@@ -221,14 +222,17 @@ namespace TGC.Monogame.TP.Src.Screens
             IACar.Initialize(new CarObject[] { Car });
 
             // Inicializo el HeightMap
-            for(int x =-710; x <= 710; x++) {
-                for(int z = -710; z <= 710; z++) {
-                    HeightMap.SetHeight(x, z, 0);
-                    HeightMap.MoveRay(x, z);
-                    Bridge.UpdateHeightMap(x, z);
-                    Buildings.UpdateHeightMap(x, z);
-                    for (int i = 0; i < MapWalls.Length; i++)   MapWalls[i].UpdateHeightMap(x, z);
-                    for (int i = 0; i < Mounts.Length; i++)     Mounts[i].UpdateHeightMap(x, z);
+            for(int level = 0; level <= 1; level++){
+                for(int x =-710; x <= 710; x++) {
+                    for(int z = -710; z <= 710; z++) {
+                        HeightMap.SetHeight(x, z, 0, level);
+                        HeightMap.MoveRay(x, z);
+                        Bridge.UpdateHeightMap(x, z, level);
+                        Buildings.UpdateHeightMap(x, z, level);
+                        for (int i = 0; i < MapWalls.Length; i++)   MapWalls[i].UpdateHeightMap(x, z, level);
+                        for (int i = 0; i < Mounts.Length; i++)     Mounts[i].UpdateHeightMap(x, z, level);
+                        for (int i = 0; i < Trees.Length; i++)      Trees[i].UpdateHeightMap(x, z, level);
+                    }
                 }
             }
 
@@ -314,7 +318,7 @@ namespace TGC.Monogame.TP.Src.Screens
         protected void SolveCollisions(CarObject car) {
             var collided = true;
             car.HasCrashed = false;
-            if(HeightMap.GetHeight(car.Position.X, car.Position.Z) == 0)
+            if(HeightMap.GetHeight(car.Position.X, car.Position.Z, HeightMap.GetActualLevel(car.Position.Y)) == 0)
                 car.GroundLevel = 0;
             while(collided){
                 collided = false;
@@ -328,8 +332,8 @@ namespace TGC.Monogame.TP.Src.Screens
                 for (int i = 0; i < MapWalls.Length; i++)       collided = collided || MapWalls[i].SolveHorizontalCollision(car);
                 for (int i = 0; i < Trees.Length; i++)          collided = collided || Trees[i].SolveHorizontalCollision(car);
             }
-            if(car.HasCrashed)  car.Crash();
             for (int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)  collided = collided || car.Enemies[i].SolveHorizontalCollision(car);
+            if(car.HasCrashed)  car.Crash();
             SolveBulletsCollisions(car);
             SolveMissilesCollisions(car);
         }
@@ -380,10 +384,25 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(View, Projection);
             for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection);
             for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection);
-            Clock.Draw(View, Projection);
-            SpeedoMeter.Draw(View, Projection);
+            
+            if (!GodModeIsActive)
+            {
+                Clock.Draw(View, Projection);
+                SpeedoMeter.Draw(View, Projection);
+                Car.DrawHUD(View, Projection);
+            }
 
-            Car.DrawHUD(View, Projection);
+            var msg = "P: PAUSA";
+            var W = TGCGame.GetGraphicsDevice().Viewport.Width;
+            var H = TGCGame.GetGraphicsDevice().Viewport.Height;
+            var escala = 1;
+            var size = Font.MeasureString(msg) * escala;
+            var Y = 25f;
+            var X = 25f;
+            TGCGame.GetSpriteBatch().Begin(SpriteSortMode.Deferred, null, null, null, null, null,
+                Matrix.CreateScale(escala) * Matrix.CreateTranslation(W - size.X - X, Y, 0));
+            TGCGame.GetSpriteBatch().DrawString(Font, msg, new Vector2(0, 0), Color.White);
+            TGCGame.GetSpriteBatch().End();
 
 
             #endregion

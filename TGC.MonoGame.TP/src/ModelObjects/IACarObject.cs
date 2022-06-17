@@ -60,6 +60,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             AccelerateBackward = false;
             Jump = false;
 
+            Vector3 normalizedForward = Vector3.Normalize(World.Forward);
+
             Vector3 targetPosition;
 
             if(PowerUp.CanBeTriggered())
@@ -72,11 +74,25 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
             TurnLeft = anguloXZ < 0;
             TurnRight = anguloXZ > 0;
+
+            AccelerateForward = targetDistance.Length() > 50 || MathF.Abs(anguloXZ) < MathF.PI / 2.8 || Speed < MaxSpeed * 0.3;
+
+            // Calculo diferenciales hacia delante del auto, para detectar obstaculos
+            var forwardPosition = Position;
+            var forwardDistance = - normalizedForward * 3;
+            for(int i = 0; i < 20; i++){
+                if(HeightMap.GetDifferential(forwardPosition, forwardDistance, HeightMap.GetActualLevel(Position.Y)) > 10f){
+                    AccelerateForward = false;
+                    AccelerateBackward = true;
+                    break;
+                }
+                forwardPosition += forwardDistance;
+            }
             
             var enemyDistance = (Enemies[0].Position - Position).Length();
 
             PreviousUsePowerUp = UsePowerUp;
-            UsePowerUp = Enemies[0].ObjectBox.Intersects(new BoundingSphere(Position - Vector3.Normalize(World.Forward) * enemyDistance, 10f));
+            UsePowerUp = Enemies[0].ObjectBox.Intersects(new BoundingSphere(Position - normalizedForward * enemyDistance, 10f));
 
             // Si el auto esta tocando el piso
             if(OnTheGround){

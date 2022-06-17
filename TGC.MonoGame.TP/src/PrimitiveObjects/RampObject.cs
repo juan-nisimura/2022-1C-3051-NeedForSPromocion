@@ -116,19 +116,19 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
 
         protected override void DrawPrimitive(Effect effect) { RampPrimitive.Draw(effect); }
 
-        public void UpdateHeightMap(int x, int z) {
+        public void UpdateHeightMap(int x, int z, int level) {
             if(HeightMap.Ray.Intersects(BoundingBox) != null){
                 var intersects = HeightMap.Ray.Intersects(Plane);
 
                 if(intersects != null) {  
-                    HeightMap.SetHeightIfGreater(x, z, HeightMap.Ray.Position.Y - intersects.GetValueOrDefault());
+                    HeightMap.SetHeightIfGreater(x, z, HeightMap.Ray.Position.Y - intersects.GetValueOrDefault(), level);
                 }
             }
         }
         internal bool SolveVerticalCollision(CarObject car)
         {
             if(car.ObjectBox.Intersects(BoundingBox)){
-                var posibleNewGroundLevel = HeightMap.GetHeight(car.Position.X, car.Position.Z);
+                var posibleNewGroundLevel = HeightMap.GetHeight(car.Position.X, car.Position.Z, HeightMap.GetActualLevel(car.Position.Y));
                 if(posibleNewGroundLevel - car.GroundLevel < 15f)
                     car.GroundLevel = posibleNewGroundLevel;
                 //else

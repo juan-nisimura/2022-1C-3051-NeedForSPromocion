@@ -180,9 +180,6 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             ForceSpeedModule = MathF.Max(ForceSpeedModule - 100f * TGCGame.GetElapsedTime(), 0f);
             var forceSpeed = ForceSpeedModule * ForceSpeedDirection;
 
-            Console.WriteLine("DATOS");
-            Console.WriteLine(ForceSpeedDirection);
-
             // Calculo la nueva posicion
             var x = Position.X + (- Speed * World.Forward.X + forceSpeed.X) * TGCGame.GetElapsedTime();
             var z = Position.Z + (- Speed * World.Forward.Z + forceSpeed.Z) * TGCGame.GetElapsedTime();
@@ -200,8 +197,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
             var forward = RotationMatrix.Forward;
 
-            var differentialAngleX = HeightMap.GetDifferentialAngle(Position, forward);
-            var differentialAngleZ = HeightMap.GetDifferentialAngle(Position, new Vector3(forward.Z, 0f, -forward.X));
+            var differentialAngleX = HeightMap.GetDifferentialAngle(Position, forward, HeightMap.GetActualLevel(Position.Y));
+            var differentialAngleZ = HeightMap.GetDifferentialAngle(Position, new Vector3(forward.Z, 0f, -forward.X), HeightMap.GetActualLevel(Position.Y));
 
             if(MathF.Abs(differentialAngleX) < MathF.PI / 6)
                 RotationMatrix = Matrix.CreateRotationX(differentialAngleX) * RotationMatrix;
@@ -303,11 +300,13 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                 enemyCar.Speed = enemyCar.Speed / 1.5f;
                 this.Speed = this.Speed / 1.5f;
 
+                enemyCar.HasCrashed = true;
+                this.HasCrashed = true;
+
                 return true;
                 /*
                 var thisNormalizedForward = Vector3.Normalize(new Vector3(this.RotationMatrix.Forward.X, 0, this.RotationMatrix.Forward.Z));
                 var thisNormalizedSideward = new Vector3(thisNormalizedForward.Z, 0, -thisNormalizedForward.X);
-                Console.WriteLine(thisNormalizedForward);
                 enemyCar.ApplyForce(-thisNormalizedForward, 85f);
                 this.ApplyForce(thisNormalizedForward, 85f);
                 enemyCar.Speed = enemyCar.Speed / 1.5f;

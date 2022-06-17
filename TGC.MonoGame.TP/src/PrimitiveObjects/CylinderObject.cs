@@ -24,6 +24,14 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
         }
         protected override void DrawPrimitive(Effect effect) { CylinderPrimitive.Draw(effect); }
     
+        public void UpdateHeightMap(int x, int z, int level) {
+            
+            if(BoundingCylinder.Intersects(HeightMap.Ray)){
+                var height = BoundingCylinder.HalfHeight * 2;
+                HeightMap.SetHeightIfGreater(x, z, height, level);
+            }
+        }
+
         public void SolveBulletCollision(BulletObject bullet){
             if(BoundingCylinder.Intersects(bullet.ImpactSphere))
                 bullet.HitObstacle();

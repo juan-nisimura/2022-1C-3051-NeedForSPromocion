@@ -65,10 +65,10 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
             return collided;
         }
 
-        internal void UpdateHeightMap(int x, int z)
+        internal void UpdateHeightMap(int x, int z, int level)
         {
-            Box.UpdateHeightMap(x, z);
-            for (int i = 0; i < Ramps.Length; i++)  Ramps[i].UpdateHeightMap(x, z);
+            Box.UpdateHeightMap(x, z, level);
+            for (int i = 0; i < Ramps.Length; i++)  Ramps[i].UpdateHeightMap(x, z, level);
         }
     }
 }

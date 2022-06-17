@@ -124,11 +124,11 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Building
             return collided;
         }
 
-        internal void UpdateHeightMap(int x, int z)
+        internal void UpdateHeightMap(int x, int z, int level)
         {
-            for (int i = 0; i < BOXES_QUANTITY; i++)  Boxes[i].UpdateHeightMap(x, z);
-            for (int i = 0; i < RAMPS_QUANTITY; i++)  Ramps[i].UpdateHeightMap(x, z);
-            for (int i = 0; i < WALLS_QUANTITY; i++)  Walls[i].UpdateHeightMap(x, z);
+            for (int i = 0; i < BOXES_QUANTITY; i++)  Boxes[i].UpdateHeightMap(x, z, level);
+            for (int i = 0; i < RAMPS_QUANTITY; i++)  Ramps[i].UpdateHeightMap(x, z, level);
+            for (int i = 0; i < WALLS_QUANTITY; i++)  Walls[i].UpdateHeightMap(x, z, level);
         }
     }
 }

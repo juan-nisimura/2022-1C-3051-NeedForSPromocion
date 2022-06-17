@@ -48,5 +48,10 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
         public void SolveMissileCollision(MissileObject missile){
             TreeTrunk.SolveMissileCollision(missile);
         }
+
+        internal void UpdateHeightMap(int x, int z, int level)
+        {
+            TreeTrunk.UpdateHeightMap(x, z, level);
+        }
     }
 }

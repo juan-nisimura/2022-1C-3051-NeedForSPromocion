@@ -23,10 +23,10 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
         public override void Update(){
         }
 
-        public void UpdateHeightMap(int x, int z) {
+        public void UpdateHeightMap(int x, int z, int level) {
             var intersects = HeightMap.Ray.Intersects(BoundingBox);
             if(intersects != null) {  
-                HeightMap.SetHeightIfGreater(x, z, HeightMap.Ray.Position.Y - intersects.GetValueOrDefault());
+                HeightMap.SetHeightIfGreater(x, z, HeightMap.Ray.Position.Y - intersects.GetValueOrDefault(), level);
             }
         }
 
@@ -93,7 +93,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
         internal bool SolveVerticalCollision(CarObject car)
         {
             if(car.ObjectBox.Intersects(BoundingBox)){
-                var posibleNewGroundLevel = HeightMap.GetHeight(car.Position.X, car.Position.Z);
+                var posibleNewGroundLevel = HeightMap.GetHeight(car.Position.X, car.Position.Z, HeightMap.GetActualLevel(car.Position.Y));
                 if(posibleNewGroundLevel - car.GroundLevel < 15f){
                     car.GroundLevel = posibleNewGroundLevel;
                 }

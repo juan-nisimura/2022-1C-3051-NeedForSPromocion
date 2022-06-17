@@ -34,7 +34,6 @@ namespace TGC.Monogame.TP.Src
         {
             var minutos = MathF.Floor(totalTime / 60);
             var segundos = MathF.Floor(totalTime) - minutos * 60; 
-            //var msg = "TIEMPO RESTANTE " + (totalTime / ).ToString("0.00");
             var msg = minutos.ToString("00") + ":" + segundos.ToString("00");
             var W = TGCGame.GetGraphicsDevice().Viewport.Width;
             var H = TGCGame.GetGraphicsDevice().Viewport.Height;
@@ -42,9 +41,9 @@ namespace TGC.Monogame.TP.Src
             var size = Font.MeasureString(msg) * escala;
             var Y = 25f;
             TGCGame.GetSpriteBatch().Begin(SpriteSortMode.Deferred, null, null, null, null, null,
-                Matrix.CreateScale(escala) * Matrix.CreateTranslation((W - size.X) / 2, Y, 0));
+                Matrix.CreateScale(escala) * Matrix.CreateTranslation((W - (Font.MeasureString("TIEMPO RESTANTE").X)) / 2, Y, 0));
             TGCGame.GetSpriteBatch().DrawString(Font, "TIEMPO RESTANTE", new Vector2(0, 0), Color.Red);
-            TGCGame.GetSpriteBatch().DrawString(Font, msg, new Vector2(0, 30), Color.Red);
+            TGCGame.GetSpriteBatch().DrawString(Font, msg, new Vector2((Font.MeasureString("TIEMPO RESTANTE").X * escala - size.X) / 2, 30), Color.Red);
             TGCGame.GetSpriteBatch().End();
         }
     }

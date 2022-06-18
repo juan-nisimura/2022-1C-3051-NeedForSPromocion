@@ -53,5 +53,10 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
         {
             TreeTrunk.UpdateHeightMap(x, z, level);
         }
+
+        internal void UpdateIALogicalMap(int x, int z, int level)
+        {
+            // TreeTrunk.UpdateIALogicalMap(x, z, level);
+        }
     }
 }

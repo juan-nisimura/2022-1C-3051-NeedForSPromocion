@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using TGC.Monogame.TP.Src.IALogicalMaps;
 using TGC.Monogame.TP.Src.PrimitiveObjects;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Map
@@ -7,7 +8,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Map
     {
 
         public MapWallObject(Vector3 position, Vector3 size, Color color) 
-        : base(position, size, color)
+        : base(position, size, color, 0, Vector3.Zero)
         {
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.Monogame.TP.Src.IALogicalMaps;
 using TGC.Monogame.TP.Src.PowerUpObjects;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels;
 using TGC.MonoGame.TP;
@@ -9,6 +10,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 {
     public class IACarObject : CarObject
     {
+        private const float ANGULO_BUSQUEDA_IA = MathF.PI / 20;
         public PowerUpObject[] MapPowerUps;
         public int MapPowerUpsQuantity;
         private bool AccelerateForward, TurnLeft, TurnRight, 
@@ -53,9 +55,12 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             return nearestPowerUp.GetPosition();
         }
 
+        public Vector3 RotateInPlaneXZ(Vector3 vector, float angle){
+            return new Vector3(vector.X * MathF.Cos(angle) - vector.Z * MathF.Sin(angle), vector.Y, vector.X * MathF.Sin(angle) + vector.Z * MathF.Cos(angle));
+        }
+
         public override void Update()
         {
-            // Capturo el estado del teclado
             AccelerateForward = true;
             AccelerateBackward = false;
             Jump = false;
@@ -64,18 +69,23 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
             Vector3 targetPosition;
 
-            if(PowerUp.CanBeTriggered())
+            var enemyDistance = (Enemies[0].Position - Position).Length();
+
+            if(PowerUp.CanBeTriggered() || SpeedBoostTime > 0 && enemyDistance < 100f)
                 targetPosition = Enemies[0].Position;
             else
                 targetPosition = NearestPowerUpPosition();
+                
+
+            targetPosition = IALogicalMap.GetTargetPositionInAdjacetCell(this.Position, targetPosition);
 
             var targetDistance = targetPosition - Position;
             var anguloXZ = MathF.Atan2(World.Forward.Z * targetDistance.X - World.Forward.X * targetDistance.Z, World.Forward.X * targetDistance.X + World.Forward.Z * targetDistance.Z);
 
-            TurnLeft = anguloXZ < 0;
-            TurnRight = anguloXZ > 0;
+            TurnLeft = anguloXZ < 0.0785;
+            TurnRight = anguloXZ > 0.0785;
 
-            AccelerateForward = targetDistance.Length() > 50 || MathF.Abs(anguloXZ) < MathF.PI / 2.8 || Speed < MaxSpeed * 0.3;
+            AccelerateForward = targetDistance.Length() > 100 || MathF.Abs(anguloXZ) < MathF.PI / 2.8 || Speed < MaxSpeed * 0.3;
 
             // Calculo diferenciales hacia delante del auto, para detectar obstaculos
             var forwardPosition = Position;
@@ -88,11 +98,40 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                 }
                 forwardPosition += forwardDistance;
             }
+
+            // Si el auto encontró un obstaculo hacia delante, busco otro camino cambiando el ángulo
+            var forwardLeftPosition = Position;
+            var forwardRightPosition = Position;
+            var normalizedLeftForward = RotateInPlaneXZ(normalizedForward, ANGULO_BUSQUEDA_IA);
+            var normalizedRightForward = RotateInPlaneXZ(normalizedForward, -ANGULO_BUSQUEDA_IA);
+            var forwardRightDistance = - normalizedRightForward * 4;
+            var forwardLeftDistance = - normalizedLeftForward * 4;
             
-            var enemyDistance = (Enemies[0].Position - Position).Length();
+            for(int i = 0; i < 20; i++){
+                if(HeightMap.GetDifferential(forwardLeftPosition, forwardLeftDistance, HeightMap.GetActualLevel(Position.Y)) > 6f){
+                    TurnLeft = true;
+                    if(i < 5){
+                        AccelerateForward = false;
+                        AccelerateBackward = true;
+                    }
+                    break;
+                }
+                if(HeightMap.GetDifferential(forwardRightPosition, forwardRightDistance, HeightMap.GetActualLevel(Position.Y)) > 6f){
+                    TurnRight = true;
+                    if(i < 5){
+                        AccelerateForward = false;
+                        AccelerateBackward = true;
+                    }
+                    break;
+                }
+                forwardLeftPosition += forwardLeftDistance;
+                forwardRightPosition += forwardRightDistance;
+            }
 
             PreviousUsePowerUp = UsePowerUp;
-            UsePowerUp = Enemies[0].ObjectBox.Intersects(new BoundingSphere(Position - normalizedForward * enemyDistance, 10f));
+            UsePowerUp = Enemies[0].ObjectBox.Intersects(new BoundingSphere(Position - normalizedForward * MathF.Min(enemyDistance, 250f), 8f));
+            
+            AccelerateForward = AccelerateForward || (enemyDistance < 100 && UsePowerUp);
 
             // Si el auto esta tocando el piso
             if(OnTheGround){

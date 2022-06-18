@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.Monogame.TP.Src.IALogicalMaps;
 using TGC.Monogame.TP.Src.PrimitiveObjects;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
@@ -8,7 +9,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
     {
 
         public MountBoxObject(Vector3 position, Vector3 size, Color color) 
-        : base(position, size, color)
+        : base(position, size, color, 0, Vector3.Zero)
         {
         }
     }

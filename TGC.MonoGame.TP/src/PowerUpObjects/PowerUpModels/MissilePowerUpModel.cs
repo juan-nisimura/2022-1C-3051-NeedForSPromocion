@@ -16,7 +16,6 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels
         public const float MISSILE_MODEL_SIZE = 1f;
         public static PowerUpModel PowerUpModel = new MissilePowerUpModel(Vector3.Zero);
         public static new PowerUpModel GetModel() { 
-            PowerUpModel.SetTime(0);
             return PowerUpModel; 
         }
         public MissilePowerUpModel(Vector3 position){

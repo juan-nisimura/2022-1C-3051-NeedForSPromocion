@@ -21,6 +21,7 @@ using TGC.Monogame.TP.Src.HUD;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUps;
 using TGC.Monogame.TP.Src.MyContentManagers;
+using TGC.Monogame.TP.Src.IALogicalMaps;
 
 namespace TGC.Monogame.TP.Src.Screens 
 {
@@ -85,7 +86,6 @@ namespace TGC.Monogame.TP.Src.Screens
             };
             
             Floor = new FloorObject(new Vector3(0f,0f,0f),new Vector3(700f,1f,700f),0);           
-
             Floor.Initialize();
 
             ControllerKeyG = new KeyController(Keys.G);
@@ -182,7 +182,7 @@ namespace TGC.Monogame.TP.Src.Screens
                 new MapWallObject(new Vector3(0f, 32.5f, -705f), new Vector3(1400f, 65f, 10f), Color.White),
             };
 
-            Buildings = new BuildingsObject();
+            Buildings = new BuildingsObject(Floor.IAMapBox);
 
             PowerUps = new PowerUpObject[] {
                 new PowerUpObject(new Vector3(0f,30f,0f)),
@@ -204,8 +204,7 @@ namespace TGC.Monogame.TP.Src.Screens
                 new PowerUpObject(new Vector3(550f, 40f, -550f))
             };
             
-            Bridge = new BridgeObject();
-
+            Bridge = new BridgeObject(Floor.IAMapBox);
             Bridge.Initialize();
             Buildings.Initialize();
 
@@ -232,6 +231,21 @@ namespace TGC.Monogame.TP.Src.Screens
                         for (int i = 0; i < MapWalls.Length; i++)   MapWalls[i].UpdateHeightMap(x, z, level);
                         for (int i = 0; i < Mounts.Length; i++)     Mounts[i].UpdateHeightMap(x, z, level);
                         for (int i = 0; i < Trees.Length; i++)      Trees[i].UpdateHeightMap(x, z, level);
+                    }
+                }
+            }
+
+            // Inicializo el IALogicalMap
+            for(int level = 0; level <= 1; level++){
+                for(int x =-710; x <= 710; x++) {
+                    for(int z = -710; z <= 710; z++) {
+                        IALogicalMap.SetIAMapBox(x, z, Floor.IAMapBox, level);
+                        IALogicalMap.MoveRay(x, z);
+                        Bridge.UpdateIALogicalMap(x, z, level);
+                        Buildings.UpdateIALogicalMap(x, z, level);
+                        //for (int i = 0; i < MapWalls.Length; i++)   MapWalls[i].UpdateIALogicalMap(x, z, level);
+                        //for (int i = 0; i < Mounts.Length; i++)     Mounts[i].UpdateIALogicalMap(x, z, level);
+                        //for (int i = 0; i < Trees.Length; i++)      Trees[i].UpdateIALogicalMap(x, z, level);
                     }
                 }
             }

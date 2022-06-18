@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
+using TGC.Monogame.TP.Src.IALogicalMaps;
 using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.MonoGame.Samples.Collisions;
 using TGC.MonoGame.TP.Src.Geometries;
@@ -11,13 +12,14 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
     class BoxObject <T> : CubeObject <T>
     {
-
-        private BoundingBox BoundingBox; 
-        private float MaxHeight;
-        public BoxObject(Vector3 position, Vector3 size, Color color) : base(position, size, color)
+        public IAMapBox IAMapBox;
+        protected BoundingBox BoundingBox; 
+        protected float MaxHeight;
+        public BoxObject(Vector3 position, Vector3 size, Color color, int connectedBoxesTotalQuantity, Vector3 IAMapBoxPosition) : base(position, size, color)
         {
             MaxHeight = position.Y + size.Y / 2;
             BoundingBox = new BoundingBox(position - size/2, position + size/2);
+            IAMapBox = new IAMapBox(BoundingBox, position + new Vector3(0f, size.Y / 2, 0f) + IAMapBoxPosition, connectedBoxesTotalQuantity);
         }
 
         public override void Update(){
@@ -27,6 +29,13 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             var intersects = HeightMap.Ray.Intersects(BoundingBox);
             if(intersects != null) {  
                 HeightMap.SetHeightIfGreater(x, z, HeightMap.Ray.Position.Y - intersects.GetValueOrDefault(), level);
+            }
+        }
+
+        public void UpdateIALogicalMap(int x, int z, int level) {
+            var intersects = IALogicalMap.Ray.Intersects(IAMapBox.BoundingBox);
+            if(intersects != null) {  
+                IALogicalMap.SetIAMapBoxIfGreater(x, z, IAMapBox, level);
             }
         }
 

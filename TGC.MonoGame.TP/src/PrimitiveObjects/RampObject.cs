@@ -8,6 +8,7 @@ using System;
 using TGC.MonoGame.TP;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
+using TGC.Monogame.TP.Src.IALogicalMaps;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
@@ -20,8 +21,10 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
 
         protected BoundingBox BoundingBox;
         protected Plane Plane;
+        
+        public IAMapBox IAMapBox;
 
-        public RampObject(Vector3 position, Vector3 size, float rotation, Color color){
+        public RampObject(Vector3 position, Vector3 size, float rotation, Color color, int connectedBoxesTotalQuantity, Vector3 IAMapBoxPosition){
             RampPrimitive = new RampPrimitive(TGCGame.GetGraphicsDevice());
             ScaleMatrix = Matrix.CreateScale(size);
             TranslateMatrix = Matrix.CreateTranslation(position);
@@ -44,7 +47,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
                                             RotationMatrix);
             Plane = Plane.Transform(Plane, TranslateMatrix);
 
-            
+            IAMapBox = new IAMapBox(BoundingBox, position + new Vector3(0f, size.Y / 2, 0f) + IAMapBoxPosition, connectedBoxesTotalQuantity);
         }
 
         public override void Update(){
@@ -125,6 +128,14 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
                 }
             }
         }
+
+        public void UpdateIALogicalMap(int x, int z, int level) {
+            var intersects = IALogicalMap.Ray.Intersects(IAMapBox.BoundingBox);
+            if(intersects != null) {  
+                IALogicalMap.SetIAMapBoxIfGreater(x, z, IAMapBox, level);
+            }
+        }
+
         internal bool SolveVerticalCollision(CarObject car)
         {
             if(car.ObjectBox.Intersects(BoundingBox)){

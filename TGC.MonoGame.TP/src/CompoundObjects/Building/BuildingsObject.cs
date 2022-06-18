@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
+using TGC.Monogame.TP.Src.IALogicalMaps;
 using TGC.Monogame.TP.Src.ModelObjects;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Building
@@ -16,62 +17,107 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Building
         protected BuildingBoxObject[] Boxes { get; set; }
         protected BuildingWallObject[] Walls { get; set; }
         protected BuildingRampObject[] Ramps { get; set; }
-        public BuildingsObject(){
+        public BuildingsObject(IAMapBox floorIAMapBox){
+
+            Ramps = new BuildingRampObject[] {  
+                new BuildingRampObject(new Vector3(550f, 20f, 350f), new Vector3(100f, 40f, 100f), MathF.PI / 2, Color.Yellow, 4, new Vector3(0f,0f,-40f)),
+                new BuildingRampObject(new Vector3(350f, 20f, 550f), new Vector3(100f, 40f, 100f), MathF.PI, Color.Yellow, 4, new Vector3(-40f,0f,0f)),
+
+                new BuildingRampObject(new Vector3(-550f, 20f, 350f), new Vector3(100f, 40f, 100f), MathF.PI / 2, Color.Yellow, 4, new Vector3(0f,0f,-40f)),
+                new BuildingRampObject(new Vector3(-350f, 20f, 550f), new Vector3(100f, 40f, 100f), 0, Color.Yellow, 4, new Vector3(40f,0f,0f)),
+
+                new BuildingRampObject(new Vector3(-550f, 20f, -350f), new Vector3(100f, 40f, 100f), - MathF.PI / 2, Color.Yellow, 4, new Vector3(0f,0f,40f)),
+                new BuildingRampObject(new Vector3(-350f, 20f, -550f), new Vector3(100f, 40f, 100f), 0, Color.Yellow, 4, new Vector3(40f,0f,0f)),
+
+                new BuildingRampObject(new Vector3(550f, 20f, -350f), new Vector3(100f, 40f, 100f), - MathF.PI / 2, Color.Yellow, 4, new Vector3(0f,0f,40f)),
+                new BuildingRampObject(new Vector3(350f, 20f, -550f), new Vector3(100f, 40f, 100f), MathF.PI, Color.Yellow, 4, new Vector3(-40f,0f,0f)),
+            };
 
             Boxes = new BuildingBoxObject[] {
-                new BuildingBoxObject(new Vector3(555f, 20f, 555f), new Vector3(290f, 40f, 290f), Color.Brown),
-                new BuildingBoxObject(new Vector3(-555f, 20f, 555f), new Vector3(290f, 40f, 290f), Color.Brown),
-                new BuildingBoxObject(new Vector3(-555f, 20f, -555f), new Vector3(290f, 40f, 290f), Color.Brown),
-                new BuildingBoxObject(new Vector3(555f, 20f, -555f), new Vector3(290f, 40f, 290f), Color.Brown),
-                
-                new BuildingBoxObject(new Vector3(405f, 20f, 550f), new Vector3(10f, 40f, 100f), Color.Brown),
-                new BuildingBoxObject(new Vector3(550f, 20f, 405f), new Vector3(100f, 40f, 10f), Color.Brown),
+                new BuildingBoxObject(new Vector3(555f, 20f, 555f), new Vector3(290f, 40f, 290f), Color.Brown, 2),
+                new BuildingBoxObject(new Vector3(405f, 20f, 550f), new Vector3(10f, 40f, 100f), Color.Brown, 2),
+                new BuildingBoxObject(new Vector3(550f, 20f, 405f), new Vector3(100f, 40f, 10f), Color.Brown, 2),
 
-                new BuildingBoxObject(new Vector3(-405f, 20f, 550f), new Vector3(10f, 40f, 100f), Color.Brown),
-                new BuildingBoxObject(new Vector3(-550f, 20f, 405f), new Vector3(100f, 40f, 10f), Color.Brown),
+                new BuildingBoxObject(new Vector3(-555f, 20f, 555f), new Vector3(290f, 40f, 290f), Color.Brown, 2),
+                new BuildingBoxObject(new Vector3(-405f, 20f, 550f), new Vector3(10f, 40f, 100f), Color.Brown, 2),
+                new BuildingBoxObject(new Vector3(-550f, 20f, 405f), new Vector3(100f, 40f, 10f), Color.Brown, 2),
 
-                new BuildingBoxObject(new Vector3(405f, 20f, -550f), new Vector3(10f, 40f, 100f), Color.Brown),
-                new BuildingBoxObject(new Vector3(550f, 20f, -405f), new Vector3(100f, 40f, 10f), Color.Brown),
+                new BuildingBoxObject(new Vector3(-555f, 20f, -555f), new Vector3(290f, 40f, 290f), Color.Brown, 2),
+                new BuildingBoxObject(new Vector3(-405f, 20f, -550f), new Vector3(10f, 40f, 100f), Color.Brown, 2),
+                new BuildingBoxObject(new Vector3(-550f, 20f, -405f), new Vector3(100f, 40f, 10f), Color.Brown, 2),
 
-                new BuildingBoxObject(new Vector3(-405f, 20f, -550f), new Vector3(10f, 40f, 100f), Color.Brown),
-                new BuildingBoxObject(new Vector3(-550f, 20f, -405f), new Vector3(100f, 40f, 10f), Color.Brown),
-            };
-            
-            Ramps = new BuildingRampObject[] {  
-                new BuildingRampObject(new Vector3(550f, 20f, 350f), new Vector3(100f, 40f, 100f), MathF.PI / 2, Color.Yellow),
-                new BuildingRampObject(new Vector3(350f, 20f, 550f), new Vector3(100f, 40f, 100f), MathF.PI, Color.Yellow),
-
-                new BuildingRampObject(new Vector3(550f, 20f, -350f), new Vector3(100f, 40f, 100f), - MathF.PI / 2, Color.Yellow),
-                new BuildingRampObject(new Vector3(350f, 20f, -550f), new Vector3(100f, 40f, 100f), MathF.PI, Color.Yellow),
-
-                new BuildingRampObject(new Vector3(-550f, 20f, -350f), new Vector3(100f, 40f, 100f), - MathF.PI / 2, Color.Yellow),
-                new BuildingRampObject(new Vector3(-350f, 20f, -550f), new Vector3(100f, 40f, 100f), 0, Color.Yellow),
-
-                new BuildingRampObject(new Vector3(-550f, 20f, 350f), new Vector3(100f, 40f, 100f), MathF.PI / 2, Color.Yellow),
-                new BuildingRampObject(new Vector3(-350f, 20f, 550f), new Vector3(100f, 40f, 100f), 0, Color.Yellow),
+                new BuildingBoxObject(new Vector3(555f, 20f, -555f), new Vector3(290f, 40f, 290f), Color.Brown, 2),
+                new BuildingBoxObject(new Vector3(405f, 20f, -550f), new Vector3(10f, 40f, 100f), Color.Brown, 2),
+                new BuildingBoxObject(new Vector3(550f, 20f, -405f), new Vector3(100f, 40f, 10f), Color.Brown, 2),
             };
 
             Walls = new BuildingWallObject[] {
-                new BuildingWallObject(new Vector3(405f, 25f, 450f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(new Vector3(455f, 25f, 405f), new Vector3(90f, 50f, 10f), Color.Gray),  
-                new BuildingWallObject(new Vector3(405f, 25f, 650f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(new Vector3(650f, 25f, 405f), new Vector3(100f, 50f, 10f), Color.Gray),
+                new BuildingWallObject(new Vector3(405f, 25f, 450f), new Vector3(10f, 50f, 100f), Color.Gray, 1),
+                new BuildingWallObject(new Vector3(455f, 25f, 405f), new Vector3(90f, 50f, 10f), Color.Gray, 1),  
+                new BuildingWallObject(new Vector3(405f, 25f, 650f), new Vector3(10f, 50f, 100f), Color.Gray, 1),
+                new BuildingWallObject(new Vector3(650f, 25f, 405f), new Vector3(100f, 50f, 10f), Color.Gray, 1),
                 
-                new BuildingWallObject(new Vector3(-405f, 25f, -450f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(new Vector3(-455f, 25f, -405f), new Vector3(90f, 50f, 10f), Color.Gray),  
-                new BuildingWallObject(new Vector3(-405f, 25f, -650f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(new Vector3(-650f, 25f, -405f), new Vector3(100f, 50f, 10f), Color.Gray),
+                new BuildingWallObject(new Vector3(-405f, 25f, -450f), new Vector3(10f, 50f, 100f), Color.Gray, 1),
+                new BuildingWallObject(new Vector3(-455f, 25f, -405f), new Vector3(90f, 50f, 10f), Color.Gray, 1),  
+                new BuildingWallObject(new Vector3(-405f, 25f, -650f), new Vector3(10f, 50f, 100f), Color.Gray, 1),
+                new BuildingWallObject(new Vector3(-650f, 25f, -405f), new Vector3(100f, 50f, 10f), Color.Gray, 1),
                 
-                new BuildingWallObject(new Vector3(-405f, 25f, 450f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(new Vector3(-455f, 25f, 405f), new Vector3(90f, 50f, 10f), Color.Gray),  
-                new BuildingWallObject(new Vector3(-405f, 25f, 650f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(new Vector3(-650f, 25f, 405f), new Vector3(100f, 50f, 10f), Color.Gray),
+                new BuildingWallObject(new Vector3(-405f, 25f, 450f), new Vector3(10f, 50f, 100f), Color.Gray, 1),
+                new BuildingWallObject(new Vector3(-455f, 25f, 405f), new Vector3(90f, 50f, 10f), Color.Gray, 1),  
+                new BuildingWallObject(new Vector3(-405f, 25f, 650f), new Vector3(10f, 50f, 100f), Color.Gray, 1),
+                new BuildingWallObject(new Vector3(-650f, 25f, 405f), new Vector3(100f, 50f, 10f), Color.Gray, 1),
                 
-                new BuildingWallObject(new Vector3(405f, 25f, -450f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(new Vector3(455f, 25f, -405f), new Vector3(90f, 50f, 10f), Color.Gray),  
-                new BuildingWallObject(new Vector3(405f, 25f, -650f), new Vector3(10f, 50f, 100f), Color.Gray),
-                new BuildingWallObject(new Vector3(650f, 25f, -405f), new Vector3(100f, 50f, 10f), Color.Gray),
+                new BuildingWallObject(new Vector3(405f, 25f, -450f), new Vector3(10f, 50f, 100f), Color.Gray, 1),
+                new BuildingWallObject(new Vector3(455f, 25f, -405f), new Vector3(90f, 50f, 10f), Color.Gray, 1),  
+                new BuildingWallObject(new Vector3(405f, 25f, -650f), new Vector3(10f, 50f, 100f), Color.Gray, 1),
+                new BuildingWallObject(new Vector3(650f, 25f, -405f), new Vector3(100f, 50f, 10f), Color.Gray, 1),
             };
+
+            // Conecto los IAMapBoxes
+            for(int i = 0; i < Ramps.Length; i++)
+                floorIAMapBox.AddIAMapBox(Ramps[i].IAMapBox);
+
+            for(int i = 0; i < Walls.Length; i++)
+                Walls[i].IAMapBox.AddIAMapBox(floorIAMapBox);
+
+            for(int i = 0; i < Ramps.Length; i++){
+                var firstBoxIndex = (int) MathF.Floor(i / 2) * 3;   
+                for(int j = firstBoxIndex; j < firstBoxIndex + 3; j++){
+                    Ramps[i].IAMapBox.AddIAMapBox(Boxes[j].IAMapBox);
+                } 
+                Ramps[i].IAMapBox.AddIAMapBox(floorIAMapBox);
+            }
+
+            for(int i = 0; i < Boxes.Length; i++){
+                var firstRampIndex = (int) MathF.Floor(i / 3) * 2;
+                for(int j = firstRampIndex; j < firstRampIndex + 2; j++){
+                    Boxes[i].IAMapBox.AddIAMapBox(Ramps[j].IAMapBox);
+                }
+            }            
+
+            /*
+            Ramps[0].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[0].IAMapBox, Boxes[4].IAMapBox, Boxes[5].IAMapBox });
+            Ramps[1].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[0].IAMapBox, Boxes[4].IAMapBox, Boxes[5].IAMapBox });
+            Ramps[2].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[3].IAMapBox, Boxes[10].IAMapBox, Boxes[11].IAMapBox });
+            Ramps[3].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[3].IAMapBox, Boxes[10].IAMapBox, Boxes[11].IAMapBox });
+            Ramps[4].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[2].IAMapBox, Boxes[8].IAMapBox, Boxes[9].IAMapBox });
+            Ramps[5].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[2].IAMapBox, Boxes[8].IAMapBox, Boxes[9].IAMapBox });
+            Ramps[6].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[1].IAMapBox, Boxes[6].IAMapBox, Boxes[7].IAMapBox });
+            Ramps[7].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[1].IAMapBox, Boxes[6].IAMapBox, Boxes[7].IAMapBox });
+
+            Boxes[0].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[0].IAMapBox, Ramps[1].IAMapBox });
+            Boxes[1].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[6].IAMapBox, Ramps[7].IAMapBox });
+            Boxes[2].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[4].IAMapBox, Ramps[5].IAMapBox });
+            Boxes[3].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[2].IAMapBox, Ramps[3].IAMapBox });
+            Boxes[4].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[0].IAMapBox, Ramps[1].IAMapBox });
+            Boxes[5].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[0].IAMapBox, Ramps[1].IAMapBox });
+            Boxes[6].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[6].IAMapBox, Ramps[7].IAMapBox });
+            Boxes[7].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[6].IAMapBox, Ramps[7].IAMapBox });
+            Boxes[8].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[4].IAMapBox, Ramps[5].IAMapBox });
+            Boxes[9].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[4].IAMapBox, Ramps[5].IAMapBox });
+            Boxes[10].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[2].IAMapBox, Ramps[3].IAMapBox });
+            Boxes[11].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[2].IAMapBox, Ramps[3].IAMapBox });            
+            */
         }
 
         public new void Initialize(){
@@ -129,6 +175,13 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Building
             for (int i = 0; i < BOXES_QUANTITY; i++)  Boxes[i].UpdateHeightMap(x, z, level);
             for (int i = 0; i < RAMPS_QUANTITY; i++)  Ramps[i].UpdateHeightMap(x, z, level);
             for (int i = 0; i < WALLS_QUANTITY; i++)  Walls[i].UpdateHeightMap(x, z, level);
+        }
+
+        internal void UpdateIALogicalMap(int x, int z, int level)
+        {
+            for (int i = 0; i < BOXES_QUANTITY; i++)  Boxes[i].UpdateIALogicalMap(x, z, level);
+            for (int i = 0; i < RAMPS_QUANTITY; i++)  Ramps[i].UpdateIALogicalMap(x, z, level);
+            for (int i = 0; i < WALLS_QUANTITY; i++)  Walls[i].UpdateIALogicalMap(x, z, level);
         }
     }
 }

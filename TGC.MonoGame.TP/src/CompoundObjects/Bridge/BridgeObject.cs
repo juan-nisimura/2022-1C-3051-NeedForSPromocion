@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
+using TGC.Monogame.TP.Src.IALogicalMaps;
 using TGC.Monogame.TP.Src.ModelObjects;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
@@ -17,19 +18,31 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
         protected BridgeColumnObject[] Columns { get; set; }
         protected BridgeRampObject[] Ramps { get; set; }
         protected BridgeFloorObject[] Floors { get; set; }
-        public BridgeObject(){
+
+        public BridgeObject(IAMapBox floorIAMapBox){
 
             Ramps = new BridgeRampObject[] { 
-                new BridgeRampObject(new Vector3(370f, 15f, -90f), new Vector3(100f, 30f, 80f), MathF.PI / 2, Color.Yellow),
-                new BridgeRampObject(new Vector3(-370f, 15f, 90f), new Vector3(100f, 30f, 80f), - MathF.PI / 2, Color.Yellow),
+                new BridgeRampObject(new Vector3(370f, 15f, -90f), new Vector3(100f, 30f, 80f), MathF.PI / 2, Color.Yellow, 2, new Vector3(0f,0f,-40f)),
+                new BridgeRampObject(new Vector3(-370f, 15f, 90f), new Vector3(100f, 30f, 80f), - MathF.PI / 2, Color.Yellow, 2, new Vector3(0f,0f,40f)),
             };
 
             Floors = new BridgeFloorObject[] {
-                new BridgeFloorObject(new Vector3(235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown),
-                new BridgeFloorObject(new Vector3(-235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown),
+                new BridgeFloorObject(new Vector3(235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown, 2, new Vector3(115f,0f,0f)),
+                new BridgeFloorObject(new Vector3(-235f, 29f, 0f), new Vector3(350f, 2f, 80f), Color.Brown, 2, new Vector3(-115f,0f,0f)),
             };
 
-            Block = new BridgeBlockObject(new Vector3(0f, 15f, 0f), new Vector3(120f, 30f, 80f), Color.Gray);
+            Block = new BridgeBlockObject(new Vector3(0f, 15f, 0f), new Vector3(120f, 30f, 80f), Color.Gray, 2); 
+            
+            // Conecto los IA Map Boxes
+            Ramps[0].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Floors[0].IAMapBox, floorIAMapBox });
+            Ramps[1].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Floors[1].IAMapBox, floorIAMapBox });
+            
+            Block.IAMapBox.AddIAMapBoxes(new IAMapBox[] { Floors[0].IAMapBox, Floors[1].IAMapBox });
+            Floors[0].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[0].IAMapBox, Block.IAMapBox });
+            Floors[1].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[1].IAMapBox, Block.IAMapBox });
+
+            for(int i = 0; i < Ramps.Length; i++)
+                floorIAMapBox.AddIAMapBox(Ramps[i].IAMapBox);
 
             Columns = new BridgeColumnObject[]{
                 new BridgeColumnObject(new Vector3(150f, 30f, -45f), new Vector3(10f, 60f, 10f), MathF.PI, Color.Beige),
@@ -107,6 +120,15 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
                 for (int i = 0; i < FLOORS_QUANTITY; i++)   Floors[i].UpdateHeightMap(x, z, level);
             for (int i = 0; i < RAMPS_QUANTITY; i++)    Ramps[i].UpdateHeightMap(x, z, level);
             for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].UpdateHeightMap(x, z, level);
+        }
+
+        internal void UpdateIALogicalMap(int x, int z, int level)
+        {
+            Block.UpdateIALogicalMap(x, z, level);
+            if(level == 1)
+                for (int i = 0; i < FLOORS_QUANTITY; i++)   Floors[i].UpdateIALogicalMap(x, z, level);
+            for (int i = 0; i < RAMPS_QUANTITY; i++)    Ramps[i].UpdateIALogicalMap(x, z, level);
+            // for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].UpdateIALogicalMap(x, z, level);
         }
     }
 }

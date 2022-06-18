@@ -10,7 +10,7 @@ namespace TGC.Monogame.TP.Src
 {
     public class Clock
     {
-        private const float GAME_TOTAL_TIME = 100f;
+        private const float GAME_TOTAL_TIME = 10000f;
         private float totalTime = GAME_TOTAL_TIME;
         private SpriteFont Font;
 

@@ -70,5 +70,11 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
             Box.UpdateHeightMap(x, z, level);
             for (int i = 0; i < Ramps.Length; i++)  Ramps[i].UpdateHeightMap(x, z, level);
         }
+
+        internal void UpdateIALogicalMap(int x, int z, int level)
+        {
+            Box.UpdateIALogicalMap(x, z, level);
+            for (int i = 0; i < Ramps.Length; i++)  Ramps[i].UpdateIALogicalMap(x, z, level);
+        }
     }
 }

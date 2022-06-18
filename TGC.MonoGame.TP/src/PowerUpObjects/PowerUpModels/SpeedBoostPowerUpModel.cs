@@ -14,7 +14,6 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels
         public const float BULLET_MODEL_SIZE = 1f;
         public static PowerUpModel PowerUpModel = new SpeedBoostPowerUpModel(Vector3.Zero);
         public static new PowerUpModel GetModel()  { 
-            PowerUpModel.SetTime(0);
             return PowerUpModel; 
         }
 

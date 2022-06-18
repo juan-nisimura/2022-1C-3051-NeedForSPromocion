@@ -94,30 +94,6 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Building
                     Boxes[i].IAMapBox.AddIAMapBox(Ramps[j].IAMapBox);
                 }
             }            
-
-            /*
-            Ramps[0].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[0].IAMapBox, Boxes[4].IAMapBox, Boxes[5].IAMapBox });
-            Ramps[1].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[0].IAMapBox, Boxes[4].IAMapBox, Boxes[5].IAMapBox });
-            Ramps[2].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[3].IAMapBox, Boxes[10].IAMapBox, Boxes[11].IAMapBox });
-            Ramps[3].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[3].IAMapBox, Boxes[10].IAMapBox, Boxes[11].IAMapBox });
-            Ramps[4].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[2].IAMapBox, Boxes[8].IAMapBox, Boxes[9].IAMapBox });
-            Ramps[5].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[2].IAMapBox, Boxes[8].IAMapBox, Boxes[9].IAMapBox });
-            Ramps[6].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[1].IAMapBox, Boxes[6].IAMapBox, Boxes[7].IAMapBox });
-            Ramps[7].IAMapBox.AddIAMapBoxes(new IAMapBox[] { floorIAMapBox, Boxes[1].IAMapBox, Boxes[6].IAMapBox, Boxes[7].IAMapBox });
-
-            Boxes[0].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[0].IAMapBox, Ramps[1].IAMapBox });
-            Boxes[1].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[6].IAMapBox, Ramps[7].IAMapBox });
-            Boxes[2].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[4].IAMapBox, Ramps[5].IAMapBox });
-            Boxes[3].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[2].IAMapBox, Ramps[3].IAMapBox });
-            Boxes[4].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[0].IAMapBox, Ramps[1].IAMapBox });
-            Boxes[5].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[0].IAMapBox, Ramps[1].IAMapBox });
-            Boxes[6].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[6].IAMapBox, Ramps[7].IAMapBox });
-            Boxes[7].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[6].IAMapBox, Ramps[7].IAMapBox });
-            Boxes[8].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[4].IAMapBox, Ramps[5].IAMapBox });
-            Boxes[9].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[4].IAMapBox, Ramps[5].IAMapBox });
-            Boxes[10].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[2].IAMapBox, Ramps[3].IAMapBox });
-            Boxes[11].IAMapBox.AddIAMapBoxes(new IAMapBox[] { Ramps[2].IAMapBox, Ramps[3].IAMapBox });            
-            */
         }
 
         public new void Initialize(){

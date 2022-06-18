@@ -38,6 +38,8 @@ namespace TGC.MonoGame.TP
         }
 
         public static KeyController ControllerKeyP { get; set; } 
+        public static KeyController ControllerKeyA { get; set; } 
+        public static KeyController ControllerKeyD { get; set; } 
 
         public static KeyController ControllerKeyEnter { get; set; }
 
@@ -53,6 +55,8 @@ namespace TGC.MonoGame.TP
             // La logica de inicializacion que no depende del contenido se recomienda poner en este metodo.
 
             ControllerKeyP = new KeyController(Keys.P);
+            ControllerKeyD = new KeyController(Keys.D);
+            ControllerKeyA = new KeyController(Keys.A);
             ControllerKeyEnter = new KeyController(Keys.Enter);
 
             MainMenuScreen.GetInstance().Initialize();
@@ -60,7 +64,10 @@ namespace TGC.MonoGame.TP
             TimeOutScreen.GetInstance().Initialize();
             WinScreen.GetInstance().Initialize();
             LoseScreen.GetInstance().Initialize();
-            PauseScreen.GetInstance().Initialize();
+            PauseControlsScreen.GetInstance().Initialize();
+            PauseInstructionsScreen.GetInstance().Initialize();
+            PausePowerUpsScreen.GetInstance().Initialize();
+            //PauseBoostPadsScreen.GetInstance().Initialize();
 
             base.Initialize();
         }
@@ -84,7 +91,9 @@ namespace TGC.MonoGame.TP
             TimeOutScreen.GetInstance().Load();
             WinScreen.GetInstance().Load();
             LoseScreen.GetInstance().Load();
-            PauseScreen.GetInstance().Load();
+            PauseControlsScreen.GetInstance().Load();
+            PauseInstructionsScreen.GetInstance().Load();
+            PausePowerUpsScreen.GetInstance().Load();
             
             ActiveScreen.Start();
         }

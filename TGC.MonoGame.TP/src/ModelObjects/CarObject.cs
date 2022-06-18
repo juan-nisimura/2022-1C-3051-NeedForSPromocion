@@ -118,6 +118,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                 MissilesPool[i] = new MissileObject();
                 MissilesPool[i].Initialize(Enemies);
             }
+            Update();
         }
 
         public void Reset(){
@@ -313,95 +314,6 @@ namespace TGC.Monogame.TP.Src.ModelObjects
                 this.HasCrashed = true;
 
                 return true;
-                /*
-                var thisNormalizedForward = Vector3.Normalize(new Vector3(this.RotationMatrix.Forward.X, 0, this.RotationMatrix.Forward.Z));
-                var thisNormalizedSideward = new Vector3(thisNormalizedForward.Z, 0, -thisNormalizedForward.X);
-                enemyCar.ApplyForce(-thisNormalizedForward, 85f);
-                this.ApplyForce(thisNormalizedForward, 85f);
-                enemyCar.Speed = enemyCar.Speed / 1.5f;
-                this.Speed = this.Speed / 1.5f;
-                enemyCar.TakeDamage(MathF.Floor(MathF.Abs(this.Speed / 1500f)));
-                this.TakeDamage(MathF.Floor(MathF.Abs(enemyCar.Speed / 1500f)));
-*/
-
-                // Si dos autos chocan, están las siguientes alternativas:
-                // 1. El primero choca de frente o marcha atrás al segundo
-                // 2. El segundo choca de frente o marcha atrás al primero
-                // 3. Ambos chocan de costado
-                // 4. Ambos chocan de frente
-
-                // var enemyNormalizedForward = Vector3.Normalize(new Vector3(enemyCar.World.Forward.X, 0, enemyCar.World.Forward.Z));
-
-                // CASO 1: Choco al otro auto por detrás
-                //enemyCar.ObjectBox.Intersects(new Ray(this.Position, thisNormalizedForward), out var optionalForwardDistancia);
-                /* enemyCar.ObjectBox.Intersects(new Ray(this.Position, - thisNormalizedForward), out var optionalBackwardDistancia);
-                this.ObjectBox.Intersects(new Ray(enemyCar.Position, thisNormalizedForward), out var optionalEnemyForwardDistancia);
-                this.ObjectBox.Intersects(new Ray(enemyCar.Position, - thisNormalizedForward), out var optionalEnemyBackwardDistancia);                
-                */
-
-
-
-
-                /*
-                if(optionalForwardDistancia.HasValue && optionalEnemyBackwardDistancia.HasValue){
-                    var longitudCatetoAdyacente = optionalForwardDistancia.GetValueOrDefault(0);
-                    
-                    // Calculo el punto de impacto en el auto enemigo:
-                    var catetoAdyacente = thisNormalizedForward * longitudCatetoAdyacente;
-                    var angulo = MathF.Acos(Convert.ToSingle(Vector3.Dot(thisNormalizedForward, enemyNormalizedForward)));
-                    var hipotenusa = enemyNormalizedForward * longitudCatetoAdyacente / MathF.Cos(angulo);
-                    var puntoDeImpacto = this.Position + thisNormalizedForward * Size.X + catetoAdyacente - hipotenusa;
-                    
-                    // Calculo la penetracion
-                    var penetracion = HIPOTENUSA_AL_VERTICE - Vector3.Distance(puntoDeImpacto, this.Position); 
-
-                    // Empuja el centro del auto fuera del Box
-                    enemyCar.ObjectBox.Center += (- thisNormalizedForward * penetracion);
-                    enemyCar.Position = enemyCar.ObjectBox.Center;
-                    enemyCar.HasCrashed = true;
-
-                    return true;
-                }*/
-
-                /*
-                enemyCar.ObjectBox.Intersects(new Ray(this.Position, -thisNormalizedForward), out optionalDistancia);
-                if(optionalDistancia.HasValue){
-                    var longitudCatetoAdyacente = optionalDistancia.GetValueOrDefault(0);
-                    
-                    // Calculo el punto de impacto:
-                    var catetoAdyacente = - thisNormalizedForward * longitudCatetoAdyacente;
-                    var angulo = MathF.Acos(Convert.ToSingle(Vector3.Dot(- thisNormalizedForward, enemyNormalizedForward)));
-                    var hipotenusa = enemyNormalizedForward * longitudCatetoAdyacente / MathF.Cos(angulo);
-                    var puntoDeImpacto = this.Position - thisNormalizedForward * Size.X + catetoAdyacente - hipotenusa;
-
-                    // Calculo la penetracion
-                    var penetracion = HIPOTENUSA_AL_VERTICE - Vector3.Distance(puntoDeImpacto, this.Position); 
-
-                    // Empuja el centro del auto fuera del Box
-                    enemyCar.ObjectBox.Center += (thisNormalizedForward * penetracion);
-                    enemyCar.Position = enemyCar.ObjectBox.Center;
-                    enemyCar.HasCrashed = true;
-
-                    return true;
-                }
-
-                // CASO 2
-                this.ObjectBox.Intersects(new Ray(enemyCar.Position, enemyNormalizedForward), out optionalDistancia);
-                if(optionalDistancia.HasValue){
-                    // Dejo el calculo al otro auto:
-                    return false;
-                }
-
-                this.ObjectBox.Intersects(new Ray(enemyCar.Position, -enemyNormalizedForward), out optionalDistancia);
-                if(optionalDistancia.HasValue){
-                    // Dejo el calculo al otro auto:
-                    return false;
-                }
-
-                // CASO 3
-
-                return true;
-                */
             } 
                 
             return false;

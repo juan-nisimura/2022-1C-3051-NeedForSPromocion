@@ -49,19 +49,6 @@ namespace TGC.Monogame.TP.Src.IALogicalMaps
                 SetIAMapBox(x, z, mapBox, level);
         }
 
-/*
-        public static float GetDifferential(Vector3 position, Vector3 forward, int level)
-        {
-            Vector3 normalized = Vector3.Normalize(forward) * 10f;
-            return GetHeight(position.X + normalized.X, position.Z + normalized.Z, level) -
-                    GetHeight(position.X, position.Z, level);
-        }
-
-        public static float GetDifferentialAngle(Vector3 position, Vector3 forward, int level)
-        {
-            return MathF.Atan(GetDifferential(position, forward, level)/10f);
-        }
-*/
         public static int GetActualLevel(float actualHeight){
             if(actualHeight > 25f)
                 return 1;

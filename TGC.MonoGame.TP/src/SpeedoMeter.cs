@@ -16,11 +16,6 @@ namespace TGC.Monogame.TP.Src
 
         public void Load()
         {
-            /*
-            Texture = content.Load<Texture2D>("Textures/" + "speedo_tex");
-            Needle = content.Load<Texture2D>("Textures/" + "speedoneedle");
-            Font = content.Load<SpriteFont>("SpriteFonts/" + "DS-Digital/DS-Digital");
-            */
             Texture = (Texture2D) MyContentManager.Textures.Load("speedo_tex");
             Needle = (Texture2D) MyContentManager.Textures.Load("speedoneedle");
             Font = MyContentManager.SpriteFonts.Load("DS-Digital/DS-Digital");

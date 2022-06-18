@@ -62,15 +62,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public void Update(CarObject car) {
             Speed[0] = Speed[1];
             Speed[1] = MathF.Abs(car.Speed);
-            /*
-            Crash[0] = Crash[1];
-            Crash[1] = car.HasCrashed;*/
-
-            /*
-            if(Crash[1] && !Crash[0] && Speed[1] > CAR_SPEED_CRASH){
-                CrashSound.CreateInstance().Play();
-            }*/
-
+            
             switch(EngineState){
                 case EngineState.Stopped:
                     if(Speed[1] > 0){

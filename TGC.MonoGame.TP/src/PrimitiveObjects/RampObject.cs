@@ -146,33 +146,6 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
                     //car.GroundLevel = 0;
             }
             return false;
-            
-            /*
-            // Chequeo si colisionó con el auto
-            if(car.ObjectBox.Intersects(BoundingBox)){
-
-                car.RotateX(new Vector3(0f, 1f, 0f));
-                
-                if(car.ObjectBox.Intersects(Plane) != PlaneIntersectionType.Back){
-                    var cos = MathF.Cos(Rotation);
-                    var sin = MathF.Sin(Rotation);
-
-                    //var groundLevel = Lerp(0, Size.Y, (cos * ( car.Position.X - cos * Position.X + Size.X / 2 ) + sin * (car.Position.Z - sin * Position.Z + Size.X / 2)) / Size.X  ); 
-                    var groundLevel = Lerp(0, Size.Y, (cos * ( car.Position.X - Position.X + Size.X / 2 ) + sin * (car.Position.Z - Position.Z + Size.X / 2)) / Size.X  );
-                    car.GroundLevel = MathF.Max(groundLevel, car.GroundLevel);
-
-                    // Inclino el auto
-                    car.RotateX(Plane.Normal);
-                    DiffuseColor = Color.Blue.ToVector3();
-                    car.OnTheGround = true;
-
-                    return false;
-                }
-
-                return true;
-            } 
-                
-            return false;*/
         }
     }
 }

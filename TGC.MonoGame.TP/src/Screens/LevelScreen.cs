@@ -281,9 +281,6 @@ namespace TGC.Monogame.TP.Src.Screens
 
         public void UpdateMainMenu() {
             Timer -= TGCGame.GetElapsedTime();
-
-            //Car.Update(View, Projection);
-            //for(int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)   IACars[i].Update();
             IACars[0].Update();
             Floor.Update();
             for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(AllCars);
@@ -325,7 +322,7 @@ namespace TGC.Monogame.TP.Src.Screens
                 TGCGame.SwitchActiveScreen(() => WinScreen.GetInstance());
 
             if (TGCGame.ControllerKeyP.Update().IsKeyToPressed())
-                TGCGame.SwitchActiveScreen(() => PauseScreen.GetInstance());
+                TGCGame.SwitchActiveScreen(() => PauseControlsScreen.GetInstance());
 
             if (ControllerKeyG.Update().IsKeyToPressed())
                 GodModeIsActive = !GodModeIsActive;

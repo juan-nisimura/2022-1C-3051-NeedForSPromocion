@@ -31,12 +31,6 @@ namespace TGC.Monogame.TP.Src.IALogicalMaps
             return this;
         }
 
-        /*
-        public IAMapBox(BoundingBox boundingBox, Vector3 position, IAMapBox[] connectedBoxes)
-            : this(boundingBox, position) {
-            this.ConnectedBoxes = connectedBoxes;
-        }*/
-
         public IAMapBox(BoundingBox boundingBox, Vector3 position, int connectedBoxesMaxQuantity) {
             this.BoundingBox = boundingBox;
             this.Position = position;

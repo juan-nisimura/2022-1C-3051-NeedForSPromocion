@@ -16,7 +16,7 @@ namespace TGC.MonoGame.TP
     public class TGCGame : Game
     {
         public static float ElapsedTime;
-        public const int PLAYERS_QUANTITY = 2;
+        public const int PLAYERS_QUANTITY = 4;
 
         private GraphicsDeviceManager Graphics { get; }
         private static SpriteBatch SpriteBatch { get; set; }

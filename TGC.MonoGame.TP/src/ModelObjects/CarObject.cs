@@ -147,6 +147,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         }
 
         public void Start(){
+            if(IsDead())
+                return;
             CarSoundEffects.Start();
         }
 
@@ -220,6 +222,9 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
         public new void Draw(Matrix view, Matrix projection)
         {
+            if(IsDead())
+                return;
+            
             // Para dibujar el modelo necesitamos pasarle informacion que el efecto esta esperando.
             World = ScaleMatrix * RotationMatrix * TranslateMatrix;
 
@@ -258,7 +263,11 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             this.ForceSpeedModule = forceModule;
         }
 
-        public bool SolveHorizontalCollision(CarObject enemyCar){            
+        public bool SolveHorizontalCollision(CarObject enemyCar){
+            
+            if(IsDead() || enemyCar.IsDead())
+                return false;
+
             // Chequeo si colisionó con el auto
             if(this.ObjectBox.Intersects(enemyCar.ObjectBox)){
 

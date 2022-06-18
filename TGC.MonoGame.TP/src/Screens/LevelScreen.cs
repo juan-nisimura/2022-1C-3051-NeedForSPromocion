@@ -39,8 +39,9 @@ namespace TGC.Monogame.TP.Src.Screens
         private Matrix View { get; set; }
         private Matrix Projection { get; set; }
         private CameraObject Camera { get; set; }
+        public CarObject[] AllCars { get; set; }
         public PlayerCarObject Car { get; set; }
-        public IACarObject IACar { get; set; }
+        public IACarObject[] IACars { get; set; }
 
         private BridgeObject Bridge { get; set; }
 
@@ -94,20 +95,20 @@ namespace TGC.Monogame.TP.Src.Screens
         public override void Start() {
             MediaPlayer.Play(Song);
             Car.Start();
-            IACar.Start();
+            for(int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)   IACars[i].Start();
         }
 
         public override void Stop() {
             MediaPlayer.Stop();
             Car.Stop();
-            IACar.Stop();
+            for(int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)   IACars[i].Stop();
         }
 
         public override void Reset(){
             Clock.Reset();
             Car.Reset();
-            IACar.Reset();
-            for (int i = 0; i < PowerUps.Length; i++)   PowerUps[i].Reset();
+            for(int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)   IACars[i].Reset();
+            for (int i = 0; i < PowerUps.Length; i++)               PowerUps[i].Reset();
         }
 
         public override void Load() {
@@ -214,11 +215,34 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < BoostPads.Length; i++)      BoostPads[i].Initialize();
             for (int i = 0; i < MapWalls.Length; i++)   MapWalls[i].Initialize();
 
-            Car = new PlayerCarObject(new Vector3(-100f,0,-100f), Color.Blue);
-            IACar = new IACarObject(new Vector3(-100f,0,-50f), Color.Red, PowerUps);
+            var CarsPositions = new Vector3[] {
+                new Vector3(-350f, 0f, -350f),
+                new Vector3(350f, 0f, -350f),
+                new Vector3(-350f, 0f, 350f),
+                new Vector3(350f, 0f, 350f),
+            };
 
-            Car.Initialize(new CarObject[] { IACar });
-            IACar.Initialize(new CarObject[] { Car });
+            Car = new PlayerCarObject(CarsPositions[0], Color.Blue);
+            IACars = new IACarObject[TGCGame.PLAYERS_QUANTITY - 1];
+            for(int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)   
+                IACars[i] = new IACarObject(CarsPositions[i+1], Color.Red, PowerUps);
+
+            AllCars = new CarObject[TGCGame.PLAYERS_QUANTITY];
+            AllCars[0] = Car;
+            for(int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)   
+                AllCars[i + 1] = IACars[i];
+
+            Car.Initialize(IACars);
+            for(int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++) {
+                var enemyCars = new CarObject[TGCGame.PLAYERS_QUANTITY - 1];
+                for(int j = 0; j < TGCGame.PLAYERS_QUANTITY - 1; j++){
+                    if(j != i)
+                        enemyCars[j] = IACars[j];
+                    else
+                        enemyCars[j] = Car;
+                }
+                IACars[i].Initialize(enemyCars);
+            }
 
             // Inicializo el HeightMap
             for(int level = 0; level <= 1; level++){
@@ -258,10 +282,11 @@ namespace TGC.Monogame.TP.Src.Screens
         public void UpdateMainMenu() {
             Timer -= TGCGame.GetElapsedTime();
 
-            Car.Update(View, Projection);
-            IACar.Update();
+            //Car.Update(View, Projection);
+            //for(int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)   IACars[i].Update();
+            IACars[0].Update();
             Floor.Update();
-            for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(new CarObject[] {Car, IACar});
+            for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(AllCars);
             for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Update(Car);
 
             for (int i = 0; i < Trees.Length; i++) Trees[i].Update();
@@ -274,8 +299,8 @@ namespace TGC.Monogame.TP.Src.Screens
                 new Vector3((float)Math.Cos(Timer) * radius, Math.Max(10 ,(float)Math.Cos(Timer * 4-MathHelper.PiOver2*2) * 100), (float)Math.Sin(Timer) * radius),
                 new Vector3((float)Math.Cos(Timer-MathHelper.PiOver4) * radius, 25f, (float)Math.Sin(Timer - MathHelper.PiOver4) * radius),
                 new Vector3(0.1f, 1f, 0f));
-            IACar.Position= new Vector3((float)Math.Cos(Timer - 0.1) * radius, Math.Max(2, (float)Math.Cos(Timer * 4 - MathHelper.PiOver2 * 2) * 100), (float)Math.Sin(Timer - 0.1) * radius);
-            IACar.Rotation = -Timer-MathHelper.Pi;
+            IACars[0].Position= new Vector3((float)Math.Cos(Timer - 0.1) * radius, Math.Max(2, (float)Math.Cos(Timer * 4 - MathHelper.PiOver2 * 2) * 100), (float)Math.Sin(Timer - 0.1) * radius);
+            IACars[0].Rotation = -Timer-MathHelper.Pi;
         }
 
         public override void Update() {
@@ -292,21 +317,18 @@ namespace TGC.Monogame.TP.Src.Screens
                 TGCGame.SwitchActiveScreen(() => LoseScreen.GetInstance());
             }
 
-            if (IACar.IsDead())
-            {
+            var Win = true;
+            for(int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)   
+                Win = Win && IACars[i].IsDead();
+
+            if(Win)
                 TGCGame.SwitchActiveScreen(() => WinScreen.GetInstance());
-            }
 
             if (TGCGame.ControllerKeyP.Update().IsKeyToPressed())
-            {
                 TGCGame.SwitchActiveScreen(() => PauseScreen.GetInstance());
 
-            }
-
             if (ControllerKeyG.Update().IsKeyToPressed())
-            {
                 GodModeIsActive = !GodModeIsActive;
-            }
 
             if (GodModeIsActive)
             {
@@ -315,18 +337,22 @@ namespace TGC.Monogame.TP.Src.Screens
             }
 
             Car.Update(View, Projection);
-            IACar.Update();
+            for(int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)   IACars[i].Update();
             
-            for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(new CarObject[] { Car, IACar });
+            for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(AllCars);
             for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Update(Car);
-            for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Update(IACar);
+            for (int i = 0; i < BoostPads.Length; i++){
+                for(int j = 0; j < TGCGame.PLAYERS_QUANTITY - 1; j++)   BoostPads[i].Update(IACars[j]);
+            } 
 
             SpeedoMeter.Update(Car.Speed);
 
             View = Camera.FollowCamera(Car.GetPosition()).GetView();
 
             SolveCollisions(Car);
-            SolveCollisions(IACar);
+            for(int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++){
+                SolveCollisions(IACars[i]);
+            }
         }
 
         protected void SolveCollisions(CarObject car) {
@@ -389,7 +415,10 @@ namespace TGC.Monogame.TP.Src.Screens
 
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
             Car.Draw(View, Projection);
-            IACar.Draw(View, Projection);
+            for(int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++){
+                IACars[i].Draw(View, Projection);
+            }
+
             Floor.Draw(View, Projection);
             Bridge.Draw(View, Projection);
             Buildings.Draw(View, Projection);
@@ -436,7 +465,7 @@ namespace TGC.Monogame.TP.Src.Screens
 
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
             Car.Draw(View, Projection);
-            IACar.Draw(View, Projection);
+            IACars[0].Draw(View, Projection);
             Floor.Draw(View, Projection);
             Bridge.Draw(View, Projection);
             Buildings.Draw(View, Projection);

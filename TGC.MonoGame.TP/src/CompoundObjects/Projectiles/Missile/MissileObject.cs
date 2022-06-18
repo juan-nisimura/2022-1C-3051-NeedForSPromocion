@@ -20,7 +20,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile
         public const float MISSILE_MODEL_SIZE = 6f;
         private const float MISSILE_SPEED = 150f;
         private const float MAX_ACTIVE_TIME = 10f;
-        private const float MISSILE_DAMAGE = 20f;
+        private const float MISSILE_DAMAGE = 10f;
         private const float TURNING_LERP = 5f;
         private static SoundEffect ExplosionSound;
         private static SoundEffect LaunchSound;
@@ -70,7 +70,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile
                         // Si detectó el auto, el misil se dirige hacia él
 
                         // Calculo el nuevo vector forward
-                        var vectorToEnemy = Vector3.Normalize(Position - Enemies[i].GetPosition());
+                        var vectorToEnemy = Vector3.Normalize(Position - Enemies[i].GetPosition() - new Vector3(0f, 4f, 0f));
                         var oldForward = Forward;
 
                         Forward.X = Lerp(Forward.X, vectorToEnemy.X, TURNING_LERP * TGCGame.GetElapsedTime());

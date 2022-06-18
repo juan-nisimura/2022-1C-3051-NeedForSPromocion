@@ -61,6 +61,9 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
         public override void Update()
         {
+            if(IsDead())
+                return;
+
             AccelerateForward = true;
             AccelerateBackward = false;
             Jump = false;
@@ -69,10 +72,20 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
             Vector3 targetPosition;
 
-            var enemyDistance = (Enemies[0].Position - Position).Length();
+            CarObject healthiestEnemy = Enemies[0];
+            float highestHealth = Enemies[0].Health; 
+
+            for(int i = 1; i < TGCGame.PLAYERS_QUANTITY - 1; i++) {
+                if(Enemies[i].Health > highestHealth) {
+                    highestHealth = Enemies[i].Health;
+                    healthiestEnemy = Enemies[i];
+                }
+            }
+
+            float enemyDistance = (healthiestEnemy.Position - Position).Length();
 
             if(PowerUp.CanBeTriggered() || SpeedBoostTime > 0 && enemyDistance < 100f)
-                targetPosition = Enemies[0].Position;
+                targetPosition = healthiestEnemy.Position;
             else
                 targetPosition = NearestPowerUpPosition();
                 
@@ -129,7 +142,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             }
 
             PreviousUsePowerUp = UsePowerUp;
-            UsePowerUp = Enemies[0].ObjectBox.Intersects(new BoundingSphere(Position - normalizedForward * MathF.Min(enemyDistance, 250f), 8f));
+            UsePowerUp = healthiestEnemy.ObjectBox.Intersects(new BoundingSphere(Position - normalizedForward * MathF.Min(enemyDistance, 250f), 8f));
             
             AccelerateForward = AccelerateForward || (enemyDistance < 100 && UsePowerUp);
 

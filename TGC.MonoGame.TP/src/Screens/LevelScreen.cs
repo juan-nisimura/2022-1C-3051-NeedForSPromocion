@@ -60,20 +60,33 @@ namespace TGC.Monogame.TP.Src.Screens
         private float Timer { get; set; }
 
         //blur
-        private FullScreenQuad FullScreenQuadBlur;
-        private RenderTarget2D HorizontalRenderTarget;
-        public RenderTarget2D MainRenderTarget;
-        public Effect blurEffect { get; set; }
+        private FullScreenQuad BlurFullScreenQuad;
+        private RenderTarget2D BlurHorizontalRenderTarget;
+        public RenderTarget2D BlurMainRenderTarget;
+        public Effect BlurEffect { get; set; }
 
         //enviroment map 
         private const int EnvironmentmapSize = 2048;
-        private Effect enviromentMap { get; set; }
+        private Effect EnviromentMap { get; set; }
         private RenderTargetCube EnvironmentMapRenderTarget { get; set; }
         private StaticCamera CubeMapCamera { get; set; }
 
         //faros-blinnphong
         private Effect Lights { get; set; }
 
+        //blur
+        private Effect Bloom { get; set; }
+        private const int PassCount = 2;
+        private RenderTarget2D BloomFirstPassRenderTarget;
+
+        private FullScreenQuad BloomFullScreenQuad;
+
+        private RenderTarget2D BloomMainSceneRenderTarget;
+
+        private RenderTarget2D BloomSecondPassRenderTarget;
+
+        //fixes
+        Effect CarEffect { get; set; }
 
         public override void Initialize() {
 
@@ -85,7 +98,7 @@ namespace TGC.Monogame.TP.Src.Screens
             Camera = new CameraObject();
 
             CubeMapCamera = new StaticCamera(1f, new Vector3(-350f, 10f, -350f), Vector3.UnitX, Vector3.Up);
-            CubeMapCamera.BuildProjection(1f, 1f, 200f, MathHelper.PiOver2);
+            CubeMapCamera.BuildProjection(1f, 50f, 400f, MathHelper.PiOver2);
 
             BoostPads = new BoostPadObject[]{
                 new BoostPadObject(new Vector3(0,0.1f,575f),new Vector3(22.5f,1f,27.5f), - MathF.PI / 2),
@@ -127,6 +140,12 @@ namespace TGC.Monogame.TP.Src.Screens
         }
 
         public override void Load() {
+            //careffect
+            CarEffect = MyContentManager.Effects.Load("CarShader");
+            //enviromentMap
+            EnvironmentMapRenderTarget = new RenderTargetCube(TGCGame.GetGraphicsDevice(), EnvironmentmapSize, false,
+                                         SurfaceFormat.Color, DepthFormat.Depth24, 0, RenderTargetUsage.DiscardContents);
+            TGCGame.GetGraphicsDevice().BlendState = BlendState.Opaque;
 
             //carLigths
             Lights = MyContentManager.Effects.Load("CarLights");
@@ -134,9 +153,39 @@ namespace TGC.Monogame.TP.Src.Screens
             Lights.Parameters["diffuseColor"].SetValue(new Color(0.5f, 0.5f, 0.5f).ToVector3());
             Lights.Parameters["specularColor"].SetValue(Color.White.ToVector3());
             Lights.Parameters["KAmbient"].SetValue(0.5f);
-            Lights.Parameters["KDiffuse"].SetValue(0.3f);
-            Lights.Parameters["KSpecular"].SetValue(0.2f);
+            Lights.Parameters["KDiffuse"].SetValue(0.0f);
+            Lights.Parameters["KSpecular"].SetValue(0.5f);
             Lights.Parameters["shininess"].SetValue(2.0f);
+
+            //Bloom
+            Bloom = MyContentManager.Effects.Load("Bloom");
+            BloomMainSceneRenderTarget = new RenderTarget2D(TGCGame.GetGraphicsDevice(), TGCGame.GetGraphicsDevice().Viewport.Width,
+                TGCGame.GetGraphicsDevice().Viewport.Height, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 0,
+                RenderTargetUsage.DiscardContents);
+            BloomFirstPassRenderTarget = new RenderTarget2D(TGCGame.GetGraphicsDevice(), TGCGame.GetGraphicsDevice().Viewport.Width,
+                TGCGame.GetGraphicsDevice().Viewport.Height, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 0,
+                RenderTargetUsage.DiscardContents);
+            BloomSecondPassRenderTarget = new RenderTarget2D(TGCGame.GetGraphicsDevice(), TGCGame.GetGraphicsDevice().Viewport.Width,
+                TGCGame.GetGraphicsDevice().Viewport.Height, false, SurfaceFormat.Color, DepthFormat.None, 0,
+                RenderTargetUsage.DiscardContents);
+
+            //Blur
+            BlurEffect = MyContentManager.Effects.Load("GaussianBlur");
+            // Create a full screen quad to post-process
+            FullScreenQuad = new FullScreenQuad(TGCGame.GetGraphicsDevice());
+            // Create render targets. One can be used for simple gaussian blur
+            // mainRenderTarget is also used as a render target in the separated filter
+            // horizontalRenderTarget is used as the horizontal render target in the separated filter
+            BlurMainRenderTarget = new RenderTarget2D(TGCGame.GetGraphicsDevice(), TGCGame.GetGraphicsDevice().Viewport.Width,
+                TGCGame.GetGraphicsDevice().Viewport.Height, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 0,
+                RenderTargetUsage.DiscardContents);
+            BlurHorizontalRenderTarget = new RenderTarget2D(TGCGame.GetGraphicsDevice(), TGCGame.GetGraphicsDevice().Viewport.Width,
+                TGCGame.GetGraphicsDevice().Viewport.Height, false, SurfaceFormat.Color, DepthFormat.None, 0,
+                RenderTargetUsage.DiscardContents);
+
+            BlurEffect.Parameters["screenSize"]
+                .SetValue(new Vector2(TGCGame.GetGraphicsDevice().Viewport.Width, TGCGame.GetGraphicsDevice().Viewport.Height));
+
 
             Font = MyContentManager.SpriteFonts.Load("CascadiaCode/CascadiaCodePL");
             Song = MyContentManager.Songs.Load(SongName());
@@ -163,22 +212,8 @@ namespace TGC.Monogame.TP.Src.Screens
             Clock.Load();
             SpeedoMeter.Load();
             
-            blurEffect = MyContentManager.Effects.Load("GaussianBlur");
-            // Create a full screen quad to post-process
-            FullScreenQuad = new FullScreenQuad(TGCGame.GetGraphicsDevice());
+            
 
-            // Create render targets. One can be used for simple gaussian blur
-            // mainRenderTarget is also used as a render target in the separated filter
-            // horizontalRenderTarget is used as the horizontal render target in the separated filter
-            MainRenderTarget = new RenderTarget2D(TGCGame.GetGraphicsDevice(), TGCGame.GetGraphicsDevice().Viewport.Width,
-                TGCGame.GetGraphicsDevice().Viewport.Height, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 0,
-                RenderTargetUsage.DiscardContents);
-            HorizontalRenderTarget = new RenderTarget2D(TGCGame.GetGraphicsDevice(), TGCGame.GetGraphicsDevice().Viewport.Width,
-                TGCGame.GetGraphicsDevice().Viewport.Height, false, SurfaceFormat.Color, DepthFormat.None, 0,
-                RenderTargetUsage.DiscardContents);
-
-            blurEffect.Parameters["screenSize"]
-                .SetValue(new Vector2(TGCGame.GetGraphicsDevice().Viewport.Width, TGCGame.GetGraphicsDevice().Viewport.Height));
             
             Mounts = new MountObject[]{
                 new MountObject(new Vector3(235f,2.5f,-400f),new Vector3(60f,5f,60f),0,Color.White),
@@ -298,9 +333,7 @@ namespace TGC.Monogame.TP.Src.Screens
                     }
                 }
             }
-            EnvironmentMapRenderTarget = new RenderTargetCube(TGCGame.GetGraphicsDevice(), EnvironmentmapSize, false,
-                SurfaceFormat.Color, DepthFormat.Depth24, 0, RenderTargetUsage.DiscardContents);
-            TGCGame.GetGraphicsDevice().BlendState = BlendState.Opaque;
+
 
             Song = MyContentManager.Songs.Load("Riders On The Storm Fredwreck Remix");
             MediaPlayer.IsRepeating = true;
@@ -466,16 +499,15 @@ namespace TGC.Monogame.TP.Src.Screens
             TGCGame.GetGraphicsDevice().Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1f, 0);
             #endregion
 
-
-            #region Pass 1
+            #region DrawScene
             TGCGame.GetGraphicsDevice().Clear(Color.LightBlue);
             TGCGame.GetGraphicsDevice().DepthStencilState = DepthStencilState.Default;
             // Use the default blend and depth configuration
             //TGCGame.GetGraphicsDevice().BlendState = BlendState.Opaque;
             TGCGame.GetGraphicsDevice().BlendState = BlendState.AlphaBlend;
-
+            TGCGame.GetGraphicsDevice().SetRenderTarget(BloomMainSceneRenderTarget);
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
-            
+
 
 
             Vector3 cameraPosition = new Vector3(Camera.getPosition().X, 70f, Camera.getPosition().Z);
@@ -483,16 +515,21 @@ namespace TGC.Monogame.TP.Src.Screens
             Vector3 forward = Car.GetWorld().Forward;
             //var eyePosition = new Vector3(Car.Position.X, Car.Position.Y + 20f, Car.Position.Z)+ forward * 10000;
 
-            var LightPosition = new Vector3(Car.Position.X,Car.Position.Y+10f,Car.Position.Z) - new Vector3 (forward.X,0f, forward.Z)  * 5000;
+            var LightPosition = new Vector3(Car.Position.X,Car.Position.Y+100f,Car.Position.Z) - new Vector3 (forward.X,0f, forward.Z)  * 5000;
             var eyePosition = Camera.getPosition() + new Vector3(0f,10f,0f);
-            Car.Draw(View, Projection, EnvironmentMapRenderTarget, cameraPosition);
+            Car.Draw(View, Projection,CarEffect, EnvironmentMapRenderTarget, cameraPosition);
             for (int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++){
-                IACars[i].Draw(View, Projection, EnvironmentMapRenderTarget, Camera.getPosition());
+                IACars[i].Draw(View, Projection,CarEffect);
             }
 
             Lights.Parameters["lightPosition"].SetValue(LightPosition);
-
             Lights.Parameters["eyePosition"].SetValue(eyePosition);
+
+            Lights.Parameters["KAmbient"].SetValue(0.3f);
+            Lights.Parameters["KDiffuse"].SetValue(0.5f);
+            Lights.Parameters["KSpecular"].SetValue(0.7f);
+            Lights.Parameters["shininess"].SetValue(3.0f);
+
             Floor.Draw(View, Projection,Lights);
             Bridge.Draw(View, Projection);
             Buildings.Draw(View, Projection);
@@ -523,6 +560,63 @@ namespace TGC.Monogame.TP.Src.Screens
 
 
             #endregion
+
+            #region Bloom pass
+            TGCGame.GetGraphicsDevice().SetRenderTarget(BloomFirstPassRenderTarget);
+            TGCGame.GetGraphicsDevice().Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
+
+            Bloom.CurrentTechnique = Bloom.Techniques["BloomPass"];
+
+            Car.DrawBloom(View, Projection, Bloom);
+
+            #endregion
+
+            #region Multipass Bloom
+            BlurEffect.CurrentTechnique = BlurEffect.Techniques["Blur"];
+
+            var bloomTexture = BloomFirstPassRenderTarget;
+            var finalBloomRenderTarget = BloomSecondPassRenderTarget;
+
+            for (var index = 0; index < PassCount; index++)
+            {
+                //Exchange(ref SecondaPassBloomRenderTarget, ref FirstPassBloomRenderTarget);
+
+                // Set the render target as null, we are drawing into the screen now!
+                TGCGame.GetGraphicsDevice().SetRenderTarget(finalBloomRenderTarget);
+                TGCGame.GetGraphicsDevice().Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
+
+                BlurEffect.Parameters["baseTexture"].SetValue(bloomTexture);
+                FullScreenQuad.Draw(BlurEffect);
+
+                if (index != PassCount - 1)
+                {
+                    var auxiliar = bloomTexture;
+                    bloomTexture = finalBloomRenderTarget;
+                    finalBloomRenderTarget = auxiliar;
+                }
+            }
+
+            #endregion
+
+
+
+            #region Final pass
+            // Set the depth configuration as none, as we don't use depth in this pass
+            TGCGame.GetGraphicsDevice().DepthStencilState = DepthStencilState.None;
+
+            // Set the render target as null, we are drawing into the screen now!
+            TGCGame.GetGraphicsDevice().SetRenderTarget(null);
+            TGCGame.GetGraphicsDevice().Clear(Color.Black);
+
+            // Set the technique to our blur technique
+            // Then draw a texture into a full-screen quad
+            // using our rendertarget as texture
+            Bloom.CurrentTechnique = Bloom.Techniques["Integrate"];
+            Bloom.Parameters["baseTexture"].SetValue(BloomMainSceneRenderTarget);
+            Bloom.Parameters["bloomTexture"].SetValue(BloomFirstPassRenderTarget);
+            FullScreenQuad.Draw(Bloom);
+
+            #endregion
         }
 
         public void DrawMainMenu()
@@ -534,7 +628,7 @@ namespace TGC.Monogame.TP.Src.Screens
             TGCGame.GetGraphicsDevice().BlendState = BlendState.Opaque;
 
             // Set the main render target as our render target
-            TGCGame.GetGraphicsDevice().SetRenderTarget(MainRenderTarget);
+            TGCGame.GetGraphicsDevice().SetRenderTarget(BlurMainRenderTarget);
             TGCGame.GetGraphicsDevice().Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1f, 0);
 
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
@@ -563,9 +657,9 @@ namespace TGC.Monogame.TP.Src.Screens
             // Then draw a texture into a full-screen quad
             // using our rendertarget as texture
 
-            blurEffect.CurrentTechnique = blurEffect.Techniques["Blur"];
-            blurEffect.Parameters["baseTexture"].SetValue(MainRenderTarget);
-            FullScreenQuad.Draw(blurEffect);
+            BlurEffect.CurrentTechnique = BlurEffect.Techniques["Blur"];
+            BlurEffect.Parameters["baseTexture"].SetValue(BlurMainRenderTarget);
+            FullScreenQuad.Draw(BlurEffect);
             #endregion
         }
 

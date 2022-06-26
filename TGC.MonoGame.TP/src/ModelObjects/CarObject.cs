@@ -221,11 +221,55 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             for(int i = 0; i < MISSILES_POOL_SIZE; i++) MissilesPool[i].Update();
         }
 
-        public new void Draw(Matrix view, Matrix projection, RenderTargetCube EnvironmentMapRenderTarget, Vector3 CameraPosition)
+        public new void Draw(Matrix view, Matrix projection, Effect carEffect)
+        {
+            if (IsDead())
+                return;
+            foreach (var meshPart in getModel().Meshes["Car"].MeshParts)
+                meshPart.Effect = carEffect;
+            // Para dibujar el modelo necesitamos pasarle informacion que el efecto esta esperando.
+            World = ScaleMatrix * RotationMatrix * TranslateMatrix;
+
+            getEffect().Parameters["View"]?.SetValue(view);
+            getEffect().Parameters["Projection"]?.SetValue(projection);
+            getEffect().Parameters["ModelTexture"]?.SetValue(getTexture());
+
+            CarBodyObject.Draw(getEffect(), getModel().Meshes["Car"], World);
+            WheelObject.Draw(getEffect(), getModel().Meshes["WheelA"], World, WheelAngle, TurningSpeed * MathF.Sign(Speed));
+            WheelObject.Draw(getEffect(), getModel().Meshes["WheelB"], World, WheelAngle, TurningSpeed * MathF.Sign(Speed));
+            WheelObject.Draw(getEffect(), getModel().Meshes["WheelC"], World, WheelAngle, 0);
+            WheelObject.Draw(getEffect(), getModel().Meshes["WheelD"], World, WheelAngle, 0);
+            Weapon.Draw(view, projection);
+            HealthBar.Draw(view, projection);
+            for (int i = 0; i < BULLETS_POOL_SIZE; i++) BulletsPool[i].Draw(view, projection);
+            for (int i = 0; i < MISSILES_POOL_SIZE; i++) MissilesPool[i].Draw(view, projection);
+        }
+        public void DrawBloom( Matrix view, Matrix projection, Effect bloom)
+        {
+
+            // Para dibujar el modelo necesitamos pasarle informacion que el efecto esta esperando.
+            World = ScaleMatrix * RotationMatrix * TranslateMatrix;
+
+            bloom.CurrentTechnique = bloom.Techniques["BloomPass"];
+            bloom.Parameters["baseTexture"].SetValue(getTexture());
+            //CarBodyObject.Draw(getEffect(), getModel().Meshes["Car"], World);
+            var meshWorld = getModel().Meshes["Car"].ParentBone.Transform * World;
+            bloom.Parameters["WorldViewProjection"].SetValue(meshWorld * view * projection);
+            foreach (var meshPart in getModel().Meshes["Car"].MeshParts)
+                meshPart.Effect = bloom;
+            
+            //getModel().Meshes["Car"].Draw();
+
+            CarBodyObject.Draw(bloom, getModel().Meshes["Car"], World);
+            Weapon.Draw(view, projection);
+        }
+
+        public new void Draw(Matrix view, Matrix projection, Effect effect ,RenderTargetCube EnvironmentMapRenderTarget, Vector3 CameraPosition)
         {
             if(IsDead())
                 return;
-            
+            foreach (var meshPart in getModel().Meshes["Car"].MeshParts)
+                meshPart.Effect = effect;
             // Para dibujar el modelo necesitamos pasarle informacion que el efecto esta esperando.
             World = ScaleMatrix * RotationMatrix * TranslateMatrix;
 

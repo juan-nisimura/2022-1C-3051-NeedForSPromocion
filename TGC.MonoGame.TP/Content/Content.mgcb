@@ -19,6 +19,12 @@
 /processorParam:DebugMode=Auto
 /build:Effects/BasicShader.fx
 
+#begin Effects/Bloom.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/Bloom.fx
+
 #begin Effects/BoostPadShader.fx
 /importer:EffectImporter
 /processor:EffectProcessor

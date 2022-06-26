@@ -14,7 +14,7 @@ namespace TGC.Monogame.TP.Src.Screens
             #region Pass 1
 
             // Set the main render target as our render target
-            TGCGame.GetGraphicsDevice().SetRenderTarget(LevelScreen.GetLevelScreenInstance().MainRenderTarget);
+            TGCGame.GetGraphicsDevice().SetRenderTarget(LevelScreen.GetLevelScreenInstance().BlurMainRenderTarget);
             TGCGame.GetGraphicsDevice().Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1f, 0);
             LevelScreen.GetInstance().Draw();
 
@@ -32,9 +32,9 @@ namespace TGC.Monogame.TP.Src.Screens
             // Then draw a texture into a full-screen quad
             // using our rendertarget as texture
 
-            LevelScreen.GetLevelScreenInstance().blurEffect.CurrentTechnique = LevelScreen.GetLevelScreenInstance().blurEffect.Techniques["Blur"];
-            LevelScreen.GetLevelScreenInstance().blurEffect.Parameters["baseTexture"].SetValue(LevelScreen.GetLevelScreenInstance().MainRenderTarget);
-            LevelScreen.GetLevelScreenInstance().FullScreenQuad.Draw(LevelScreen.GetLevelScreenInstance().blurEffect);
+            LevelScreen.GetLevelScreenInstance().BlurEffect.CurrentTechnique = LevelScreen.GetLevelScreenInstance().BlurEffect.Techniques["Blur"];
+            LevelScreen.GetLevelScreenInstance().BlurEffect.Parameters["baseTexture"].SetValue(LevelScreen.GetLevelScreenInstance().BlurMainRenderTarget);
+            LevelScreen.GetLevelScreenInstance().FullScreenQuad.Draw(LevelScreen.GetLevelScreenInstance().BlurEffect);
             
             DrawText();
             #endregion

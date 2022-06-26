@@ -14,7 +14,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
 
         public static void Draw(Effect effect, ModelMesh mesh, Matrix world){
             var meshWorld = mesh.ParentBone.Transform * world;
-            effect.Parameters["World"].SetValue(meshWorld);
+            effect.Parameters["World"]?.SetValue(meshWorld);
             mesh.Draw();
         }
     }

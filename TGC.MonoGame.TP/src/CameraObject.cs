@@ -7,9 +7,13 @@ namespace TGC.Monogame.TP.Src
 {
     public class CameraObject
     {
-        private Vector3 Position { get; set; } = new Vector3(0f,0f,0f);
+        private Vector3 Position { get; set; } = new Vector3(0f, 0f, 0f);
         private static float CameraAbsoluteSpeed = 300f;
         private Vector3 Speed;
+
+        public Vector3 getPosition (){
+            return Position;
+        }
 
         public CameraObject MoveCameraByKeyboard()
         {
@@ -32,7 +36,14 @@ namespace TGC.Monogame.TP.Src
             else if (keyboardState.IsKeyDown(Keys.A)) {
                 Speed += CameraAbsoluteSpeed * new Vector3(1f,0f,-1f);
             }
-            
+            if (keyboardState.IsKeyDown(Keys.LeftShift))
+            {
+                Speed += CameraAbsoluteSpeed * new Vector3(0f, 1f,0f);
+            }
+            else if (keyboardState.IsKeyDown(Keys.LeftControl))
+            {
+                Speed += CameraAbsoluteSpeed * new Vector3(0f, -1f, 0f);
+            }
             // Calculo la nueva posicion
             Position += Speed * TGCGame.GetElapsedTime();
 

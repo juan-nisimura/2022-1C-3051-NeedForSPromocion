@@ -37,6 +37,12 @@
 /processorParam:DebugMode=Auto
 /build:Effects/BridgeFloorTextureShader.fx
 
+#begin Effects/CarLights.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/CarLights.fx
+
 #begin Effects/CarShader.fx
 /importer:EffectImporter
 /processor:EffectProcessor

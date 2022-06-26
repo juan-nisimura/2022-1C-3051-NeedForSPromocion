@@ -39,10 +39,11 @@ namespace TGC.Monogame.TP.Src
 
         public void Draw(Matrix view, Matrix projection, Effect effect) {
             effect.Parameters["World"].SetValue(World);
-            effect.Parameters["View"].SetValue(view);
-            effect.Parameters["Projection"].SetValue(projection);
+            effect.Parameters["View"]?.SetValue(view);
+            effect.Parameters["Projection"]?.SetValue(projection);
             effect.Parameters["DiffuseColor"]?.SetValue(DiffuseColor);
             effect.Parameters["Texture"]?.SetValue(getTexture());
+            effect.Parameters["InverseTransposeWorld"]?.SetValue(Matrix.Transpose(Matrix.Invert(World)));
             DrawPrimitive(effect);       
         }
     

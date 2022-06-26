@@ -22,6 +22,7 @@ using TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUps;
 using TGC.Monogame.TP.Src.MyContentManagers;
 using TGC.Monogame.TP.Src.IALogicalMaps;
+using TGC.MonoGame.Samples.Cameras;
 
 namespace TGC.Monogame.TP.Src.Screens 
 {
@@ -63,6 +64,17 @@ namespace TGC.Monogame.TP.Src.Screens
         private RenderTarget2D HorizontalRenderTarget;
         public RenderTarget2D MainRenderTarget;
         public Effect blurEffect { get; set; }
+
+        //enviroment map 
+        private const int EnvironmentmapSize = 2048;
+        private Effect enviromentMap { get; set; }
+        private RenderTargetCube EnvironmentMapRenderTarget { get; set; }
+        private StaticCamera CubeMapCamera { get; set; }
+
+        //faros-blinnphong
+        private Effect Lights { get; set; }
+
+
         public override void Initialize() {
 
             // Configuramos nuestras matrices de la escena.
@@ -71,6 +83,9 @@ namespace TGC.Monogame.TP.Src.Screens
                 Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, TGCGame.GetGraphicsDevice().Viewport.AspectRatio, 1, 500);
             
             Camera = new CameraObject();
+
+            CubeMapCamera = new StaticCamera(1f, new Vector3(-350f, 10f, -350f), Vector3.UnitX, Vector3.Up);
+            CubeMapCamera.BuildProjection(1f, 1f, 200f, MathHelper.PiOver2);
 
             BoostPads = new BoostPadObject[]{
                 new BoostPadObject(new Vector3(0,0.1f,575f),new Vector3(22.5f,1f,27.5f), - MathF.PI / 2),
@@ -112,6 +127,16 @@ namespace TGC.Monogame.TP.Src.Screens
         }
 
         public override void Load() {
+
+            //carLigths
+            Lights = MyContentManager.Effects.Load("CarLights");
+            Lights.Parameters["ambientColor"].SetValue(new Color(1f, 1f, 1f).ToVector3());
+            Lights.Parameters["diffuseColor"].SetValue(new Color(0.5f, 0.5f, 0.5f).ToVector3());
+            Lights.Parameters["specularColor"].SetValue(Color.White.ToVector3());
+            Lights.Parameters["KAmbient"].SetValue(0.5f);
+            Lights.Parameters["KDiffuse"].SetValue(0.3f);
+            Lights.Parameters["KSpecular"].SetValue(0.2f);
+            Lights.Parameters["shininess"].SetValue(2.0f);
 
             Font = MyContentManager.SpriteFonts.Load("CascadiaCode/CascadiaCodePL");
             Song = MyContentManager.Songs.Load(SongName());
@@ -273,6 +298,9 @@ namespace TGC.Monogame.TP.Src.Screens
                     }
                 }
             }
+            EnvironmentMapRenderTarget = new RenderTargetCube(TGCGame.GetGraphicsDevice(), EnvironmentmapSize, false,
+                SurfaceFormat.Color, DepthFormat.Depth24, 0, RenderTargetUsage.DiscardContents);
+            TGCGame.GetGraphicsDevice().BlendState = BlendState.Opaque;
 
             Song = MyContentManager.Songs.Load("Riders On The Storm Fredwreck Remix");
             MediaPlayer.IsRepeating = true;
@@ -334,7 +362,8 @@ namespace TGC.Monogame.TP.Src.Screens
             }
 
             Car.Update(View, Projection);
-            for(int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)   IACars[i].Update();
+            CubeMapCamera.Position = new Vector3(Car.Position.X-5f, Car.Position.Y+25f, Car.Position.Z-5f);
+            for (int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)   IACars[i].Update();
             
             for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(AllCars);
             for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Update(Car);
@@ -403,6 +432,41 @@ namespace TGC.Monogame.TP.Src.Screens
 
         public override void Draw()
         {
+            //enviromentMap
+            #region Pass 1-6
+
+            TGCGame.GetGraphicsDevice().DepthStencilState = DepthStencilState.Default;
+            // Draw to our cubemap from the robot position
+            for (var face = CubeMapFace.PositiveX; face <= CubeMapFace.NegativeZ; face++)
+            {
+
+                // Set the render target as our cubemap face, we are drawing the scene in this texture
+                TGCGame.GetGraphicsDevice().SetRenderTarget(EnvironmentMapRenderTarget, face);
+                TGCGame.GetGraphicsDevice().Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
+
+                SetCubemapCameraForOrientation(face);
+                CubeMapCamera.BuildView();
+
+                // Draw our scene. Do not draw our tank as it would be occluded by itself 
+                // (if it has backface culling on)
+                //Floor.Draw(View, Projection);
+                Bridge.Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+                Buildings.Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+                for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+                //for (int i = 0; i < Mounts.Length; i++) Mounts[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+                for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+                for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+                for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+            }
+
+            #endregion
+
+            #region clear 
+            TGCGame.GetGraphicsDevice().SetRenderTarget(null);
+            TGCGame.GetGraphicsDevice().Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1f, 0);
+            #endregion
+
+
             #region Pass 1
             TGCGame.GetGraphicsDevice().Clear(Color.LightBlue);
             TGCGame.GetGraphicsDevice().DepthStencilState = DepthStencilState.Default;
@@ -411,12 +475,25 @@ namespace TGC.Monogame.TP.Src.Screens
             TGCGame.GetGraphicsDevice().BlendState = BlendState.AlphaBlend;
 
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
-            Car.Draw(View, Projection);
-            for(int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++){
-                IACars[i].Draw(View, Projection);
+            
+
+
+            Vector3 cameraPosition = new Vector3(Camera.getPosition().X, 70f, Camera.getPosition().Z);
+            //var LightPosition = new Vector3(Car.Position.X, Car.Position.Y + 20f, Car.Position.Z);
+            Vector3 forward = Car.GetWorld().Forward;
+            //var eyePosition = new Vector3(Car.Position.X, Car.Position.Y + 20f, Car.Position.Z)+ forward * 10000;
+
+            var LightPosition = new Vector3(Car.Position.X,Car.Position.Y+10f,Car.Position.Z) - new Vector3 (forward.X,0f, forward.Z)  * 5000;
+            var eyePosition = Camera.getPosition() + new Vector3(0f,10f,0f);
+            Car.Draw(View, Projection, EnvironmentMapRenderTarget, cameraPosition);
+            for (int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++){
+                IACars[i].Draw(View, Projection, EnvironmentMapRenderTarget, Camera.getPosition());
             }
 
-            Floor.Draw(View, Projection);
+            Lights.Parameters["lightPosition"].SetValue(LightPosition);
+
+            Lights.Parameters["eyePosition"].SetValue(eyePosition);
+            Floor.Draw(View, Projection,Lights);
             Bridge.Draw(View, Projection);
             Buildings.Draw(View, Projection);
             for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Draw(View, Projection);
@@ -491,6 +568,43 @@ namespace TGC.Monogame.TP.Src.Screens
             FullScreenQuad.Draw(blurEffect);
             #endregion
         }
-        
+
+        private void SetCubemapCameraForOrientation(CubeMapFace face)
+        {
+            switch (face)
+            {
+                default:
+                case CubeMapFace.PositiveX:
+                    CubeMapCamera.FrontDirection = -Vector3.UnitX;
+                    CubeMapCamera.UpDirection = Vector3.Down;
+                    break;
+
+                case CubeMapFace.NegativeX:
+                    CubeMapCamera.FrontDirection = Vector3.UnitX;
+                    CubeMapCamera.UpDirection = Vector3.Down;
+                    break;
+
+                case CubeMapFace.PositiveY:
+                    CubeMapCamera.FrontDirection = Vector3.Down;
+                    CubeMapCamera.UpDirection = Vector3.UnitZ;
+                    break;
+
+                case CubeMapFace.NegativeY:
+                    CubeMapCamera.FrontDirection = Vector3.Up;
+                    CubeMapCamera.UpDirection = -Vector3.UnitZ;
+                    break;
+
+                case CubeMapFace.PositiveZ:
+                    CubeMapCamera.FrontDirection = -Vector3.UnitZ;
+                    CubeMapCamera.UpDirection = Vector3.Down;
+                    break;
+
+                case CubeMapFace.NegativeZ:
+                    CubeMapCamera.FrontDirection = Vector3.UnitZ;
+                    CubeMapCamera.UpDirection = Vector3.Down;
+                    break;
+            }
+        }
+
     }
 }

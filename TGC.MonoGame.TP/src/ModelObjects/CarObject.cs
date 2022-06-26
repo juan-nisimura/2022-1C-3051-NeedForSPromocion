@@ -221,7 +221,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             for(int i = 0; i < MISSILES_POOL_SIZE; i++) MissilesPool[i].Update();
         }
 
-        public new void Draw(Matrix view, Matrix projection)
+        public new void Draw(Matrix view, Matrix projection, RenderTargetCube EnvironmentMapRenderTarget, Vector3 CameraPosition)
         {
             if(IsDead())
                 return;
@@ -233,6 +233,12 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             getEffect().Parameters["Projection"]?.SetValue(projection);
             getEffect().Parameters["ModelTexture"]?.SetValue(getTexture());
 
+            //enviroment
+            getEffect().Parameters["environmentMap"].SetValue(EnvironmentMapRenderTarget);
+            getEffect().Parameters["eyePosition"].SetValue(CameraPosition);
+            getEffect().Parameters["InverseTransposeWorld"]?.SetValue(Matrix.Transpose(Matrix.Invert(World)));
+
+
             CarBodyObject.Draw(getEffect(), getModel().Meshes["Car"], World);
             WheelObject.Draw(getEffect(), getModel().Meshes["WheelA"], World, WheelAngle, TurningSpeed * MathF.Sign(Speed));
             WheelObject.Draw(getEffect(), getModel().Meshes["WheelB"], World, WheelAngle, TurningSpeed * MathF.Sign(Speed));
@@ -243,6 +249,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             for(int i = 0; i < BULLETS_POOL_SIZE; i++)  BulletsPool[i].Draw(view, projection);
             for(int i = 0; i < MISSILES_POOL_SIZE; i++) MissilesPool[i].Draw(view, projection);
         }
+
+
 
         public Vector3 GetPosition()
         {

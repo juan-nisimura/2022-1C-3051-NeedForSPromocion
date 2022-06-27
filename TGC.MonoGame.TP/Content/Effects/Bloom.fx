@@ -7,7 +7,11 @@
 #define PS_SHADERMODEL ps_4_0_level_9_1
 #endif
 
-float4x4 WorldViewProjection;
+float4x4 World;
+float4x4 View;
+float4x4 Projection;
+float3 DiffuseColor;
+
 
 texture baseTexture;
 sampler2D textureSampler = sampler_state
@@ -46,8 +50,12 @@ struct VertexShaderOutput
 VertexShaderOutput MainVS(in VertexShaderInput input)
 {
     VertexShaderOutput output = (VertexShaderOutput) 0;
-
-    output.Position = mul(input.Position, WorldViewProjection);
+    // Model space to World space
+    float4 worldPosition = mul(input.Position, World);
+    // World space to View space
+    float4 viewPosition = mul(worldPosition, View);
+	// View space to Projection space
+    output.Position = mul(viewPosition, Projection);
     output.TextureCoordinates = input.TextureCoordinates;
 	
     return output;
@@ -62,6 +70,17 @@ float4 BloomPS(VertexShaderOutput input) : COLOR
     float filter = step(distanceToTargetColor, 1);
     
     return float4(color.rgb * filter, 1);
+}
+
+float4 BloomPrimitivePS(VertexShaderOutput input) : COLOR
+{
+    float4 color = tex2D(textureSampler, input.TextureCoordinates);
+    
+    float distanceToTargetColor = distance(color.rgb, float3(1.0, 1.0, 0.0));
+    
+    float filter = step(distanceToTargetColor, 1);
+    
+    return float4(color.rgb * filter, 1) * 0.0000001 + float4(DiffuseColor, 1);
 }
 
 VertexShaderOutput PostProcessVS(in VertexShaderInput input)
@@ -89,6 +108,14 @@ technique BloomPass
     }
 };
 
+technique BloomPassPrimitive
+{
+    pass Pass0
+    {
+        VertexShader = compile VS_SHADERMODEL MainVS();
+        PixelShader = compile PS_SHADERMODEL BloomPrimitivePS();
+    }
+};
 
 
 technique Integrate

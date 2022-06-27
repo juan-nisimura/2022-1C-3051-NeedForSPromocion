@@ -514,24 +514,25 @@ namespace TGC.Monogame.TP.Src.Screens
             //var LightPosition = new Vector3(Car.Position.X, Car.Position.Y + 20f, Car.Position.Z);
             Vector3 forward = Car.GetWorld().Forward;
             //var eyePosition = new Vector3(Car.Position.X, Car.Position.Y + 20f, Car.Position.Z)+ forward * 10000;
-
-            var LightPosition = new Vector3(Car.Position.X,Car.Position.Y+100f,Car.Position.Z) - new Vector3 (forward.X,0f, forward.Z)  * 5000;
-            var eyePosition = Camera.getPosition() + new Vector3(0f,10f,0f);
+            var eyePosition = Car.Position + new Vector3(0f, 10f, 0f) - new Vector3(forward.X, 0f, forward.Z) * 50;
+            var floorEyePosition = new Vector3(Car.Position.X, Car.Position.Y + 100f, Car.Position.Z) - new Vector3(forward.X, 0f, forward.Z) * 5000;
+            var LightPosition = Car.Position + new Vector3(0f,10f,0f) + new Vector3(forward.X, 0f, forward.Z) * 5;
             Car.Draw(View, Projection,CarEffect, EnvironmentMapRenderTarget, cameraPosition);
             for (int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++){
                 IACars[i].Draw(View, Projection,CarEffect);
             }
 
             Lights.Parameters["lightPosition"].SetValue(LightPosition);
-            Lights.Parameters["eyePosition"].SetValue(eyePosition);
-
+            Lights.Parameters["eyePosition"]?.SetValue(eyePosition);
+            Lights.Parameters["floorEyePosition"]?.SetValue(floorEyePosition);
             Lights.Parameters["KAmbient"].SetValue(0.3f);
-            Lights.Parameters["KDiffuse"].SetValue(0.5f);
-            Lights.Parameters["KSpecular"].SetValue(0.7f);
-            Lights.Parameters["shininess"].SetValue(3.0f);
+            Lights.Parameters["KDiffuse"].SetValue(0.0f);
+            Lights.Parameters["KSpecular"].SetValue(0.3f);
+            Lights.Parameters["shininess"].SetValue(3f);
 
+            Lights.CurrentTechnique = Lights.Techniques["Floor"];
             Floor.Draw(View, Projection,Lights);
-            Bridge.Draw(View, Projection);
+            Bridge.Draw(View, Projection, Lights);
             Buildings.Draw(View, Projection);
             for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Draw(View, Projection);
             for (int i = 0; i < Mounts.Length; i++) Mounts[i].Draw(View, Projection);
@@ -539,12 +540,12 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection);
             for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection);
             
-            if (!GodModeIsActive)
+            /*if (!GodModeIsActive)
             {
                 Clock.Draw(View, Projection);
                 SpeedoMeter.Draw(View, Projection);
                 Car.DrawHUD(View, Projection);
-            }
+            }*/
 
             var msg = "P: PAUSA";
             var W = TGCGame.GetGraphicsDevice().Viewport.Width;
@@ -565,9 +566,15 @@ namespace TGC.Monogame.TP.Src.Screens
             TGCGame.GetGraphicsDevice().SetRenderTarget(BloomFirstPassRenderTarget);
             TGCGame.GetGraphicsDevice().Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
 
+            Bloom.CurrentTechnique = Bloom.Techniques["BloomPassPrimitive"];
+            for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Draw(View, Projection, Bloom);
+            for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(View, Projection);
+
             Bloom.CurrentTechnique = Bloom.Techniques["BloomPass"];
 
             Car.DrawBloom(View, Projection, Bloom);
+
+            
 
             #endregion
 
@@ -615,7 +622,12 @@ namespace TGC.Monogame.TP.Src.Screens
             Bloom.Parameters["baseTexture"].SetValue(BloomMainSceneRenderTarget);
             Bloom.Parameters["bloomTexture"].SetValue(BloomFirstPassRenderTarget);
             FullScreenQuad.Draw(Bloom);
-
+            if (!GodModeIsActive)
+            {
+                Clock.Draw(View, Projection);
+                SpeedoMeter.Draw(View, Projection);
+                Car.DrawHUD(View, Projection);
+            }
             #endregion
         }
 

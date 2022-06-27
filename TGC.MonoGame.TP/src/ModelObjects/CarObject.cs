@@ -252,9 +252,12 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
             bloom.CurrentTechnique = bloom.Techniques["BloomPass"];
             bloom.Parameters["baseTexture"].SetValue(getTexture());
+            bloom.Parameters["View"].SetValue(view);
+            bloom.Parameters["Projection"].SetValue(projection);
             //CarBodyObject.Draw(getEffect(), getModel().Meshes["Car"], World);
             var meshWorld = getModel().Meshes["Car"].ParentBone.Transform * World;
-            bloom.Parameters["WorldViewProjection"].SetValue(meshWorld * view * projection);
+            bloom.Parameters["World"].SetValue(meshWorld);
+            //bloom.Parameters["WorldViewProjection"].SetValue(meshWorld * view * projection);
             foreach (var meshPart in getModel().Meshes["Car"].MeshParts)
                 meshPart.Effect = bloom;
             

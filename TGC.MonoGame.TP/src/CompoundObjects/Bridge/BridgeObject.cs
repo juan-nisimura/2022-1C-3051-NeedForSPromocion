@@ -80,6 +80,19 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
             for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].Draw(view, projection);
         }
 
+        public void Draw(Matrix view, Matrix projection, Effect effect)
+        {
+            effect.CurrentTechnique = effect.Techniques["Box"];
+            Block.Draw(view, projection, effect);
+            effect.CurrentTechnique = effect.Techniques["Ramp"];
+            for (int i = 0; i < RAMPS_QUANTITY; i++) Ramps[i].Draw(view, projection, effect);
+            effect.CurrentTechnique = effect.Techniques["BridgeFloor"];
+            for (int i = 0; i < FLOORS_QUANTITY; i++) Floors[i].Draw(view, projection, effect);
+            effect.CurrentTechnique = effect.Techniques["TreeTrunk"];
+            for (int i = 0; i < COLUMNS_QUANTITY; i++) Columns[i].Draw(view, projection, effect);
+            effect.CurrentTechnique = effect.Techniques["Floor"];
+        }
+
         public void SolveBulletCollision(BulletObject bullet){
             Block.SolveBulletCollision(bullet);
             for (int i = 0; i < RAMPS_QUANTITY; i++)    Ramps[i].SolveBulletCollision(bullet);

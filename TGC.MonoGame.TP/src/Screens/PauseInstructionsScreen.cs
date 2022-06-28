@@ -37,6 +37,8 @@ namespace TGC.Monogame.TP.Src.Screens
             DrawCenterTextY("Un coche es derrotado cuando se agotan sus Puntos de Vida (PV).   ", 240, 0.8f);
             DrawCenterTextY("Un coche pierde PV si recibe un golpe fuerte o un impacto de arma.", 280, 0.8f);
             DrawCenterTextY("Si te derrotan o se acaba el tiempo, pierdes!                     ", 320, 0.8f);
+            DrawLeftArrow();
+            DrawRightArrow();
         }
     }
 }

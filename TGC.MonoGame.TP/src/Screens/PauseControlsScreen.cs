@@ -36,9 +36,8 @@ namespace TGC.Monogame.TP.Src.Screens
             DrawCenterTextY("SPACE: Saltar          ", 300, 1);
             DrawCenterTextY("F:     Activar Poder   ", 330, 1);
             DrawCenterTextY("G:     Modo GOD        ", 360, 1);
-            DrawCenterTextY("                        D", 350, 2);
-            DrawCenterTextY("                        = ", 390, 2);
-            DrawCenterTextY("                  >  ", 377, 3);
+            
+            DrawRightArrow();
         }
     }
 }

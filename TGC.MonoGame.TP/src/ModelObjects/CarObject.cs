@@ -221,7 +221,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             for(int i = 0; i < MISSILES_POOL_SIZE; i++) MissilesPool[i].Update();
         }
 
-        public new void Draw(Matrix view, Matrix projection, Effect carEffect)
+        public void Draw(Matrix view, Matrix projection, Effect carEffect)
         {
             if (IsDead())
                 return;
@@ -267,7 +267,7 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             Weapon.Draw(view, projection);
         }
 
-        public new void Draw(Matrix view, Matrix projection, Effect effect ,RenderTargetCube EnvironmentMapRenderTarget, Vector3 CameraPosition)
+        public void Draw(Matrix view, Matrix projection, Effect effect ,RenderTargetCube EnvironmentMapRenderTarget, Vector3 CameraPosition)
         {
             if(IsDead())
                 return;

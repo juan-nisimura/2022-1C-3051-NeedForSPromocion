@@ -51,6 +51,7 @@ namespace TGC.Monogame.TP.Src
         }
         abstract public void Update();
         
+        //abstract protected bool IsVisible();
         public abstract void Draw(Matrix view, Matrix projection);
     }
 }

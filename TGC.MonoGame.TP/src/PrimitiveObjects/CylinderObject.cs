@@ -14,6 +14,7 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
     {
         protected BoundingCylinder BoundingCylinder;
         protected CylinderPrimitive CylinderPrimitive { get; }
+
         public CylinderObject(Vector3 position, Vector3 size, float rotationX, float rotationY, Color color){
             CylinderPrimitive = new CylinderPrimitive(TGCGame.GetGraphicsDevice());
             ScaleMatrix = Matrix.CreateScale(size);

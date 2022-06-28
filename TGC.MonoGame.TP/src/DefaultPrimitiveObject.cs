@@ -29,6 +29,8 @@ namespace TGC.Monogame.TP.Src
         }
 
         public override void Draw(Matrix view, Matrix projection){
+            //if(!IsVisible())
+               // return;
             Effects[typeof(T)].Parameters["World"].SetValue(World);
             Effects[typeof(T)].Parameters["View"].SetValue(view);
             Effects[typeof(T)].Parameters["Projection"].SetValue(projection);
@@ -38,6 +40,8 @@ namespace TGC.Monogame.TP.Src
         }
 
         public void Draw(Matrix view, Matrix projection, Effect effect) {
+            //if(!IsVisible())
+              //  return;
             effect.Parameters["World"].SetValue(World);
             effect.Parameters["View"]?.SetValue(view);
             effect.Parameters["Projection"]?.SetValue(projection);

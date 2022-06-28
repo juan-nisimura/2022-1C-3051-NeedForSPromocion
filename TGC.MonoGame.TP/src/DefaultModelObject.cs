@@ -35,6 +35,8 @@ namespace TGC.Monogame.TP.Src
         }
 
         public override void Draw(Matrix view, Matrix projection){
+            //if(!IsVisible())
+               // return;
 
             Texture texture = getTexture();
 

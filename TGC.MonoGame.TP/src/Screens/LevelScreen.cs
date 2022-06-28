@@ -70,6 +70,7 @@ namespace TGC.Monogame.TP.Src.Screens
         private Effect EnviromentMap { get; set; }
         private RenderTargetCube EnvironmentMapRenderTarget { get; set; }
         private StaticCamera CubeMapCamera { get; set; }
+        private CubeMapFace CubeMapFace = CubeMapFace.PositiveX;
 
         //faros-blinnphong
         private Effect Lights { get; set; }
@@ -470,27 +471,29 @@ namespace TGC.Monogame.TP.Src.Screens
 
             TGCGame.GetGraphicsDevice().DepthStencilState = DepthStencilState.Default;
             // Draw to our cubemap from the robot position
-            for (var face = CubeMapFace.PositiveX; face <= CubeMapFace.NegativeZ; face++)
-            {
 
-                // Set the render target as our cubemap face, we are drawing the scene in this texture
-                TGCGame.GetGraphicsDevice().SetRenderTarget(EnvironmentMapRenderTarget, face);
-                TGCGame.GetGraphicsDevice().Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
+            // Optimizacion
+            // Por ciclo sólo capturo una cara
+            if(CubeMapFace > CubeMapFace.NegativeZ)
+                CubeMapFace = CubeMapFace.PositiveX;
 
-                SetCubemapCameraForOrientation(face);
-                CubeMapCamera.BuildView();
+            // Set the render target as our cubemap face, we are drawing the scene in this texture
+            TGCGame.GetGraphicsDevice().SetRenderTarget(EnvironmentMapRenderTarget, CubeMapFace);
+            TGCGame.GetGraphicsDevice().Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
 
-                // Draw our scene. Do not draw our tank as it would be occluded by itself 
-                // (if it has backface culling on)
-                //Floor.Draw(View, Projection);
-                Bridge.Draw(CubeMapCamera.View, CubeMapCamera.Projection);
-                Buildings.Draw(CubeMapCamera.View, CubeMapCamera.Projection);
-                for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
-                //for (int i = 0; i < Mounts.Length; i++) Mounts[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
-                for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
-                for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
-                for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
-            }
+            SetCubemapCameraForOrientation(CubeMapFace);
+            CubeMapCamera.BuildView();
+
+            // Draw our scene. Do not draw our tank as it would be occluded by itself 
+            // (if it has backface culling on)
+            //Floor.Draw(View, Projection);
+            Bridge.Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+            Buildings.Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+            for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+            //for (int i = 0; i < Mounts.Length; i++) Mounts[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+            for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+            for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+            for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
 
             #endregion
 
@@ -586,8 +589,6 @@ namespace TGC.Monogame.TP.Src.Screens
             Bloom.CurrentTechnique = Bloom.Techniques["BloomPass"];
 
             Car.DrawBloom(View, Projection, Bloom);
-
-            
 
             #endregion
 

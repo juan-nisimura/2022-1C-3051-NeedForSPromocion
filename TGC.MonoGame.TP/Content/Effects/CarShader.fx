@@ -96,11 +96,42 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
 }
 
-technique BasicColorDrawing
+VertexShaderOutput AiVS(in VertexShaderInput input)
+{
+    // Clear the output
+    VertexShaderOutput output = (VertexShaderOutput) 0;
+    // Model space to World space
+    float4 worldPosition = mul(input.Position, World);
+    // World space to View space
+    float4 viewPosition = mul(worldPosition, View);
+	// View space to Projection space
+    output.Position = mul(viewPosition, Projection);
+    output.TextureCoordinate = input.TextureCoordinate;
+	
+    return output;
+}
+
+float4 AiPS(VertexShaderOutput input) : COLOR
+{
+	
+    return tex2D(textureSampler, input.TextureCoordinate);
+
+}
+
+technique PlayerCar
 {
 	pass P0
 	{
 		VertexShader = compile VS_SHADERMODEL MainVS();
 		PixelShader = compile PS_SHADERMODEL MainPS();
 	}
+};
+
+technique AiCar
+{
+    pass P0
+    { 
+        VertexShader = compile VS_SHADERMODEL AiVS();
+        PixelShader = compile PS_SHADERMODEL AiPS();
+    }
 };

@@ -129,6 +129,16 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Building
             for (int i = 0; i < WALLS_QUANTITY; i++)  Walls[i].Draw(view, projection);
         }
 
+        public void Draw(Matrix view, Matrix projection, Effect effect)
+        {
+            effect.CurrentTechnique = effect.Techniques["Box"];
+            for (int i = 0; i < BOXES_QUANTITY; i++) Boxes[i].Draw(view, projection, effect);
+            effect.CurrentTechnique = effect.Techniques["Ramp"];
+            for (int i = 0; i < RAMPS_QUANTITY; i++) Ramps[i].Draw(view, projection, effect);
+            effect.CurrentTechnique = effect.Techniques["Wall"];
+            for (int i = 0; i < WALLS_QUANTITY; i++) Walls[i].Draw(view, projection, effect);
+        }
+
         public bool SolveHorizontalCollision(CarObject car){
             bool collided = false;
             for (int i = 0; i < BOXES_QUANTITY; i++)  Boxes[i].SolveHorizontalCollision(car);

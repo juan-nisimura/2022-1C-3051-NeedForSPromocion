@@ -21,6 +21,8 @@ float KDiffuse;
 float KSpecular;
 float shininess; 
 float3 lightPosition;
+float3 wallLightPosition; // luz para paredes
+float3 carPosition;
 float3 eyePosition; // Camera position
 float3 floorEyePosition; // inverse position for floors
 float3 rampEyePosition; // particular position for ramps
@@ -140,6 +142,34 @@ VertexShaderOutput BridgeFloorVS(in VertexShaderInput input)
 }
 
 VertexShaderOutput BoxVS(in VertexShaderInput input)
+{
+    VertexShaderOutput output = (VertexShaderOutput) 0;
+    // Model space to World space
+    float4 worldPosition = mul(input.Position, World);
+    // World space to View space
+    float4 viewPosition = mul(worldPosition, View);
+	// View space to Projection space
+    output.Position = mul(viewPosition, Projection);
+    output.WorldPosition = mul(input.Position, World);
+    output.Normal = mul(input.Normal, InverseTransposeWorld);
+
+    // Get how parallel the normal of this point is to the X plane
+    float xAlignment = abs(dot(input.Normal.xyz, float3(1, 0, 0)));
+    // Same for the Y plane
+    float zAlignment = abs(dot(input.Normal.xyz, float3(0, 0, 1)));
+
+    // Use the world position as texture coordinates 
+    // Choose which coordinates we will use based on our normal
+    float2 zPlane = lerp(worldPosition.xz, worldPosition.xy, zAlignment);
+    float2 resultPlane = lerp(zPlane, worldPosition.zy, xAlignment);
+
+    // Propagamos las coordenadas de textura
+    output.TextureCoordinates = resultPlane;
+
+    return output;
+}
+
+VertexShaderOutput WallVS(in VertexShaderInput input)
 {
     VertexShaderOutput output = (VertexShaderOutput) 0;
     // Model space to World space
@@ -320,6 +350,40 @@ float4 BoxPS(VertexShaderOutput input) : COLOR
     return finalColor;
 }
 
+float4 WallPS(VertexShaderOutput input) : COLOR
+{
+    
+    float3 distanciaLuzX = distance(input.WorldPosition.x , lightPosition.x);
+    float3 distanciaAutoX = distance(input.WorldPosition.x , carPosition.x);
+    float iluminarX = step(distanciaAutoX, distanciaLuzX);
+    float3 distanciaLuzZ = distance(input.WorldPosition.z , lightPosition.z);
+    float3 distanciaAutoZ = distance(input.WorldPosition.z , carPosition.z);
+    float iluminarZ = step(distanciaAutoZ, distanciaLuzZ);
+    float lejanoZ = step(distanciaLuzX, distanciaLuzZ);
+    float lejanoX = step(distanciaLuzZ, distanciaLuzX);
+    float iluminar = clamp(iluminarX * lejanoX+ iluminarZ * lejanoZ, 0.0, 1.0);
+    // Base vectors
+    float3 lightDirection = normalize(wallLightPosition - input.WorldPosition.xyz);
+    float3 viewDirection = normalize(eyePosition - input.WorldPosition.xyz);
+    float3 halfVector = normalize(lightDirection + viewDirection);
+
+	// Get the texture texel
+    float4 texelColor = tex2D(textureSampler, input.TextureCoordinates / 75);
+    
+	// Calculate the diffuse light
+    float NdotL = saturate(dot(input.Normal.xyz, lightDirection));
+    float3 diffuseLight = KDiffuse * diffuseColor * NdotL * iluminar;
+
+	// Calculate the specular light
+    float NdotH = dot(input.Normal.xyz, halfVector);
+    float3 specularLight = sign(NdotL) * KSpecular * 4 * specularColor * pow(saturate(NdotH), shininess / 3 * 0.8)*iluminar;
+    
+    // Final calculation
+    float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * texelColor.rgb + specularLight, texelColor.a);
+    //float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * float3(1, 1, 1) + specularLight, texelColor.a);
+    return finalColor;
+}
+
 
 technique Floor
 {
@@ -363,5 +427,14 @@ technique Box
     {
         VertexShader = compile VS_SHADERMODEL BoxVS();
         PixelShader = compile PS_SHADERMODEL BoxPS();
+    }
+};
+
+technique Wall
+{
+    pass P0
+    {
+        VertexShader = compile VS_SHADERMODEL BoxVS();
+        PixelShader = compile PS_SHADERMODEL WallPS();
     }
 };

@@ -396,7 +396,7 @@ namespace TGC.Monogame.TP.Src.Screens
             }
 
             Car.Update(View, Projection);
-            CubeMapCamera.Position = new Vector3(Car.Position.X-5f, Car.Position.Y+25f, Car.Position.Z-5f);
+            CubeMapCamera.Position = new Vector3(Car.Position.X, Car.Position.Y+10f, Car.Position.Z);
             for (int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)   IACars[i].Update();
             
             for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Update(AllCars);
@@ -474,6 +474,7 @@ namespace TGC.Monogame.TP.Src.Screens
 
             // Optimizacion
             // Por ciclo sólo capturo una cara
+            CubeMapFace++;
             if(CubeMapFace > CubeMapFace.NegativeZ)
                 CubeMapFace = CubeMapFace.PositiveX;
 
@@ -510,8 +511,6 @@ namespace TGC.Monogame.TP.Src.Screens
             TGCGame.GetGraphicsDevice().BlendState = BlendState.AlphaBlend;
             TGCGame.GetGraphicsDevice().SetRenderTarget(BloomMainSceneRenderTarget);
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
-
-
 
             Vector3 cameraPosition = new Vector3(Camera.getPosition().X, 70f, Camera.getPosition().Z);
             //var LightPosition = new Vector3(Car.Position.X, Car.Position.Y + 20f, Car.Position.Z);

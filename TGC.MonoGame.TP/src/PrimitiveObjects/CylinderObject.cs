@@ -7,10 +7,11 @@ using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.MonoGame.Samples.Collisions;
 using TGC.MonoGame.TP;
 using TGC.MonoGame.TP.Src.Geometries;
+using TGC.Monogame.TP.Src.Screens;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
-    public class CylinderObject<T> : DefaultPrimitiveObject <T>
+    public abstract class CylinderObject<T> : DefaultPrimitiveObject <T>
     {
         protected BoundingCylinder BoundingCylinder;
         protected CylinderPrimitive CylinderPrimitive { get; }

@@ -7,6 +7,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.SpeedBoost
 {
     public class SpeedBoostHeadObject : CylinderObject <SpeedBoostHeadObject>
     {
+        protected override bool IsVisible() { return true; }
         private const float SPEED_BOOST_HEAD_FORWARD_DISTANCE = 0.80f;
 
         private float ModelSize;

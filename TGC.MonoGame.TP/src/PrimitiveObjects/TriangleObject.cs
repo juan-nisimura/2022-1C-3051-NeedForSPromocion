@@ -1,11 +1,13 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.Monogame.TP.Src.Screens;
 using TGC.MonoGame.TP;
 using TGC.MonoGame.TP.Src.Geometries;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
-    public class TriangleObject<T> : DefaultPrimitiveObject <T>
+    public abstract class TriangleObject<T> : DefaultPrimitiveObject <T>
     {
         protected TrianglePrimitive TrianglePrimitive { get; }
         public TriangleObject(Vector3 position, Vector3 vertex1, Vector3 vertex2, Vector3 vertex3, Color color){

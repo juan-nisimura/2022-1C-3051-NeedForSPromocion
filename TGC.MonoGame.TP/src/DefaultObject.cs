@@ -19,6 +19,8 @@ namespace TGC.Monogame.TP.Src
         protected Vector3 DiffuseColor;
         public static int ObjectCount { get; set; } = 0;
 
+        abstract protected bool IsVisible();
+
         public static Effect getEffect(){
             return Effects[typeof(T)];
         }
@@ -50,8 +52,6 @@ namespace TGC.Monogame.TP.Src
             return World;
         }
         abstract public void Update();
-        
-        //abstract protected bool IsVisible();
         public abstract void Draw(Matrix view, Matrix projection);
     }
 }

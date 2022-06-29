@@ -18,6 +18,11 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
             TreeTop = new TreeTopObject(position + new Vector3(0f, size * 5/3, 0f), size * 5 / 3, Color.ForestGreen);
         }
 
+        protected override bool IsVisible() 
+        {
+            return true;
+        }
+
         public new void Initialize(){
             TreeTrunk.Initialize();
             TreeTop.Initialize();

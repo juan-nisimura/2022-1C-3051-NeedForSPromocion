@@ -45,7 +45,7 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels
             effect.Parameters["Time"]?.SetValue(Time);
             effect.Parameters["Center"]?.SetValue(Position);
             SpeedBoostBody.Draw(view, projection, effect);
-            SpeedBoostHead.Draw(view, projection, effect);
+            SpeedBoostHead.Draw(view, projection, effect); 
         }
     }
 }

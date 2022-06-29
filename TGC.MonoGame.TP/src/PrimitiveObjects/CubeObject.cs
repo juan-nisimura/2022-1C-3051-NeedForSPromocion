@@ -1,11 +1,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.Monogame.TP.Src.Screens;
 using TGC.MonoGame.TP;
 using TGC.MonoGame.TP.Src.Geometries.Textures;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
-    public class CubeObject <T> : DefaultPrimitiveObject <T>
+    public abstract class CubeObject <T> : DefaultPrimitiveObject <T>
     {
         protected BoxPrimitive BoxPrimitive { get; }
         public CubeObject(Vector3 position, Vector3 size, Color color){

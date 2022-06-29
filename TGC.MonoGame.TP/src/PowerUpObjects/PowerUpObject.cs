@@ -6,6 +6,7 @@ using TGC.Monogame.TP.Src.ModelObjects;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUps;
 using TGC.Monogame.TP.Src.PrimitiveObjects;
+using TGC.Monogame.TP.Src.Screens;
 using TGC.MonoGame.TP;
 
 namespace TGC.Monogame.TP.Src.PowerUpObjects
@@ -41,6 +42,10 @@ namespace TGC.Monogame.TP.Src.PowerUpObjects
         public void Reset() {
             IsAvailable = true;
             Time = 0;
+        }
+        protected override bool IsVisible() 
+        {
+            return LevelScreen.GetBoundingFrustum().Intersects(BoundingSphere);
         }
         
         public void Update(CarObject[] cars){

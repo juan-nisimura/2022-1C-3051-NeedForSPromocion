@@ -57,6 +57,14 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
             for (int i = 0; i < Ramps.Length; i++)  Ramps[i].Draw(view, projection);
         }
 
+        public void Draw(Matrix view, Matrix projection, Effect effect)
+        {
+            effect.CurrentTechnique = effect.Techniques["Box"];
+            Box.Draw(view, projection, effect);
+            effect.CurrentTechnique = effect.Techniques["Ramp"];
+            for (int i = 0; i < Ramps.Length; i++) Ramps[i].Draw(view, projection, effect);
+        }
+
         internal bool SolveVerticalCollision(CarObject car)
         {
             bool collided = false;

@@ -36,6 +36,14 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
             TreeTop.Draw(view, projection);
         }
 
+        public void Draw(Matrix view, Matrix projection, Effect effect)
+        {
+            effect.CurrentTechnique = effect.Techniques["TreeTrunk"];
+            TreeTrunk.Draw(view, projection, effect);
+            effect.CurrentTechnique = effect.Techniques["TreeTop"];
+            TreeTop.Draw(view, projection, effect);
+        }
+
         public bool SolveHorizontalCollision(CarObject car)
         {
             return TreeTrunk.SolveHorizontalCollision(car);

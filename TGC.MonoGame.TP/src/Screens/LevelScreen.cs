@@ -150,13 +150,10 @@ namespace TGC.Monogame.TP.Src.Screens
 
             //carLigths
             Lights = MyContentManager.Effects.Load("CarLights");
-            Lights.Parameters["ambientColor"].SetValue(Color.White.ToVector3());
-            Lights.Parameters["diffuseColor"].SetValue(Color.White.ToVector3());
-            Lights.Parameters["specularColor"].SetValue(Color.White.ToVector3());
-            Lights.Parameters["KAmbient"].SetValue(0.5f);
-            Lights.Parameters["KDiffuse"].SetValue(0.0f);
-            Lights.Parameters["KSpecular"].SetValue(0.5f);
-            Lights.Parameters["shininess"].SetValue(2.0f);
+            Lights.Parameters["ambientColor"]?.SetValue(Color.White.ToVector3());
+            Lights.Parameters["specularColor"]?.SetValue(Color.White.ToVector3());
+            Lights.Parameters["KAmbient"]?.SetValue(0.5f);
+            Lights.Parameters["KSpecular"]?.SetValue(0.5f);
 
             //Bloom
             Bloom = MyContentManager.Effects.Load("Bloom");
@@ -513,16 +510,9 @@ namespace TGC.Monogame.TP.Src.Screens
             // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.  
 
             Vector3 cameraPosition = new Vector3(Camera.getPosition().X, 70f, Camera.getPosition().Z);
-            //var LightPosition = new Vector3(Car.Position.X, Car.Position.Y + 20f, Car.Position.Z);
             Vector3 forward = Car.GetWorld().Forward;
-            //var eyePosition = new Vector3(Car.Position.X, Car.Position.Y + 20f, Car.Position.Z)+ forward * 10000;
-            var eyePosition = Car.Position + new Vector3(0f, 10f, 0f) - new Vector3(forward.X, 0f, forward.Z) * 5;
-            var floorEyePosition = new Vector3(Car.Position.X, Car.Position.Y + 100f, Car.Position.Z) - new Vector3(forward.X, 0f, forward.Z) * 5000;
-            var LightPosition = Car.Position + new Vector3(0f,10f,0f) + new Vector3(forward.X, 0f, forward.Z) * 5;
 
-            var wallLigthPosition = Car.Position + new Vector3(0f, 10f, 0f) +new Vector3(forward.X, 0f, forward.Z) * 6;
-            //var wallLigthPosition = new Vector3(0f, 10f, 0f);
-            var wallEyePosition = Car.Position + new Vector3(0f, 10f, 0f) - new Vector3(forward.X, 0f, forward.Z) * 500; ;
+            var frontCarPosition = new Vector3(Car.Position.X, Car.Position.Y, Car.Position.Z) - new Vector3(forward.X, 0, forward.Z) * 2000;
 
             CarEffect.CurrentTechnique = CarEffect.Techniques["PlayerCar"];
             Car.Draw(View, Projection,CarEffect, EnvironmentMapRenderTarget, cameraPosition);
@@ -532,27 +522,24 @@ namespace TGC.Monogame.TP.Src.Screens
             }
 
             Lights.Parameters["ambientColor"].SetValue(Color.White.ToVector3());
-            Lights.Parameters["diffuseColor"].SetValue(Color.White.ToVector3());
-            Lights.Parameters["specularColor"].SetValue(Color.White.ToVector3());
+            Lights.Parameters["specularColor"]?.SetValue(Color.White.ToVector3());
             Lights.Parameters["carPosition"]?.SetValue(Car.Position);
-            Lights.Parameters["lightPosition"]?.SetValue(LightPosition);
-            Lights.Parameters["wallLigthPosition"]?.SetValue(wallLigthPosition);
-            Lights.Parameters["eyePosition"]?.SetValue(eyePosition);
-            Lights.Parameters["floorEyePosition"]?.SetValue(floorEyePosition);
-            Lights.Parameters["KAmbient"].SetValue(0.6f);
-            Lights.Parameters["KDiffuse"].SetValue(0.0f);
-            Lights.Parameters["KSpecular"].SetValue(0.3f);
-            Lights.Parameters["shininess"].SetValue(4.7f);
+            Lights.Parameters["frontCarPosition"]?.SetValue(frontCarPosition);
+            Lights.Parameters["KAmbient"]?.SetValue(0.5f);
+            Lights.Parameters["KSpecular"]?.SetValue(0.5f);
+            Lights.Parameters["Alcance"]?.SetValue(300.0f);
+            Lights.Parameters["VarAngulo"]?.SetValue(2.2f);//mayor = menos angulo
+
 
             Lights.CurrentTechnique = Lights.Techniques["Floor"];
             Floor.Draw(View, Projection,Lights);
             Bridge.Draw(View, Projection, Lights);
             Buildings.Draw(View, Projection, Lights);
             for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Draw(View, Projection);
-            for (int i = 0; i < Mounts.Length; i++) Mounts[i].Draw(View, Projection);
+            for (int i = 0; i < Mounts.Length; i++) Mounts[i].Draw(View, Projection, Lights);
             for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(View, Projection);
-            for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection);
-            Lights.CurrentTechnique = Lights.Techniques["Wall"];
+            for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection, Lights);
+            Lights.CurrentTechnique = Lights.Techniques["Box"];
             for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection, Lights);
             
             /*if (!GodModeIsActive)

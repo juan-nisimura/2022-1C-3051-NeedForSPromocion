@@ -14,18 +14,14 @@ float4x4 Projection;
 float4x4 InverseTransposeWorld;
 
 float3 ambientColor; // Light's Ambient Color
-float3 diffuseColor; // Light's Diffuse Color
 float3 specularColor; // Light's Specular Color
 float KAmbient; 
-float KDiffuse; 
 float KSpecular;
-float shininess; 
-float3 lightPosition;
-float3 wallLightPosition; // luz para paredes
 float3 carPosition;
-float3 eyePosition; // Camera position
-float3 floorEyePosition; // inverse position for floors
-float3 rampEyePosition; // particular position for ramps
+float3 frontCarPosition;
+float Alcance;
+float VarAngulo;//mayor = menos angulo
+
 
 texture Texture;
 sampler2D textureSampler = sampler_state
@@ -199,188 +195,102 @@ VertexShaderOutput WallVS(in VertexShaderInput input)
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
-    // Base vectors
-    float3 lightDirection = normalize(lightPosition - input.WorldPosition.xyz);
-    float3 viewDirection = normalize(eyePosition - input.WorldPosition.xyz);
-    float3 halfVector = normalize(lightDirection + viewDirection);
-
+    float3 targetPosition = input.WorldPosition.xyz;
+    float distance = length(targetPosition - carPosition);
+    float isInRange = step(distance, Alcance);
+    
+    float angle = acos(dot(normalize(frontCarPosition - carPosition), normalize(targetPosition - carPosition)));
+    float isInAngle = smoothstep(0.0, angle * VarAngulo, 0.3);
+    
+    float isInHeigth = smoothstep(-40.0, 10.0, carPosition.y - targetPosition.y);
+    
 	// Get the texture texel
     float4 texelColor = tex2D(textureSampler, input.TextureCoordinates);
-    
-	// Calculate the diffuse light
-    float NdotL = saturate(dot(input.Normal.xyz, lightDirection));
-    float3 diffuseLight = KDiffuse * diffuseColor * NdotL;
 
-	// Calculate the specular light
-    float NdotH = dot(input.Normal.xyz, halfVector);
-    float3 specularLight = sign(NdotL) * KSpecular * specularColor * pow(saturate(NdotH), shininess);
+    float3 specularLight = KSpecular * specularColor * isInRange * isInAngle * isInHeigth;
     
-    // Final calculation
-    float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * texelColor.rgb + specularLight, texelColor.a);
-    //float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * float3(1, 1, 1) + specularLight, texelColor.a);
+    float4 finalColor = float4(saturate(ambientColor * KAmbient) * texelColor.rgb + specularLight, texelColor.a);
     return finalColor;
-    //return float4(specularLight, 1.0) + finalColor * 0.0000000000000000000001;
+
 
 }
 
 
 float4 FloorPS(VertexShaderOutput input) : COLOR
 {
-    // Base vectors
-    float3 lightDirection = normalize(lightPosition - input.WorldPosition.xyz);
-    float3 viewDirection = normalize(floorEyePosition - input.WorldPosition.xyz);
-    float3 halfVector = normalize(lightDirection + viewDirection);
-
+    float3 targetPosition = input.WorldPosition.xyz;
+    float distance = length(targetPosition - carPosition);
+    float isInRange = step(distance, Alcance);
+    
+    float angle = acos(dot(normalize(frontCarPosition-carPosition), normalize(targetPosition-carPosition)));
+    float isInAngle = smoothstep(0.0,angle*VarAngulo,0.3);
+    
+    float isInHeigth = smoothstep(-40.0, 10.0, carPosition.y -  targetPosition.y );
+    
 	// Get the texture texel
     float2 coordinates = input.TextureCoordinates;
     coordinates = coordinates * 7;
     float4 texelColor = tex2D(textureSampler, coordinates);
-    
-	// Calculate the diffuse light
-    float NdotL = saturate(dot(input.Normal.xyz, lightDirection));
-    float3 diffuseLight = KDiffuse * diffuseColor * NdotL;
 
-	// Calculate the specular light
-    float NdotH = dot(input.Normal.xyz, halfVector);
-    float3 specularLight = sign(NdotL) * KSpecular * specularColor * pow(saturate(NdotH), shininess);
+    float3 specularLight = KSpecular * specularColor * isInRange * isInAngle * isInHeigth;
     
-    // Final calculation
-    float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * texelColor.rgb + specularLight, texelColor.a);
-    //float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * float3(1, 1, 1) + specularLight, texelColor.a);
+    float4 finalColor = float4(saturate(ambientColor * KAmbient) * texelColor.rgb + specularLight, texelColor.a);
     return finalColor;
-    //return float4(specularLight, 1.0) + finalColor * 0.0000000000000000000001;
 
 }
 float4 BridgeFloorPS(VertexShaderOutput input) : COLOR
 {
-    // Base vectors
-    float3 lightDirection = normalize(lightPosition - input.WorldPosition.xyz);
-    float3 viewDirection = normalize(floorEyePosition - input.WorldPosition.xyz);
-    float3 halfVector = normalize(lightDirection + viewDirection);
-
+    float3 targetPosition = input.WorldPosition.xyz;
+    float distance = length(targetPosition - carPosition);
+    float isInRange = step(distance, Alcance);
+    
+    float angle = acos(dot(normalize(frontCarPosition - carPosition), normalize(targetPosition - carPosition)));
+    float isInAngle = smoothstep(0.0, angle * VarAngulo, 0.3);
+    
+    float isInHeigth = smoothstep(-40.0, 10.0, carPosition.y - targetPosition.y);
+    
 	// Get the texture texel
+    float2 coordinates = input.TextureCoordinates;
+    coordinates = coordinates * 7;
     float4 texelColor = tex2D(textureSampler, input.TextureCoordinates / 75);
-    
-	// Calculate the diffuse light
-    float NdotL = saturate(dot(input.Normal.xyz, lightDirection));
-    float3 diffuseLight = KDiffuse * diffuseColor * NdotL;
 
-	// Calculate the specular light
-    float NdotH = dot(input.Normal.xyz, halfVector);
-    float3 specularLight = sign(NdotL) * KSpecular*2 * specularColor * pow(saturate(NdotH), shininess/2);
+    float3 specularLight = KSpecular * specularColor * isInRange * isInAngle * isInHeigth;
     
-    // Final calculation
-    float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * texelColor.rgb + specularLight, texelColor.a);
-    //float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * float3(1, 1, 1) + specularLight, texelColor.a);
+    float4 finalColor = float4(saturate(ambientColor * KAmbient) * texelColor.rgb + specularLight, texelColor.a);
     return finalColor;
 }
 
-float4 TreeTrunkPS(VertexShaderOutput input) : COLOR
+VertexShaderOutput BasicVS(in VertexShaderInput input)
 {
-    // Base vectors
-    float3 lightDirection = normalize(lightPosition - input.WorldPosition.xyz);
-    float3 viewDirection = normalize(eyePosition - input.WorldPosition.xyz);
-    float3 halfVector = normalize(lightDirection + viewDirection);
+    // Clear the output
+    VertexShaderOutput output = (VertexShaderOutput) 0;
+    // Model space to World space
+    float4 worldPosition = mul(input.Position, World);
+    // World space to View space
+    float4 viewPosition = mul(worldPosition, View);
+	// View space to Projection space
+    output.Position = mul(viewPosition, Projection);
 
-	// Get the texture texel
-    float4 texelColor = tex2D(textureSampler, input.TextureCoordinates);
-    
-	// Calculate the diffuse light
-    float NdotL = saturate(dot(input.Normal.xyz, lightDirection));
-    float3 diffuseLight = KDiffuse * diffuseColor * NdotL;
-
-	// Calculate the specular light
-    float NdotH = dot(input.Normal.xyz, halfVector);
-    float3 specularLight = sign(NdotL) * KSpecular*4 * specularColor * pow(saturate(NdotH), shininess/3*0.86);
-    
-    // Final calculation
-    float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * texelColor.rgb + specularLight, texelColor.a);
-    //float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * float3(1, 1, 1) + specularLight, texelColor.a);
-    return finalColor;
-    //return float4(specularLight, 1.0) + finalColor * 0.0000000000000000000001;
-
+    return output;
 }
 
-float4 RampPS(VertexShaderOutput input) : COLOR
+float4 BasicPS(VertexShaderOutput input) : COLOR
 {
-    // Base vectors
-    float3 lightDirection = normalize(lightPosition - input.WorldPosition.xyz);
-    float3 viewDirection = normalize(floorEyePosition - input.WorldPosition.xyz);
-    float3 halfVector = normalize(lightDirection + viewDirection);
-
+    float3 targetPosition = input.WorldPosition.xyz;
+    float distance = length(targetPosition - carPosition);
+    float isInRange = step(distance, Alcance);
+    
+    float angle = acos(dot(normalize(frontCarPosition - carPosition), normalize(targetPosition - carPosition)));
+    float isInAngle = smoothstep(0.0, angle * VarAngulo, 0.3);
+    
+    float isInHeigth = smoothstep(-40.0, 10.0, carPosition.y - targetPosition.y);
+    
 	// Get the texture texel
-    float4 texelColor = tex2D(textureSampler, input.TextureCoordinates);
+    float4 basicColor = float4(0.0,1.0,0.0,1.0);
+
+    float3 specularLight = KSpecular * specularColor * isInRange * isInAngle * isInHeigth;
     
-	// Calculate the diffuse light
-    float NdotL = saturate(dot(input.Normal.xyz, lightDirection));
-    float3 diffuseLight = KDiffuse * diffuseColor * NdotL;
-
-	// Calculate the specular light
-    float NdotH = dot(input.Normal.xyz, halfVector);
-    float3 specularLight = sign(NdotL) * KSpecular * 8 * specularColor * pow(saturate(NdotH), shininess / 3 * 0.8);
-  
-    // Final calculation
-    float4 finalColor = float4(saturate(ambientColor * KAmbient * 1.2f + diffuseLight) * texelColor.rgb + specularLight, texelColor.a);
-    //float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * float3(1, 1, 1) + specularLight, texelColor.a);
-    return finalColor;
-
-}
-
-float4 BoxPS(VertexShaderOutput input) : COLOR
-{
-    // Base vectors
-    float3 lightDirection = normalize(lightPosition - input.WorldPosition.xyz);
-    float3 viewDirection = normalize(floorEyePosition - input.WorldPosition.xyz);
-    float3 halfVector = normalize(lightDirection + viewDirection);
-
-	// Get the texture texel
-    float4 texelColor = tex2D(textureSampler, input.TextureCoordinates / 75);
-    
-	// Calculate the diffuse light
-    float NdotL = saturate(dot(input.Normal.xyz, lightDirection));
-    float3 diffuseLight = KDiffuse * diffuseColor * NdotL;
-
-	// Calculate the specular light
-    float NdotH = dot(input.Normal.xyz, halfVector);
-    float3 specularLight = sign(NdotL) * KSpecular*4 * specularColor * pow(saturate(NdotH), shininess/3*0.8);
-    
-    // Final calculation
-    float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * texelColor.rgb + specularLight, texelColor.a);
-    //float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * float3(1, 1, 1) + specularLight, texelColor.a);
-    return finalColor;
-}
-
-float4 WallPS(VertexShaderOutput input) : COLOR
-{
-    
-    float3 distanciaLuzX = distance(input.WorldPosition.x , lightPosition.x);
-    float3 distanciaAutoX = distance(input.WorldPosition.x , carPosition.x);
-    float iluminarX = step(distanciaAutoX, distanciaLuzX);
-    float3 distanciaLuzZ = distance(input.WorldPosition.z , lightPosition.z);
-    float3 distanciaAutoZ = distance(input.WorldPosition.z , carPosition.z);
-    float iluminarZ = step(distanciaAutoZ, distanciaLuzZ);
-    float lejanoZ = step(distanciaLuzX, distanciaLuzZ);
-    float lejanoX = step(distanciaLuzZ, distanciaLuzX);
-    float iluminar = clamp(iluminarX * lejanoX+ iluminarZ * lejanoZ, 0.0, 1.0);
-    // Base vectors
-    float3 lightDirection = normalize(wallLightPosition - input.WorldPosition.xyz);
-    float3 viewDirection = normalize(eyePosition - input.WorldPosition.xyz);
-    float3 halfVector = normalize(lightDirection + viewDirection);
-
-	// Get the texture texel
-    float4 texelColor = tex2D(textureSampler, input.TextureCoordinates / 75);
-    
-	// Calculate the diffuse light
-    float NdotL = saturate(dot(input.Normal.xyz, lightDirection));
-    float3 diffuseLight = KDiffuse * diffuseColor * NdotL * iluminar;
-
-	// Calculate the specular light
-    float NdotH = dot(input.Normal.xyz, halfVector);
-    float3 specularLight = sign(NdotL) * KSpecular * 4 * specularColor * pow(saturate(NdotH), shininess / 3 * 0.8)*iluminar;
-    
-    // Final calculation
-    float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * texelColor.rgb + specularLight, texelColor.a);
-    //float4 finalColor = float4(saturate(ambientColor * KAmbient + diffuseLight) * float3(1, 1, 1) + specularLight, texelColor.a);
+    float4 finalColor = float4(saturate(ambientColor * KAmbient) * basicColor.rgb + specularLight, basicColor.a);
     return finalColor;
 }
 
@@ -399,7 +309,16 @@ technique TreeTrunk
     pass Pass0
     {
         VertexShader = compile VS_SHADERMODEL TreeTrunkVS();
-        PixelShader = compile PS_SHADERMODEL TreeTrunkPS();
+        PixelShader = compile PS_SHADERMODEL MainPS();
+    }
+};
+
+technique TreeTop
+{
+    pass Pass0
+    {
+        VertexShader = compile VS_SHADERMODEL BasicVS();
+        PixelShader = compile PS_SHADERMODEL BasicPS();
     }
 };
 
@@ -408,7 +327,7 @@ technique Ramp
     pass P0
     {
         VertexShader = compile VS_SHADERMODEL RampVS();
-        PixelShader = compile PS_SHADERMODEL RampPS();
+        PixelShader = compile PS_SHADERMODEL MainPS();
     }
 };
 
@@ -426,7 +345,7 @@ technique Box
     pass P0
     {
         VertexShader = compile VS_SHADERMODEL BoxVS();
-        PixelShader = compile PS_SHADERMODEL BoxPS();
+        PixelShader = compile PS_SHADERMODEL BridgeFloorPS();
     }
 };
 
@@ -435,6 +354,6 @@ technique Wall
     pass P0
     {
         VertexShader = compile VS_SHADERMODEL BoxVS();
-        PixelShader = compile PS_SHADERMODEL WallPS();
+        PixelShader = compile PS_SHADERMODEL BridgeFloorPS();
     }
 };

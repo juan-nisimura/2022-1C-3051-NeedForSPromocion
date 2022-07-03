@@ -197,7 +197,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 {
     float3 targetPosition = input.WorldPosition.xyz;
     float distance = length(targetPosition - carPosition);
-    float isInRange = step(distance, Alcance);
+    float isInRange = smoothstep(-Alcance, 0.0, -distance);
     
     float angle = acos(dot(normalize(frontCarPosition - carPosition), normalize(targetPosition - carPosition)));
     float isInAngle = smoothstep(0.0, angle * VarAngulo, 0.3);
@@ -220,7 +220,7 @@ float4 FloorPS(VertexShaderOutput input) : COLOR
 {
     float3 targetPosition = input.WorldPosition.xyz;
     float distance = length(targetPosition - carPosition);
-    float isInRange = step(distance, Alcance);
+    float isInRange = smoothstep(-Alcance, 0.0, -distance);
     
     float angle = acos(dot(normalize(frontCarPosition-carPosition), normalize(targetPosition-carPosition)));
     float isInAngle = smoothstep(0.0,angle*VarAngulo,0.3);
@@ -242,7 +242,7 @@ float4 BridgeFloorPS(VertexShaderOutput input) : COLOR
 {
     float3 targetPosition = input.WorldPosition.xyz;
     float distance = length(targetPosition - carPosition);
-    float isInRange = step(distance, Alcance);
+    float isInRange = smoothstep(-Alcance, 0.0, -distance);
     
     float angle = acos(dot(normalize(frontCarPosition - carPosition), normalize(targetPosition - carPosition)));
     float isInAngle = smoothstep(0.0, angle * VarAngulo, 0.3);
@@ -278,7 +278,7 @@ float4 BasicPS(VertexShaderOutput input) : COLOR
 {
     float3 targetPosition = input.WorldPosition.xyz;
     float distance = length(targetPosition - carPosition);
-    float isInRange = step(distance, Alcance);
+    float isInRange = smoothstep(-Alcance, 0.0, -distance);
     
     float angle = acos(dot(normalize(frontCarPosition - carPosition), normalize(targetPosition - carPosition)));
     float isInAngle = smoothstep(0.0, angle * VarAngulo, 0.3);

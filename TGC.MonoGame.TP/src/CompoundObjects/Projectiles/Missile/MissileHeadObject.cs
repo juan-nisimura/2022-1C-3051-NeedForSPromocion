@@ -9,6 +9,9 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile
     {
         // private const float MISSILE_HEAD_FORWARD_DISTANCE = 3f;
         private float ModelSize;
+        private bool Visible = true;
+        public void SetIsVisible(bool visible){ this.Visible = visible; }
+        protected override bool IsVisible() { return Visible; }
         public MissileHeadObject(float modelSize) :
             base(new Vector3(0f, 0f, 0f), new Vector3(0.5f, 1, 0.5f) * modelSize, 0f, Color.Red)
         {

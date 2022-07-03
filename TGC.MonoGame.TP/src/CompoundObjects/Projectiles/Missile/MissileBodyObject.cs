@@ -7,6 +7,9 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile
 {
     public class MissileBodyObject : CylinderObject <MissileBodyObject>
     {
+        private bool Visible = true;
+        public void SetIsVisible(bool visible){ this.Visible = visible; }
+        protected override bool IsVisible() { return Visible; }
         public MissileBodyObject(float modelSize)
             : base(new Vector3(0f, 0f, 0f), new Vector3(modelSize/2, modelSize, modelSize/2), MathHelper.PiOver2, 0f, Color.Gray)
         {

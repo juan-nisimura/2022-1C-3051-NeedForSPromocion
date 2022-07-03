@@ -17,5 +17,8 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet
             World *= rotationMatrix;
             World *= Matrix.CreateTranslation(position);
         }
+        private bool Visible = true;
+        public void SetIsVisible(bool visible){ this.Visible = visible; }
+        protected override bool IsVisible() { return Visible; }
     }
 }

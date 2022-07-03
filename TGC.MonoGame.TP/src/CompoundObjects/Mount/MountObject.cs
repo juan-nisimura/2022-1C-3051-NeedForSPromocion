@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
 using TGC.Monogame.TP.Src.ModelObjects;
+using TGC.Monogame.TP.Src.Screens;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Mount 
 {
@@ -12,6 +13,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
     {
         protected MountBoxObject Box { get; set; }
         protected MountRampObject[] Ramps { get; set; }
+        protected BoundingBox VisibleBoundingBox;
         public MountObject(Vector3 position, Vector3 size, float rotation, Color color){
             Box = new MountBoxObject(position, size, color);
             Ramps = new MountRampObject[] {
@@ -20,6 +22,12 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
                 new MountRampObject(position + new Vector3(0f, 0f, size.Z * 6 / 10), new Vector3(size.X/5,size.Y,size.Z), rotation - MathF.PI/2, color),
                 new MountRampObject(position + new Vector3(0f, 0f, -size.Z * 6 / 10), new Vector3(size.X/5,size.Y,size.Z), rotation + MathF.PI/2, color)
             };
+            VisibleBoundingBox = new BoundingBox(position - size * 6 / 10, position + size * 6 / 10);
+        }
+
+        protected override bool IsVisible() 
+        {
+            return LevelScreen.GetBoundingFrustum().Intersects(VisibleBoundingBox);
         }
 
         public new void Initialize(){
@@ -53,8 +61,10 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Mount
         }
 
         public override void Draw(Matrix view, Matrix projection){
-            Box.Draw(view, projection);
-            for (int i = 0; i < Ramps.Length; i++)  Ramps[i].Draw(view, projection);
+            if(IsVisible()){
+                Box.Draw(view, projection);
+                for (int i = 0; i < Ramps.Length; i++)  Ramps[i].Draw(view, projection);
+            }
         }
 
         public void Draw(Matrix view, Matrix projection, Effect effect)

@@ -7,6 +7,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.SpeedBoost
 {
     public class SpeedBoostBodyObject : CylinderObject <SpeedBoostBodyObject>
     {
+        protected override bool IsVisible() { return true; }
         public SpeedBoostBodyObject(float modelSize)
             : base(new Vector3(0f, 0f, 0f), new Vector3(modelSize/1.5f, modelSize, modelSize/1.5f), MathHelper.PiOver2, 0f, Color.Red){
         }

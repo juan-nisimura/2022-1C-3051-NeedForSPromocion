@@ -39,7 +39,7 @@ namespace TGC.Monogame.TP.Src.Screens
         private Matrix World { get; set; }
         private Matrix View { get; set; }
         private Matrix Projection { get; set; }
-        private CameraObject Camera { get; set; }
+        public CameraObject Camera { get; set; }
         public CarObject[] AllCars { get; set; }
         public PlayerCarObject Car { get; set; }
         public IACarObject[] IACars { get; set; }
@@ -541,13 +541,6 @@ namespace TGC.Monogame.TP.Src.Screens
             for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(View, Projection, Lights);
             Lights.CurrentTechnique = Lights.Techniques["Box"];
             for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(View, Projection, Lights);
-            
-            /*if (!GodModeIsActive)
-            {
-                Clock.Draw(View, Projection);
-                SpeedoMeter.Draw(View, Projection);
-                Car.DrawHUD(View, Projection);
-            }*/
 
             var msg = "P: PAUSA";
             var W = TGCGame.GetGraphicsDevice().Viewport.Width;
@@ -673,6 +666,10 @@ namespace TGC.Monogame.TP.Src.Screens
             BlurEffect.Parameters["baseTexture"].SetValue(BlurMainRenderTarget);
             FullScreenQuad.Draw(BlurEffect);
             #endregion
+        }
+
+        public static BoundingFrustum GetBoundingFrustum() {
+            return new BoundingFrustum(GetLevelScreenInstance().View * GetLevelScreenInstance().Projection);
         }
 
         private void SetCubemapCameraForOrientation(CubeMapFace face)

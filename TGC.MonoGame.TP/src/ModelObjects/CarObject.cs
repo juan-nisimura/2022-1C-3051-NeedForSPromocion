@@ -13,6 +13,7 @@ using TGC.Monogame.TP.Src.PowerUpObjects.PowerUps;
 using Microsoft.Xna.Framework.Audio;
 using TGC.Monogame.TP.Src.MyContentManagers;
 using TGC.Monogame.TP.Src.PowerUpObjects.PowerUpModels;
+using TGC.Monogame.TP.Src.Screens;
 
 namespace TGC.Monogame.TP.Src.ModelObjects
 
@@ -77,6 +78,14 @@ namespace TGC.Monogame.TP.Src.ModelObjects
         public float Health = MAX_HEALTH;
 
         protected static SoundEffect SpeedBoostSound;
+        protected BoundingSphere VisibleBoundingSphere;
+
+        protected static float VISIBLE_BOUNDING_SPHERE_RADIUS;
+
+        protected override bool IsVisible() 
+        {
+            return LevelScreen.GetBoundingFrustum().Intersects(VisibleBoundingSphere);
+        }
 
         public CarObject(Vector3 position, Color color){
             InitialPosition = position;
@@ -98,6 +107,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             // Then set its orientation!
             // Hacerlo que funcione cuando se inclina
             ObjectBox.Orientation = Matrix.CreateRotationY(ObjectAngle);
+
+            VisibleBoundingSphere = new BoundingSphere(position, VISIBLE_BOUNDING_SPHERE_RADIUS);
         }
 
         public void Initialize(CarObject[] enemies){
@@ -164,6 +175,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             ANGULO_AL_VERTICE = MathF.Atan(temporalCarObject.Size.X / temporalCarObject.Size.Z);
             HIPOTENUSA_AL_VERTICE = MathF.Sqrt(MathF.Pow(temporalCarObject.Size.X / 2, 2) + MathF.Pow(temporalCarObject.Size.Z / 2, 2));
         
+            VISIBLE_BOUNDING_SPHERE_RADIUS = MathF.Max(MathF.Max(temporalCarObject.Size.X, temporalCarObject.Size.Y), temporalCarObject.Size.Z) / 2;
+
             SpeedBoostSound = MyContentManager.SoundEffects.Load("boost engine");
         }
 
@@ -216,6 +229,9 @@ namespace TGC.Monogame.TP.Src.ModelObjects
             Weapon.FollowCar(World);
             HealthBar.Update(this);
             CarSoundEffects.Update(this);
+
+            VisibleBoundingSphere = new BoundingSphere(Position, VISIBLE_BOUNDING_SPHERE_RADIUS);
+            Weapon.SetIsVisible(this.IsVisible());
 
             for(int i = 0; i < BULLETS_POOL_SIZE; i++)  BulletsPool[i].Update();
             for(int i = 0; i < MISSILES_POOL_SIZE; i++) MissilesPool[i].Update();

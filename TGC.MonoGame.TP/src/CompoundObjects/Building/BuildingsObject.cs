@@ -17,6 +17,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Building
         protected BuildingBoxObject[] Boxes { get; set; }
         protected BuildingWallObject[] Walls { get; set; }
         protected BuildingRampObject[] Ramps { get; set; }
+        protected override bool IsVisible() { return true; }
         public BuildingsObject(IAMapBox floorIAMapBox){
 
             Ramps = new BuildingRampObject[] {  

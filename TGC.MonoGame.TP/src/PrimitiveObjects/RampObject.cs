@@ -9,6 +9,7 @@ using TGC.MonoGame.TP;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
 using TGC.Monogame.TP.Src.IALogicalMaps;
+using TGC.Monogame.TP.Src.Screens;
 
 namespace TGC.Monogame.TP.Src.PrimitiveObjects
 {
@@ -23,6 +24,11 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
         protected Plane Plane;
         
         public IAMapBox IAMapBox;
+
+        protected override bool IsVisible() 
+        {
+            return LevelScreen.GetBoundingFrustum().Intersects(BoundingBox);
+        }
 
         public RampObject(Vector3 position, Vector3 size, float rotation, Color color, int connectedBoxesTotalQuantity, Vector3 IAMapBoxPosition){
             RampPrimitive = new RampPrimitive(TGCGame.GetGraphicsDevice());

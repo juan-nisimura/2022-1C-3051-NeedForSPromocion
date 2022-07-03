@@ -5,6 +5,7 @@ using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet;
 using TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile;
 using TGC.Monogame.TP.Src.IALogicalMaps;
 using TGC.Monogame.TP.Src.ModelObjects;
+using TGC.Monogame.TP.Src.Screens;
 using TGC.MonoGame.Samples.Collisions;
 using TGC.MonoGame.TP.Src.Geometries;
 
@@ -20,6 +21,11 @@ namespace TGC.Monogame.TP.Src.PrimitiveObjects
             MaxHeight = position.Y + size.Y / 2;
             BoundingBox = new BoundingBox(position - size/2, position + size/2);
             IAMapBox = new IAMapBox(BoundingBox, position + new Vector3(0f, size.Y / 2, 0f) + IAMapBoxPosition, connectedBoxesTotalQuantity);
+        }
+
+        protected override bool IsVisible() 
+        {
+            return LevelScreen.GetBoundingFrustum().Intersects(BoundingBox);
         }
 
         public override void Update(){

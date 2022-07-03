@@ -9,6 +9,10 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile
     {
         //private const float MISSILE_TRIANGLE_FORWARD_DISTANCE = 3f;
         private float ModelSize;
+        private bool Visible = true;
+        public void SetIsVisible(bool visible){ this.Visible = visible; }
+        protected override bool IsVisible() { return Visible; }
+
         public MissileTriangleObject(Vector3 position, Vector3 vertex1, Vector3 vertex2, Vector3 vertex3, Color color, float modelSize)
             : base(position, vertex1, vertex2, vertex3, color){
             ModelSize = modelSize;

@@ -19,6 +19,8 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
         protected BridgeRampObject[] Ramps { get; set; }
         protected BridgeFloorObject[] Floors { get; set; }
 
+        protected override bool IsVisible() { return true; }
+
         public BridgeObject(IAMapBox floorIAMapBox){
 
             Ramps = new BridgeRampObject[] { 

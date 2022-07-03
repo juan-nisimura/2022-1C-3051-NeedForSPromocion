@@ -10,6 +10,7 @@ namespace TGC.Monogame.TP.Src
         private Vector3 Position { get; set; } = new Vector3(0f, 0f, 0f);
         private static float CameraAbsoluteSpeed = 300f;
         private Vector3 Speed;
+        
 
         public Vector3 getPosition (){
             return Position;

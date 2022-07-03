@@ -5,6 +5,7 @@ using TGC.Monogame.TP.Src.ModelObjects;
 using System;
 using Microsoft.Xna.Framework.Audio;
 using TGC.Monogame.TP.Src.MyContentManagers;
+using TGC.Monogame.TP.Src.Screens;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile
 {
@@ -51,6 +52,12 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile
             MissileBody.Initialize();
             MissileHead.Initialize();
             for (int i = 0; i < TRIANGLES_QUANTITY; i++)   MissileTriangles[i].Initialize();
+        }
+
+        
+        protected override bool IsVisible() 
+        {
+            return LevelScreen.GetBoundingFrustum().Intersects(this.ImpactSphere);
         }
         
         public static void Load(){
@@ -114,7 +121,9 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Missile
         }
 
         public override void Draw(Matrix view, Matrix projection){
-            if(IsActive){
+            MissileBody.SetIsVisible(IsVisible());
+            MissileHead.SetIsVisible(IsVisible());
+            if(IsActive && IsVisible()){
                 MissileBody.Draw(view, projection);
                 MissileHead.Draw(view, projection);
                 for (int i = 0; i < TRIANGLES_QUANTITY; i++)   MissileTriangles[i].Draw(view, projection);

@@ -4,6 +4,7 @@ using TGC.MonoGame.TP;
 using TGC.Monogame.TP.Src.ModelObjects;
 using Microsoft.Xna.Framework.Audio;
 using TGC.Monogame.TP.Src.MyContentManagers;
+using TGC.Monogame.TP.Src.Screens;
 
 namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet
 {
@@ -63,6 +64,11 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet
             };
         }
 
+        protected override bool IsVisible() 
+        {
+            return LevelScreen.GetBoundingFrustum().Intersects(this.ImpactSphere);
+        }
+
         public override void Update(){
             if(IsActive){
                 Position = Position - BULLET_SPEED * Forward * TGCGame.GetElapsedTime();
@@ -90,7 +96,9 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Projectiles.Bullet
         }
 
         public override void Draw(Matrix view, Matrix projection){
-            if(IsActive){
+            BulletBody.SetIsVisible(IsVisible());
+            BulletHead.SetIsVisible(IsVisible());
+            if(IsActive && IsVisible()){
                 BulletBody.Draw(view, projection);
                 BulletHead.Draw(view, projection);
             }

@@ -12,9 +12,15 @@ namespace TGC.Monogame.TP.Src.Screens
         protected static Screen Instance { get; set; } = new MainMenuScreen();
         public static Screen GetInstance() { return Instance; }
 
+        protected GraphicsDeviceManager Graphics { get; set; }
+
         public override void Initialize()
         {
-        
+            Graphics = TGCGame.GetGraphicsDeviceManager();
+            Graphics.PreferredBackBufferWidth = TGCGame.GetGraphicsDevice().Adapter.CurrentDisplayMode.Width;
+            Graphics.PreferredBackBufferHeight = TGCGame.GetGraphicsDevice().Adapter.CurrentDisplayMode.Height;
+            Graphics.ApplyChanges();
+            Graphics.ToggleFullScreen();
         }
 
         public override void Update() {

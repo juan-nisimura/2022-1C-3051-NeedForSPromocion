@@ -20,6 +20,7 @@ namespace TGC.Monogame.TP.Src
         }
 
         public static float GetHeight(float positionX, float positionZ, int level) {
+            
             return Bitmap[(int) MathF.Round(positionX) + 710, (int) MathF.Round(positionZ) + 710, level];
         }
 

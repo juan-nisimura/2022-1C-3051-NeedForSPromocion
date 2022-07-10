@@ -29,8 +29,8 @@ namespace TGC.Monogame.TP.Src
             var SpeedIndicator = Math.Abs(Speed); 
             var W = TGCGame.GetGraphicsDevice().Viewport.Width;
             var H = TGCGame.GetGraphicsDevice().Viewport.Height;
-            var escala = 0.5f;
-            var escalaTex = 0.3f;
+            var escala = W / 1400f;
+            var escalaTex = H / 1400f;
             Vector2 position = new Vector2(W-Texture.Width*escalaTex,H - Texture.Height* escalaTex);
 
             var size = Font.MeasureString(msg) * escala;

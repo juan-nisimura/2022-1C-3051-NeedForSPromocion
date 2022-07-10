@@ -18,7 +18,7 @@ namespace TGC.MonoGame.TP
         public static float ElapsedTime;
         public const int PLAYERS_QUANTITY = 4;
 
-        private GraphicsDeviceManager Graphics { get; }
+        private static GraphicsDeviceManager Graphics { get; set; }
         private static SpriteBatch SpriteBatch { get; set; }
         private static GraphicsDevice StaticGraphicsDevice;
 
@@ -157,6 +157,10 @@ namespace TGC.MonoGame.TP
         }
         public static SpriteBatch GetSpriteBatch() {
             return SpriteBatch;
+        }
+        public static GraphicsDeviceManager GetGraphicsDeviceManager()
+        {
+            return Graphics;
         }
         
     }

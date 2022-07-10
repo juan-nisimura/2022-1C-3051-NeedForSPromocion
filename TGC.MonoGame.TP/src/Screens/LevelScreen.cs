@@ -99,7 +99,7 @@ namespace TGC.Monogame.TP.Src.Screens
             Camera = new CameraObject();
 
             CubeMapCamera = new StaticCamera(1f, new Vector3(-350f, 10f, -350f), Vector3.UnitX, Vector3.Up);
-            CubeMapCamera.BuildProjection(1f, 50f, 400f, MathHelper.PiOver2);
+            CubeMapCamera.BuildProjection(1f, 1f, 400f, MathHelper.PiOver2);
 
             BoostPads = new BoostPadObject[]{
                 new BoostPadObject(new Vector3(0,0.1f,575f),new Vector3(22.5f,1f,27.5f), - MathF.PI / 2),
@@ -486,13 +486,16 @@ namespace TGC.Monogame.TP.Src.Screens
             // (if it has backface culling on)
             //Floor.Draw(View, Projection);
             Bridge.Draw(CubeMapCamera.View, CubeMapCamera.Projection);
-            Buildings.Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+            Buildings.DrawNoBox(CubeMapCamera.View, CubeMapCamera.Projection);
             for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
             //for (int i = 0; i < Mounts.Length; i++) Mounts[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
-            for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+            //for (int i = 0; i < BoostPads.Length; i++) BoostPads[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
             for (int i = 0; i < Trees.Length; i++) Trees[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
             for (int i = 0; i < MapWalls.Length; i++) MapWalls[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
-
+            for (int i = 0; i < TGCGame.PLAYERS_QUANTITY - 1; i++)
+            {
+                IACars[i].Draw(View, Projection, CarEffect);
+            }
             #endregion
 
             #region clear 

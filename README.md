@@ -63,11 +63,6 @@ Happel, Javier  |  Nisimura, Juan
 ![vlc_ApHjjaVSA0](https://user-images.githubusercontent.com/38801689/178370784-94659666-b5cf-484a-978b-8a655f78e81d.jpg)
 ![CdX1TO6yrH](https://user-images.githubusercontent.com/38801689/178370816-29fd04f5-03b1-487e-9862-4bbd5fafd4f8.jpg)
 
-![screenshot1](https://github.com/tgc-utn/tgc-monogame-tp/blob/master/TGC.MonoGame.TP/Icon.bmp)
-![screenshot2](https://github.com/tgc-utn/tgc-monogame-tp/blob/master/TGC.MonoGame.TP/Icon.bmp)
-![screenshot3](https://github.com/tgc-utn/tgc-monogame-tp/blob/master/TGC.MonoGame.TP/Icon.bmp)
-![screenshot4](https://github.com/tgc-utn/tgc-monogame-tp/blob/master/TGC.MonoGame.TP/Icon.bmp)
-![screenshot5](https://github.com/tgc-utn/tgc-monogame-tp/blob/master/TGC.MonoGame.TP/Icon.bmp)
 
 ## Game Play
-[![Watch the video](https://img.youtube.com/vi/pgEwUC0jvH4/0.jpg)](https://www.youtube.com/playlist?list=PLRM4L32DjvnazuMl8wZlbpEYL5Qh63ulG)
+[![Watch the video](https://user-images.githubusercontent.com/38801689/178370797-a96816da-41f4-42a2-ae82-869697c1b1b8.jpg)](https://youtu.be/PeDozm4Qt54)

@@ -53,14 +53,17 @@ dotnet run --project TGC.MonoGame.TP
 ## Integrantes
 Happel, Javier  |  Nisimura, Juan  
 ------------ | ------------- 
-<img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/robotgc.png" height="500"> | <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/trofeotp.png" height="500"> 
+
+<img src="https://user-images.githubusercontent.com/38801689/178372402-01eb8d7a-eae5-48b0-8cf2-43aa627bec49.jpg" height="500"> | <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/trofeotp.png" height="500"> 
 
 ## Capturas
-![screenshot1](https://github.com/tgc-utn/tgc-monogame-tp/blob/master/TGC.MonoGame.TP/Icon.bmp)
-![screenshot2](https://github.com/tgc-utn/tgc-monogame-tp/blob/master/TGC.MonoGame.TP/Icon.bmp)
-![screenshot3](https://github.com/tgc-utn/tgc-monogame-tp/blob/master/TGC.MonoGame.TP/Icon.bmp)
-![screenshot4](https://github.com/tgc-utn/tgc-monogame-tp/blob/master/TGC.MonoGame.TP/Icon.bmp)
-![screenshot5](https://github.com/tgc-utn/tgc-monogame-tp/blob/master/TGC.MonoGame.TP/Icon.bmp)
+![TGC MonoGame TP_dKeZnPR8ZV](https://user-images.githubusercontent.com/38801689/178370797-a96816da-41f4-42a2-ae82-869697c1b1b8.jpg)
+![vlc_k8hOIelJ8C](https://user-images.githubusercontent.com/38801689/178370680-3bc6a982-6990-4bad-aebf-e39cbfbb3465.jpg)
+![vlc_29YSQjTfUD](https://user-images.githubusercontent.com/38801689/178370721-23cf0b7a-6816-4384-89d2-3792d107a642.jpg)
+![vlc_dNHJfrj1Tq](https://user-images.githubusercontent.com/38801689/178370769-073c920a-82f2-4a4d-9967-772186fff0d7.jpg)
+![vlc_ApHjjaVSA0](https://user-images.githubusercontent.com/38801689/178370784-94659666-b5cf-484a-978b-8a655f78e81d.jpg)
+![CdX1TO6yrH](https://user-images.githubusercontent.com/38801689/178370816-29fd04f5-03b1-487e-9862-4bbd5fafd4f8.jpg)
+
 
 ## Game Play
-[![Watch the video](https://img.youtube.com/vi/pgEwUC0jvH4/0.jpg)](https://www.youtube.com/playlist?list=PLRM4L32DjvnazuMl8wZlbpEYL5Qh63ulG)
+[![Watch the video](https://user-images.githubusercontent.com/38801689/178370797-a96816da-41f4-42a2-ae82-869697c1b1b8.jpg)](https://youtu.be/PeDozm4Qt54)

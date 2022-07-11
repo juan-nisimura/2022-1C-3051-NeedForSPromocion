@@ -82,6 +82,14 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Bridge
             for (int i = 0; i < COLUMNS_QUANTITY; i++)  Columns[i].Draw(view, projection);
         }
 
+        public void DrawNoFloor(Matrix view, Matrix projection)
+        {
+            //Block.Draw(view, projection);
+            for (int i = 0; i < RAMPS_QUANTITY; i++) Ramps[i].Draw(view, projection);
+            //for (int i = 0; i < FLOORS_QUANTITY; i++) Floors[i].Draw(view, projection);
+            for (int i = 0; i < COLUMNS_QUANTITY; i++) Columns[i].Draw(view, projection);
+        }
+
         public void Draw(Matrix view, Matrix projection, Effect effect)
         {
             effect.CurrentTechnique = effect.Techniques["Box"];

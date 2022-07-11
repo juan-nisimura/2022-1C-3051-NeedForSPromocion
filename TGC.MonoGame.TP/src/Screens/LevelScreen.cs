@@ -485,7 +485,7 @@ namespace TGC.Monogame.TP.Src.Screens
             // Draw our scene. Do not draw our tank as it would be occluded by itself 
             // (if it has backface culling on)
             //Floor.Draw(View, Projection);
-            Bridge.Draw(CubeMapCamera.View, CubeMapCamera.Projection);
+            Bridge.DrawNoFloor(CubeMapCamera.View, CubeMapCamera.Projection);
             Buildings.DrawNoBox(CubeMapCamera.View, CubeMapCamera.Projection);
             for (int i = 0; i < PowerUps.Length; i++) PowerUps[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);
             //for (int i = 0; i < Mounts.Length; i++) Mounts[i].Draw(CubeMapCamera.View, CubeMapCamera.Projection);

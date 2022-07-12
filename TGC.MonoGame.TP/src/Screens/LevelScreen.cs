@@ -548,7 +548,7 @@ namespace TGC.Monogame.TP.Src.Screens
             var msg = "P: PAUSA";
             var W = TGCGame.GetGraphicsDevice().Viewport.Width;
             var H = TGCGame.GetGraphicsDevice().Viewport.Height;
-            var escala = 1;
+            var escala = 1 * H / 800f;
             var size = Font.MeasureString(msg) * escala;
             var Y = 25f;
             var X = 25f;
@@ -556,7 +556,6 @@ namespace TGC.Monogame.TP.Src.Screens
                 Matrix.CreateScale(escala) * Matrix.CreateTranslation(W - size.X - X, Y, 0));
             TGCGame.GetSpriteBatch().DrawString(Font, msg, new Vector2(0, 0), Color.White);
             TGCGame.GetSpriteBatch().End();
-
 
             #endregion
 

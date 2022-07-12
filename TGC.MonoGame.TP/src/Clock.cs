@@ -37,7 +37,7 @@ namespace TGC.Monogame.TP.Src
             var msg = minutos.ToString("00") + ":" + segundos.ToString("00");
             var W = TGCGame.GetGraphicsDevice().Viewport.Width;
             var H = TGCGame.GetGraphicsDevice().Viewport.Height;
-            var escala = 1;
+            var escala = 1 * H / 800f;
             var size = Font.MeasureString(msg) * escala;
             var Y = 25f;
             TGCGame.GetSpriteBatch().Begin(SpriteSortMode.Deferred, null, null, null, null, null,

@@ -76,7 +76,9 @@ namespace TGC.Monogame.TP.Src.Screens
         {
             var W = TGCGame.GetGraphicsDevice().Viewport.Width;
             var H = TGCGame.GetGraphicsDevice().Viewport.Height;
+            escala = escala * H / 500f;
             var size = Font.MeasureString(msg) * escala;
+            Y = Y * H / 500f;
             TGCGame.GetSpriteBatch().Begin(SpriteSortMode.Deferred, null, null, null, null, null,
                 Matrix.CreateScale(escala) * Matrix.CreateTranslation((W - size.X) / 2, Y, 0));
             TGCGame.GetSpriteBatch().DrawString(Font, msg, new Vector2(0, 0), Color.White);
@@ -86,7 +88,7 @@ namespace TGC.Monogame.TP.Src.Screens
         protected void DrawRightArrow() {
             var W = TGCGame.GetGraphicsDevice().Viewport.Width;
             var H = TGCGame.GetGraphicsDevice().Viewport.Height;
-            var escalaTex = new Vector3(0.02f, 0.09f, 1f);// 0.3f;
+            var escalaTex = new Vector3(0.02f, 0.09f, 1f) * H / 500f;
             Vector2 position = new Vector2((W - 10f) / escalaTex.X - RightArrow.Width, (H - 10f) / escalaTex.Y - RightArrow.Height);
             
             TGCGame.GetSpriteBatch().Begin(SpriteSortMode.Deferred, null, null, null, null, null,
@@ -94,14 +96,20 @@ namespace TGC.Monogame.TP.Src.Screens
             TGCGame.GetSpriteBatch().Draw(RightArrow, position, Color.White);
             TGCGame.GetSpriteBatch().End();
 
-            //DrawCenterTextXY();
-            DrawCenterTextY("                         D", 370, 2);
+            var msg = "D";
+            var escala = 2 * H / 500f;
+            var size = Font.MeasureString(msg) * escala;
+            var Y = 370f * H / 500f;
+            TGCGame.GetSpriteBatch().Begin(SpriteSortMode.Deferred, null, null, null, null, null,
+                Matrix.CreateScale(escala) * Matrix.CreateTranslation(W - size.X - escalaTex.X * RightArrow.Width / 2, Y, 0));
+            TGCGame.GetSpriteBatch().DrawString(Font, msg, new Vector2(0, 0), Color.White);
+            TGCGame.GetSpriteBatch().End();
         }
 
         protected void DrawLeftArrow() {
             var W = TGCGame.GetGraphicsDevice().Viewport.Width;
             var H = TGCGame.GetGraphicsDevice().Viewport.Height;
-            var escalaTex = new Vector3(0.02f, 0.09f, 1f);// 0.3f;
+            var escalaTex = new Vector3(0.02f, 0.09f, 1f) * H / 500f;
 
             Vector2 position = new Vector2(10f / escalaTex.X, (H - 10f) / escalaTex.Y - LeftArrow.Height );
             
@@ -110,7 +118,14 @@ namespace TGC.Monogame.TP.Src.Screens
             TGCGame.GetSpriteBatch().Draw(LeftArrow, position, Color.White);
             TGCGame.GetSpriteBatch().End();
 
-            DrawCenterTextY("A                         ", 370, 2);
+            var msg = "A";
+            var escala = 2 * H / 500f;
+            var size = Font.MeasureString(msg) * escala;
+            var Y = 370f * H / 500f;
+            TGCGame.GetSpriteBatch().Begin(SpriteSortMode.Deferred, null, null, null, null, null,
+                Matrix.CreateScale(escala) * Matrix.CreateTranslation(escalaTex.X * LeftArrow.Width / 2, Y, 0));
+            TGCGame.GetSpriteBatch().DrawString(Font, msg, new Vector2(0, 0), Color.White);
+            TGCGame.GetSpriteBatch().End();
         }
     }
 }

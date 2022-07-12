@@ -43,8 +43,8 @@ namespace TGC.Monogame.TP.Src.ModelObjects
 
         protected float SpeedBoostTime {get; set;}=0;
 
-        public const int BULLETS_POOL_SIZE = 20;
-        public const int MISSILES_POOL_SIZE = 2;
+        public const int BULLETS_POOL_SIZE = 12;
+        public const int MISSILES_POOL_SIZE = 1;
 
         public BulletObject[] BulletsPool = new BulletObject[BULLETS_POOL_SIZE];
         public MissileObject[] MissilesPool = new MissileObject[MISSILES_POOL_SIZE];

@@ -16,7 +16,7 @@ namespace TGC.Monogame.TP.Src.CompoundObjects.Tree
         
         public TreeTrunkObject(Vector3 position, Vector3 size, float rotation, Color color)
             : base(position, size, 0, rotation, color){
-            BoundingBox = new BoundingBox(position - size, position + size);
+            BoundingBox = new BoundingBox(position - size / 2, position + size / 2);
         }
         
     }

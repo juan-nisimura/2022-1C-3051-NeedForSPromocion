@@ -54,7 +54,8 @@ dotnet run --project TGC.MonoGame.TP
 Happel, Javier  |  Nisimura, Juan  
 ------------ | ------------- 
 
-<img src="https://user-images.githubusercontent.com/38801689/178372402-01eb8d7a-eae5-48b0-8cf2-43aa627bec49.jpg" height="500"> | <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/trofeotp.png" height="500"> 
+<img src="https://user-images.githubusercontent.com/38801689/178372402-01eb8d7a-eae5-48b0-8cf2-43aa627bec49.jpg" height="500"> |
+<img src="https://user-images.githubusercontent.com/48994113/178512687-4af9517e-2f53-40ee-af4a-2d06d1b7b949.jpg" height="500"> 
 
 ## Capturas
 ![TGC MonoGame TP_dKeZnPR8ZV](https://user-images.githubusercontent.com/38801689/178370797-a96816da-41f4-42a2-ae82-869697c1b1b8.jpg)
